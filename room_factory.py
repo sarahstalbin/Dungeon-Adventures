@@ -83,13 +83,13 @@ class Room:
         """ setting exit """
         self.__exit = True
 
-    def set_impasse(self):
+    def set_impasse(self, impasse):
         """ setting impasse """
-        self.__impasse = True
+        self.__impasse = impasse
 
-    def set_visited(self):
+    def set_visited(self, visited):
         """ setting visited """
-        self.__visited = True
+        self.__visited = visited
 
     def multiple_items(self):
         """ This method is for one or more items in a room """
