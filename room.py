@@ -1,6 +1,6 @@
-
 class Room:
     """ Room class sets all the items necessary for the dungeon adventure and prints the layout of the room """
+
     def __init__(self):
         """ Initializing the items and setting it to False  """
 
@@ -22,12 +22,54 @@ class Room:
         self.__polymorphism_pillar = False
         self.__empty_room = False
 
+    # getter methods
+    def get_north_door(self):
+        """ gets north_door boolean value """
+        return self.__north_door
+
+    def get_south_door(self):
+        """ gets south_door boolean value """
+        return self.__south_door
+
+    def get_east_door(self):
+        """ gets east_door boolean value """
+        return self.__east_door
+
+    def get_west_door(self):
+        """ gets west_door boolean value """
+        return self.__west_door
+
+    def get_impasse(self):
+        """ gets impasse boolean value """
+        return self.__impasse
+
+    def get_visited(self):
+        """ gets visited boolean value """
+        return self.__visited
+
+    def get_empty_room(self):
+        """ gets empty_room boolean value """
+        return self.__empty_room
+
+    def get_entrance(self):
+        """ gets entrance boolean value """
+        return self.__entrance
+
+    def get_exit(self):
+        """ gets exit boolean value """
+        return self.__exit
+
     # setter methods
 
     def set_healing_potion(self, add_potion):
         """ setting healing potion
          param: add_potion"""
         self.__healing_potion = add_potion
+
+    def set_vision_potion(self, vision_potion):
+        """ setting vision potion
+                 param: vision_potion"""
+        self.__vision_potion = vision_potion
 
     def set_pit(self, reduce_potion):
         """ setting pit
@@ -145,5 +187,3 @@ class Room:
         else:
             layout += "***"
         return layout
-
-
