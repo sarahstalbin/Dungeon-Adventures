@@ -40,6 +40,8 @@ class Dungeon:
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
 
+    def get_entrance(self):
+        return self.__maze[0][0]
 
     def _create_maze(self, room, current_row, current_col):
         # Set the starting room to "visited"
