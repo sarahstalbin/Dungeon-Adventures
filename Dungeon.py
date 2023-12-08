@@ -13,6 +13,8 @@ class Dungeon:
         self.__maze = [[Room() for _ in range(rows)] for _ in range(cols)]
         self.build_dungeon()
 
+    # External methods
+
     def build_dungeon(self):
         """
         Generates a maze for the Dungeon.
@@ -43,6 +45,63 @@ class Dungeon:
     def get_entrance(self):
         return self.__maze[0][0]
 
+    def is_valid_room(self, row, col):
+        return 0 <= row < self.__rows and 0 <= col < self.__cols
+
+    def print_dictionary(self):
+        symbols_dict = dungeon._get_object_symbols()
+        for key, value in symbols_dict.items():
+            print(f"Room at ({key[0]}, {key[1]}): {value}")
+
+    def print_details(self):
+        """
+        Prints the details of the maze by accessing the __str__() method in Room
+        :return: None.
+        """
+        for row in range(0, self.__rows):
+            print("row ", row)
+            for col in range(0, self.__cols):
+                print("col", col)
+                print(self.__maze[row][col].__str__())
+            print()
+
+    def print_dungeon(self):
+        """
+        Prints a simple visual representation of the Dungeon's maze.
+        :return: None.
+        """
+        print("+", end="")
+        for _ in range(self.__rows * 2):
+            print("-", end="")
+        print("+")
+
+        # Print each row of cells
+        for col in range(self.__cols):
+            # Print left wall
+            print("|", end="")
+
+            # Print each cell's doors
+            for row in range(self.__rows):
+                room = self.__maze[col][row]
+                if room.get_entrance():
+                    print(" E", end="")
+                elif room.get_exit():
+                    print(" X", end="")
+                elif room.get_impasse():
+                    print(" #", end="")
+                else:
+                    print(" " if room.get_west_door() else " |", end="")
+                    print(" " if room.get_south_door() else "-", end="")
+            print("|")
+
+        # Print bottom border
+        print("+", end="")
+        for _ in range(self.__rows * 2):
+            print("-", end="")
+        print("+")
+
+    # Internal methods
+
     def _create_maze(self, room, current_row, current_col):
         # Set the starting room to "visited"
         room.set_visited(True)
@@ -71,9 +130,6 @@ class Dungeon:
         new_row = row + dx[direction]
         new_col = col + dy[direction]
         return new_row, new_col
-
-    def is_valid_room(self, row, col):
-        return 0 <= row < self.__rows and 0 <= col < self.__cols
 
     def _opposite_direction(self, direction):
         return {"N": "S", "S": "N", "E": "W", "W": "E"}[direction]
@@ -215,57 +271,7 @@ class Dungeon:
             symbols_dict[(row, col)] = symbols
         return symbols_dict
 
-    def print_dictionary(self):
-        symbols_dict = dungeon._get_object_symbols()
-        for key, value in symbols_dict.items():
-            print(f"Room at ({key[0]}, {key[1]}): {value}")
 
-    def print_details(self):
-        """
-        Prints the details of the maze by accessing the __str__() method in Room
-        :return: None.
-        """
-        for row in range(0, self.__rows):
-            print("row ", row)
-            for col in range(0, self.__cols):
-                print("col", col)
-                print(self.__maze[row][col].__str__())
-            print()
-
-    def print_dungeon(self):
-        """
-        Prints a simple visual representation of the Dungeon's maze.
-        :return: None.
-        """
-        print("+", end="")
-        for _ in range(self.__rows * 2):
-            print("-", end="")
-        print("+")
-
-        # Print each row of cells
-        for col in range(self.__cols):
-            # Print left wall
-            print("|", end="")
-
-            # Print each cell's doors
-            for row in range(self.__rows):
-                room = self.__maze[col][row]
-                if room.get_entrance():
-                    print(" E", end="")
-                elif room.get_exit():
-                    print(" X", end="")
-                elif room.get_impasse():
-                    print(" #", end="")
-                else:
-                    print(" " if room.get_west_door() else " |", end="")
-                    print(" " if room.get_south_door() else "-", end="")
-            print("|")
-
-        # Print bottom border
-        print("+", end="")
-        for _ in range(self.__rows * 2):
-            print("-", end="")
-        print("+")
 
 # Example usage
 dungeon = Dungeon(20, 20)
