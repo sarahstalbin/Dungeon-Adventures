@@ -18,7 +18,7 @@ class Dungeon:
     def build_dungeon(self):
         """
         Generates a maze for the Dungeon.
-        :return: none
+        :return: None
         """
         # Randomly select a starting Room
         start_row = random.randint(0, self.__rows - 1)
@@ -43,13 +43,27 @@ class Dungeon:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
 
     def get_entrance(self):
+        """
+        Gets the entrance Room coordinates of the Dungeon's maze.
+        :return: Room
+        """
         return self.__maze[0][0]
 
     def is_valid_room(self, row, col):
+        """
+        Checks whether a Room is valid or not.
+        :param row: row coordinate
+        :param col: column coordinate
+        :return: boolean
+        """
         return 0 <= row < self.__rows and 0 <= col < self.__cols
 
     def print_dictionary(self):
-        symbols_dict = dungeon._get_object_symbols()
+        """
+        Prints a string representation of the dictionary, with the format "(room coordinates): items in the room"
+        :return: None
+        """
+        symbols_dict = self._get_object_symbols()
         for key, value in symbols_dict.items():
             print(f"Room at ({key[0]}, {key[1]}): {value}")
 
@@ -103,6 +117,13 @@ class Dungeon:
     # Internal methods
 
     def _create_maze(self, room, current_row, current_col):
+        """
+        Internal method that randomly generates a maze for the Dungeon.
+        :param room: starting room
+        :param current_row: current row coordinate
+        :param current_col: current column coordinate
+        :return: None
+        """
         # Set the starting room to "visited"
         room.set_visited(True)
 
@@ -124,17 +145,43 @@ class Dungeon:
                     self._create_maze(neighbor_room, neighbor_row, neighbor_col)
 
     def _get_neighbor_coords(self, row, col, direction):
-        dx = {"N": 0, "S": 0, "E": 1, "W": -1}
-        dy = {"N": -1, "S": 1, "E": 0, "W": 0}
+        """
+        Internal method that returns the coordinates of the neighboring room in order to generate the maze.
+        :param row: row coordinate, intended to be the current row
+        :param col: column coordinate, intended to be the current column
+        :param direction: the current direction that the maze is following during generation
+        :return: the new row and column coordinates
+        """
+        d_row = {"N": 0, "S": 0, "E": 1, "W": -1}
+        d_col = {"N": -1, "S": 1, "E": 0, "W": 0}
 
-        new_row = row + dx[direction]
-        new_col = col + dy[direction]
+        new_row = row + d_row[direction]
+        new_col = col + d_col[direction]
         return new_row, new_col
 
     def _opposite_direction(self, direction):
+        """
+        Internal method that returns the opposite direction of the provided direction.
+        Raises ValueError if an invalid direction is given.
+        :param direction: the given direction ("N," "S," "E," "W")
+        :return: (Str) the opposite direction of the provided direction
+        """
+        if direction not in ("N," "S," "E," "W"):
+            raise ValueError("INVALID DIRECTION PROVIDED")
         return {"N": "S", "S": "N", "E": "W", "W": "E"}[direction]
 
     def _knock_down_door(self, room, direction):
+        """
+        Internal method that "knocks down" a door in a particular direction ("N," "S," "E," "W") in relation
+        to the provided Room.
+        :param room: Room object whose doors need to be knocked down in _create_maze()
+        :param direction: the direction of the door that will be knocked down ("N," "S," "E," "W")
+        :return: None
+        """
+        if direction not in ("N," "S," "E," "W"):
+            raise ValueError("INVALID DIRECTION PROVIDED")
+
+        # Update the relevant door based on given direction
         if direction == "N":
             room.set_north_door()
         elif direction == "S":
@@ -146,7 +193,7 @@ class Dungeon:
 
     def _set_entrance_exit(self):
         """
-        Sets the entrance and exit in the maze, sets them as passable, and sets them as empty.
+        Internal method that sets the entrance and exit in the maze, sets them as passable, and sets them as empty.
         :return: None.
         """
         # Set the entrance and exit
@@ -163,7 +210,7 @@ class Dungeon:
 
     def _make_impassable(self):
         """
-        Randomly sets some Rooms as impassable.
+        Internal method that randomly sets some Rooms as impassable.
         :return: None.
         """
         for row in range(self.__rows):
@@ -172,11 +219,17 @@ class Dungeon:
                     self.__maze[row][col].set_impasse(True)
 
     def _is_traversable(self, start_row, start_col):
+        """
+        Internal method that returns a boolean reflecting whether the maze is passable or not.
+        :param start_row: starting row coordinate (usually 0)
+        :param start_col: starting column coordinate (usually 0)
+        :return: boolean
+        """
         return self._traverse_the_maze(start_row, start_col)
 
     def _traverse_the_maze(self, row, col):
         """
-        Traverses the dungeon from entrance to exit to verify that it is passable.
+        Internal method that traverses the Dungeon from entrance to exit to verify that it is passable.
         :param row: starting row, usually 0.
         :param col: starting column, usually 0.
         :return: boolean.
@@ -208,6 +261,10 @@ class Dungeon:
         return found_exit
 
     def _place_items(self):
+        """
+        Internal method that randomly places items in the Dungeon.
+        :return: None
+        """
         for (row, col), room in self.__items.items():
             if room.get_impasse() or room.get_entrance() or room.get_exit():
                 continue
@@ -240,9 +297,18 @@ class Dungeon:
                 room.set_pit(True)
 
     def _get_maze_dictionary(self):
+        """
+        Internal getter method that returns the dictionary.
+        :return: the dictionary instantiated in the class constructor.
+        """
         return self.__items
 
     def _get_object_symbols(self):
+        """
+        Internal method that overrides the Room class __str__() method by converting its symbols to shorter, more
+        readable symbols in the Dungeon class dictionary.
+        :return: the dictionary of symbols
+        """
         symbols_dict = {}
         for (row, col), room in self.__items.items():
             symbols = ""
