@@ -6,7 +6,7 @@ Dungeon Adventure
 # import random
 
 class Adventurer:
-    def __init__(self, HP, name, healing_potion_count, vision_potion_count):
+    def __init__(self, name="", HP=0, healing_potion_count =0, vision_potion_count=0):
         #super().__init__() = name
         self.adventurer_dict = {"Name": name, "HP": HP, "Healing Potion Count": healing_potion_count,
                                 "Vision Potion Count": vision_potion_count, "Pillar Count": 0}
@@ -20,14 +20,21 @@ class Adventurer:
         """getting name from Dungeon Adventure, setting, and passing name if needed"""
         self.adventurer_dict["Name"] = name
 
-    def get_name(self):
+    def __get_name__(self):
         """Setting name"""
         return self.adventurer_dict["Name"]
 
+    def __get_health_potion_count__(self):
+        """returns health potion count"""
+        return self.adventurer_dict["Healing Potion Count"]
+
+    def __get_vision_potion_count__(self):
+        """returns health potion count"""
+        return self.adventurer_dict["Vision Potion Count"]
     def increase_healing_potion_count(self):
         """Increasing healing Potion count passed from Dungeon"""
         self.adventurer_dict["Healing Potion Count"] +=1
-
+    #
     def increase_vision_potion_count(self):
         """Increasing Vision Potion count passed from Dungeon"""
         self.adventurer_dict["Vision Potion Count"] += 1
