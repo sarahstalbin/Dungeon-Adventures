@@ -283,18 +283,19 @@ class Dungeon:
         Internal method that randomly places items in the Dungeon.
         :return: None
         """
+
+        pillars = {
+            "abstraction": 0,
+            "encapsulation": 0,
+            "polymorphism": 0,
+            "inheritance": 0
+        }
+
         for (row, col), room in self.__items.items():
             if room.get_impasse() or room.get_entrance() or room.get_exit():
                 continue
 
             else:
-
-                pillars = {
-                    "abstraction": 0,
-                    "encapsulation": 0,
-                    "polymorphism": 0,
-                    "inheritance": 0
-                }
 
                 if random.random() <= 0.04 and pillars["abstraction"] < 1:
                     room.set_abstraction_pillar()
@@ -358,7 +359,6 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(20, 20)
+dungeon = Dungeon(5, 5)
 dungeon.print_dungeon()
-
-print(dungeon)
+dungeon.print_dictionary()
