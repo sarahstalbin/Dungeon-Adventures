@@ -23,6 +23,38 @@ class Room:
         self.__empty_room = False
 
     # getter methods
+    def get_healing_potion(self):
+        """ gets healing potion boolean value """
+        return self.__healing_potion
+
+    def get_vision_potion(self):
+        """ gets vision boolean value """
+        return self.__vision_potion
+
+    def get_pit(self):
+        """ gets pit boolean value """
+        return self.__pit
+
+    def get_multiple_items(self):
+        """ gets multiple_items boolean value """
+        return self.__multiple_items
+
+    def get_abstraction_pillar(self):
+        """ gets abstraction_pillar boolean value """
+        return self.__abstraction_pillar
+
+    def get_inheritance_pillar(self):
+        """ gets inheritance_pillar boolean value """
+        return self.__inheritance_pillar
+
+    def get_polymorphism_pillar(self):
+        """ gets polymorphism_pillar boolean value """
+        return self.__polymorphism_pillar
+
+    def get_encapsulation_pillar(self):
+        """ gets encapsulation_pillar boolean value """
+        return self.__encapsulation_pillar
+
     def get_north_door(self):
         """ gets north_door boolean value """
         return self.__north_door
