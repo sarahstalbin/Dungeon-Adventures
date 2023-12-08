@@ -58,6 +58,36 @@ class Dungeon:
         """
         return 0 <= row < self.__rows and 0 <= col < self.__cols
 
+    def __str__(self):
+        """
+        External method that builds a string containing information about the entire Dungeon.
+        :return: String
+        """
+        dungeon_info = ""
+        for col in range(self.__cols):
+            for row in range(self.__rows):
+                room = self.__maze[col][row]
+                dungeon_info += f"Room at ({row}, {col}):"
+                dungeon_info += f"\n  - North Door: {room.get_north_door()}"
+                dungeon_info += f"\n  - South Door: {room.get_south_door()}"
+                dungeon_info += f"\n  - East Door: {room.get_east_door()}"
+                dungeon_info += f"\n  - West Door: {room.get_west_door()}"
+                dungeon_info += f"\n  - Visited: {room.get_visited()}"
+                dungeon_info += f"\n  - Entrance: {room.get_entrance()}"
+                dungeon_info += f"\n  - Exit: {room.get_exit()}"
+                dungeon_info += f"\n  - Impasse: {room.get_impasse()}"
+                dungeon_info += f"\n  - Empty Room: {room.get_empty_room()}"
+                dungeon_info += f"\n  - Abstraction Pillar: {room.set_abstraction_pillar()}"
+                dungeon_info += f"\n  - Encapsulation Pillar: {room.set_encapsulation_pillar()}"
+                dungeon_info += f"\n  - Inheritance Pillar: {room.set_inheritance_pillar()}"
+                dungeon_info += f"\n  - Polymorphism Pillar: {room.set_polymorphism_pillar()}"
+                dungeon_info += f"\n  - Healing Potion: {room.set_healing_potion(True)}"
+                dungeon_info += f"\n  - Vision Potion: {room.set_vision_potion(True)}"
+                dungeon_info += f"\n  - Pit: {room.set_pit(True)}"
+                dungeon_info += "\n\n"
+
+        return dungeon_info
+
     def print_dictionary(self):
         """
         Prints a string representation of the dictionary, with the format "(room coordinates): items in the room"
@@ -66,18 +96,6 @@ class Dungeon:
         symbols_dict = self._get_object_symbols()
         for key, value in symbols_dict.items():
             print(f"Room at ({key[0]}, {key[1]}): {value}")
-
-    def print_details(self):
-        """
-        Prints the details of the maze by accessing the __str__() method in Room
-        :return: None.
-        """
-        for row in range(0, self.__rows):
-            print("row ", row)
-            for col in range(0, self.__cols):
-                print("col", col)
-                print(self.__maze[row][col].__str__())
-            print()
 
     def print_dungeon(self):
         """
@@ -343,4 +361,4 @@ class Dungeon:
 dungeon = Dungeon(20, 20)
 dungeon.print_dungeon()
 
-dungeon.print_dictionary()
+print(dungeon)
