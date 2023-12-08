@@ -49,6 +49,14 @@ class Dungeon:
         """
         return self.__maze[0][0]
 
+    def get_room_contents(self, key):
+        """
+        Gets the contents of a Room in the dungeon.
+        :param key: a tuple representation of the row, column Room coordinates (0, 0)
+        :return: the contents of the specified Room, in the format specified in the __str__() method in Room class.
+        """
+        return self.__items.get(key)
+
     def is_valid_room(self, row, col):
         """
         Checks whether a Room is valid or not.
@@ -361,4 +369,4 @@ class Dungeon:
 # Example usage
 dungeon = Dungeon(5, 5)
 dungeon.print_dungeon()
-dungeon.print_dictionary()
+print(dungeon.get_room_contents((0, 1)))
