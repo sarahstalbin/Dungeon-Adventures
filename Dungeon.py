@@ -57,6 +57,16 @@ class Dungeon:
         """
         return self.__items.get(key)
 
+    def print_dictionary(self):
+        """
+        Prints the contents of each Room without the symbols from Room's __str__() method.
+        Uses the format (row, col) : contents.
+        :return: None
+        """
+        symbols_dict = self._get_object_symbols()
+        for key, value in symbols_dict.items():
+            print(f"Room at ({key[0]}, {key[1]}): {value}")
+
     def is_valid_room(self, row, col):
         """
         Checks whether a Room is valid or not.
@@ -96,15 +106,6 @@ class Dungeon:
 
         return dungeon_info
 
-    def print_dictionary(self):
-        """
-        Prints a string representation of the dictionary, with the format "(room coordinates): items in the room"
-        :return: None
-        """
-        symbols_dict = self._get_object_symbols()
-        for key, value in symbols_dict.items():
-            print(f"Room at ({key[0]}, {key[1]}): {value}")
-
     def print_dungeon(self):
         """
         Prints a simple visual representation of the Dungeon's maze.
@@ -115,12 +116,12 @@ class Dungeon:
             print("-", end="")
         print("+")
 
-        # Print each row of cells
+        # Print each row of Rooms
         for col in range(self.__cols):
             # Print left wall
             print("|", end="")
 
-            # Print each cell's doors
+            # Print each Room's doors
             for row in range(self.__rows):
                 room = self.__maze[col][row]
                 if room.get_entrance():
@@ -167,7 +168,7 @@ class Dungeon:
                     self._knock_down_door(room, direction)
                     self._knock_down_door(neighbor_room, self._opposite_direction(direction))
 
-                    # Recursively explore the neighbor cell
+                    # Recursively explore the neighbor Room
                     self._create_maze(neighbor_room, neighbor_row, neighbor_col)
 
     def _get_neighbor_coords(self, row, col, direction):
@@ -265,24 +266,23 @@ class Dungeon:
         found_exit = False
         if self.is_valid_room(row, col):
             self.__maze[row][col].set_visited(True)
-            # check for exit
+            # Check if the Room is the exit
             if self.__maze[row][col].get_exit():
                 return True
-            # not at exit so try another room: south, east, north, west
-            found_exit = self._traverse_the_maze(row + 1, col)  # south
+            # If it isn't the exit, try another Room to the South, East, North, and West
+            found_exit = self._traverse_the_maze(row + 1, col)  # South
             if not found_exit:
-                found_exit = self._traverse_the_maze(row, col + 1)  # east
+                found_exit = self._traverse_the_maze(row, col + 1)  # East
             if not found_exit:
-                found_exit = self._traverse_the_maze(row - 1, col)  # north
+                found_exit = self._traverse_the_maze(row - 1, col)  # North
             if not found_exit:
-                found_exit = self._traverse_the_maze(row, col - 1)  # west
+                found_exit = self._traverse_the_maze(row, col - 1)  # West
 
-            # if we did not reach the exit from this room we need mark it as visited to
-            # avoid going into the room again
+            # If the exit was not found in this Room, mark it as visited
             if not found_exit:
                 self.__maze[row][col].set_visited(True)
 
-        else:  # tried to move into a room that is not valid
+        else:  # If the Room is not valid
             return False
         return found_exit
 
