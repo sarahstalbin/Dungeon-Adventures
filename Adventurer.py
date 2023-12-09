@@ -3,7 +3,7 @@ Minna Chae
 TCSS 501 and 502
 Dungeon Adventure
 """
-# import random
+import random
 
 class Adventurer:
     def __init__(self, name="", HP=0, healing_potion_count =0, vision_potion_count=0):
@@ -31,22 +31,35 @@ class Adventurer:
     def __get_vision_potion_count__(self):
         """returns health potion count"""
         return self.adventurer_dict["Vision Potion Count"]
-    def increase_healing_potion_count(self):
+
+    def get_HP(self):
+        return self.adventurer_dict["HP"]
+
+    def get_pillar(self):
+        return self.adventurer_dict["Pillar Count"]
+
+    def inc_healing_potion_count(self):
         """Increasing healing Potion count passed from Dungeon"""
         self.adventurer_dict["Healing Potion Count"] +=1
     #
-    def increase_vision_potion_count(self):
+    def inc_vision_potion_count(self):
         """Increasing Vision Potion count passed from Dungeon"""
         self.adventurer_dict["Vision Potion Count"] += 1
 
-    def increase_HP(self, healing_potion):
+    def inc_HP(self):
         """Increase health point requested via Dungeon"""
-        self.adventurer_dict["HP"] += healing_potion
+        self.adventurer_dict["HP"] += random.randint(1, 10)
         self.adventurer_dict["Healing Potion Count"] -= 1
 
-    def decrease_HP(self, pit):
+    def inc_pillar(self):
+        self.adventurer_dict["Pillar Count"] += 1
+    def dec_HP(self):
         """Decrease HP if falling in pit"""
-        self.adventurer_dict["HP"] -= pit
+        # self.adventurer_dict["HP"] -= random.randint(1, 10)
+        self.adventurer_dict["HP"] -= 100
+
+    def dec_vision_potion(self):
+        self.adventurer_dict["Vision Potion Count"] -= 1
 
     def __str__(self):
         """Printing in string form"""
