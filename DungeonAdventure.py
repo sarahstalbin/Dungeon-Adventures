@@ -4,11 +4,12 @@ TCSS 501 and 502
 Dungeon Adventure
 """
 
-"contains main logic on playing the game"
+"""contains main logic on playing the game"""
 from Adventurer import Adventurer
 from Dungeon_Minna import Dungeon
 import random
 import sys, time
+
 
 class DungeonAdventure:
 
@@ -22,21 +23,20 @@ class DungeonAdventure:
         self.player_loc_row = 0
         #creating dungeon and adventure (initializing them)
 
+    def play_whole_game(self):
+        self.print_introduction()
+        self.set_play_mode()
+        # print(play_game.menu_str())
+        self.set_up_player()
+        self.get_input_player()
+        self.player_results()
+        self.print_end()
 
     # def __str__(self): #menu?
     #     """Printing in string form"""
     #     formatted_list = [str(item) + " : " + str(values) for item, values in self.adventurer_dict.items()]
     #     return "\n" + "\n".join(formatted_list) + "\n"
 
-    # def game_play(self):
-    #     """Plays the game"""
-    #     game = DungeonAdventure()
-    #     game.print_introduction()
-    #     # input_play_mode = input(f"Choose: Easy, Medium, or Hard? Default will be Easy. ")
-    #     game.set_play_mode()
-    #
-    #     print(f"Hello {self.adventurer.__get_name__()}. Welcome to the Dungeon Adventurer game.")
-    #     print(f"Here are your current details: {self.adventurer}")
     def print_introduction(self):
         """
         Prints Introduction and game background
@@ -196,8 +196,8 @@ class DungeonAdventure:
             print(f"You won the game and found all {self.adventurer.get_pillar()} pillars!")
 
         else:
-            print(f"Sorry, you have lost the game")
-        see_stats = input("Do you want to see your stats? y/n ")
+            print(f"Sorry, you only found {self.adventurer.get_pillar()} pillars. You have lost the game")
+        see_stats = input("\nDo you want to see your stats? y/n ")
         if see_stats.lower() == "y" or see_stats.lower() == "yes":
             print(self.adventurer)
         else:
@@ -225,3 +225,4 @@ class DungeonAdventure:
     # Determines the Adventurer 's options (Move, Use a Potion)
     # Continues this process until the Adventurer wins or dies
 game_play = DungeonAdventure()
+game_play.play_whole_game()
