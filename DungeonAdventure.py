@@ -6,18 +6,20 @@ Dungeon Adventure
 
 "contains main logic on playing the game"
 from Adventurer import Adventurer
-from Dungeon import Dungeon
+from Dungeon_Minna import Dungeon
 import random
+import sys, time
 
 class DungeonAdventure:
 
     def __init__(self):
         self.menu = {"Action Menu": "m", "Go North": "n", "Go South": "s", "Go East": "e", "Go West": "w",
-                     "Use Potion": "p", "Use Vision": "v", "View current status": "stats"}
+                     "Use Health Potion": "h", "Use Vision": "v", "View current status": "stats", "Quit": "q"}
         self.hidden_menu_option = "map"
-        self.dungeon = Dungeon(20,20)
+        self.dungeon = Dungeon(5,5)
         self.adventurer = Adventurer()
-        self.player_location = [0,0]
+        self.player_loc_col = 0
+        self.player_loc_row = 0
         #creating dungeon and adventure (initializing them)
 
 
@@ -36,7 +38,9 @@ class DungeonAdventure:
     #     print(f"Hello {self.adventurer.__get_name__()}. Welcome to the Dungeon Adventurer game.")
     #     print(f"Here are your current details: {self.adventurer}")
     def print_introduction(self):
-        """Prints Introduction and game background"""
+        """
+        Prints Introduction and game background
+        """
         print("Welcome to Dungeon Adventure where you may traverse the dangerous dungeons to find the secret exit. \n"
               "In this game, you will find a multiple of surprises in each room such as a healing potion, vision potion, or"
               " fall into a pit. \nThe healing potion can be stored and used to heal your HP. The Vision potion and be stored"
@@ -45,7 +49,10 @@ class DungeonAdventure:
               "you die before you find the 4 pillars, you lose. \n")
 
     def set_play_mode(self):
-        """Setting Play mode based on user input and setting attributes to Adventurer"""
+        """
+        Setting up play mode level based on user input and setting attributes to Adventurer
+        :return: None
+        """
         input_play_mode = input(f"Choose: Easy, Medium, or Hard? Default will be Easy. ")
         # print("Choose: Easy, Medium, or Hard? Default will be Easy. ") #for debugging purposes
         # input_play_mode = "easy" #for debugging purposes
@@ -67,11 +74,13 @@ class DungeonAdventure:
         name = input("What is your name? ")
         # name = "Minna"#for debugging purposes
         self.adventurer.__init__(name, HP, healing_potion_count, vision_potion_count)
-        print(self.adventurer) #for debugging purposes
+        print(f"this is self.adventurer {self.adventurer}") #for debugging purposes
 
     def menu_str(self):
-        """Return menu display for player moves NOTE: Include a hidden menu option for testing that prints out the
-        entire Dungeon -- specify what the menu option"""
+        """Reminder: Include a hidden menu option for testing that prints out the
+        entire Dungeon -- specify what the menu option is in your documentation for the DungeonAdventure class
+        :return: menu str display for player moves
+        """
         formatted_list = [item + " : " + values for item, values in self.menu.items()]
         return "\n" + "\n".join(formatted_list) + "\n"
 
@@ -80,71 +89,135 @@ class DungeonAdventure:
         #Prints the current room (this is based on the Adventurer's current location)
         #Determines the Adventurer's options (Move, Use a Potion)
         #Continues this process until the Adventurer wins or dies
-        #NOTE: Include a hidden menu option for testing that prints out the entire Dungeon -- specify what the menu
-        #   option is in your documentation for the DungeonAdventure class
         #At the conclusion of the game, display the entire Dungeon
         # dungeon = Dungeon(5,5) I should create dungeon eventually
+        """
+        Sets up the game by creating the dungeon maze and locating the starting coordinates
+        """
         self.dungeon.build_dungeon()
-        self.player_str = self.dungeon.__get_entrance__()
-        self.player_location = [0,0]
-        print(self.player_location)
-
-        #print action menu option
-        #n, s, e, w, p: potion, v:vision
+        self.player_str = self.dungeon.get_entrance()
+        self.player_loc_col = 0
+        self.player_loc_row = 0
+        #create better code for ths
 
     def get_input_player(self):
-        menu_command = input("What is your next move? Enter \"m\" for menu: ")
-        if str(menu_command).lower() == "m":
-            print(self.menu_str())
-        elif str(menu_command).lower() == "p":
-            if self.adventurer.__get_health_potion_count__() >0:
-                #increase healing
-                pass
-        elif str(menu_command).lower() == "e":
-            input_row = 0
-            input_col = 0
-            print(f"this is str(menu_command).upper {str(menu_command).upper()}")
-            row, col = self.dungeon._get_neighbor_coords(input_row, input_col, str(menu_command).upper())
-            print(f"this is get neighbor row {row} col {col}")
-            print(f"this is self.dungeon.is_valid_room(row, col) {self.dungeon.is_valid_room(row, col)}")
-            if self.dungeon.is_valid_room(row, col):
-                print(self.dungeon.next_move(row, col))
-                # self.dungeon.get_item_in_room(row, col)
-        elif str(menu_command).lower() == "map":
-            self.dungeon.print_dungeon()
-            self.dungeon.print_dictionary()
-        # while still in maze
-        # next_move = input("What would you like to do next? M for action menu"
-        # if next_move.lower = "m":
-        # print
+        menu_command = ""
+        item = ""
+        while item != "O" or menu_command.lower() != "q":
+            menu_command = input("What is your next move? Enter \"m\" for menu: ")
+            # while still in maze and not quit
+            if menu_command.lower() == "q":
+                break
+            elif str(menu_command).lower() == "m":
+                #call for menu
+                print(self.menu_str())
+            elif str(menu_command).lower() == "h":
+                #use health potion
+                if self.adventurer.__get_health_potion_count__() >0:
+                    self.adventurer.inc_HP()
+                    print(f"Your health is now {self.adventurer.get_HP()}")
+                else:
+                    print("You don't have any health potions left")
+            elif str(menu_command).lower() == "v":
+                if self.adventurer.__get_vision_potion_count__() > 0:
+                    self.adventurer.dec_vision_potion()
+
+                    #do the vision code
+                else:
+                    print("You don't have any vision potions left")
+
+            elif menu_command.lower() == "e" or menu_command.lower() == "w" or menu_command.lower() == "s" or menu_command.lower() == "n":
+                #moving character
+                item = self.move_adventurer(menu_command)
+
+                #if the player reaches an exit or dies, break out of the game
+                if item == "O" or self.adventurer.get_HP() < 0 or self.adventurer.get_pillar() == 4:
+                    break
+            elif str(menu_command).lower() == "map":
+                self.dungeon.print_dungeon()
+                self.dungeon.print_dictionary()
+            else:
+                print("Not a valid command")
+
+
         # ask if player wants to use potion or vision
+    def move_adventurer(self, menu_command):
+        """
+        If player input is a director, move to that direction if possible
+        :return: item in next room
+        """
+        new_row, new_col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
+                                                             str(menu_command).upper())
+        # print(f"is valid coords? {self.dungeon.is_valid_room(new_row, new_col)}")
+        if self.dungeon.is_valid_room(new_row, new_col):
+            self.player_loc_row, self.player_loc_col = new_row, new_col
+            print(f"this is new coors row: {self.player_loc_row} col: {self.player_loc_col}")
+            print(self.dungeon.get_room_str((new_row, new_col)))
+            print(f"{self.dungeon.get_room_contents((self.player_loc_row, self.player_loc_col))}")
+            item = self.dungeon.get_room_contents((self.player_loc_row, self.player_loc_col))
+            if item == "H":
+                self.adventurer.inc_healing_potion_count()
+                print(f"Increased healing: {self.adventurer.__get_health_potion_count__()}")
+            elif item == "V":  # vision
+                self.adventurer.inc_vision_potion_count()
+                print(f"Increased vision: {self.adventurer.__get_vision_potion_count__()}")
+            elif item == "X":  # pit- come back to it
+                self.adventurer.dec_HP()
+                print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
+                if self.adventurer.get_HP() < 0:
+                    print("You have died and lost the game!")
+                    return item
+            elif item == "O":  # exit
+                print("You found the exit to the dungeon")
+                return item
+            elif item == "M":  # get multiple items- come back to it
+                self.adventurer.inc_healing_potion_count()
+                print(f"You got a pillar! Total Pillars: {self.adventurer.get_pillar()}")
+            elif item == "A":  # abstraction
+                self.adventurer.inc_pillar()
+                print(f"You got a pillar! Total Pillars: {self.adventurer.get_pillar()}")
+            elif item == "P":  # polymorphism
+                self.adventurer.inc_pillar()
+                print(f"You got a pillar! Total Pillars: {self.adventurer.get_pillar()}")
+            elif item == "I":  # inheritance
+                self.adventurer.inc_pillar()
+                print(f"You got a pillar! Total Pillars: {self.adventurer.get_pillar()}")
+            elif item == "E":  # encapsulation
+                self.adventurer.inc_pillar()
+                print(f"You got a pillar! Total Pillars: {self.adventurer.get_pillar()}")
+            # print(f"this is self.adventurer after update{self.adventurer}")
+        else:
+            print("Not valid direction")
+            print(f"Current location: row: {self.player_loc_row} col: {self.player_loc_col}")
+            return
 
-    def __traverse_maze__(self):
+    def player_results(self):
+        if self.adventurer.get_pillar() == 4:
+            print(f"You won the game and found all {self.adventurer.get_pillar()} pillars!")
 
+        else:
+            print(f"Sorry, you have lost the game")
+        see_stats = input("Do you want to see your stats? y/n ")
+        if see_stats.lower() == "y" or see_stats.lower() == "yes":
+            print(self.adventurer)
+        else:
+            print("I guess you'll never know")
 
-
-
-            #ask to go N,S,E,W
-            #if direction is possible
-                #move
-            #else
-                #request new direction
-                #maybe look at dungeon and give options?
-            #print room
-            #if room has poition
-                #adventurer potion+1 & potion value?
-            #if room has vision
-                #vision +1
-            #if pit
-                #-HP
-            #if pillar
-                #pillar +=1
-
-            #grab necessary objects and values of object and pass into adventurer
-            #adventurer
-        person = self.dungeon.next_move(0,1)
-        print(person)
-        # dungeon.print_dictionary()
+    def print_end(self):
+        time.sleep(1)
+        group_names = ("\nSarah St. Albin\nAqueno Amalraj  \nMinna Chae \n")
+        teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
+        print("Thank you for playing Dungeon Adventure. \nThis game was created by")
+        for character in group_names:
+            sys.stdout.write(character)
+            sys.stdout.flush()
+            time.sleep(.05)
+        print("\nA special thanks to our instructors ")
+        for character in teacher_names:
+            sys.stdout.write(character)
+            sys.stdout.flush()
+            time.sleep(.05)
+        print("\nWe could not have done it without you.")
 
 
 
