@@ -49,13 +49,50 @@ class Dungeon:
         """
         return self.__maze[0][0]
 
+    def get_room_str(self):
+        """
+        Gets the entrance Room coordinates of the Dungeon's maze.
+        :return: Room
+        """
+        return self.__maze[0][0]
+
     def get_room_contents(self, key):
         """
-        Gets the contents of a Room in the dungeon.
-        :param key: a tuple representation of the row, column Room coordinates (0, 0)
-        :return: the contents of the specified Room, in the format specified in the __str__() method in Room class.
-        """
-        return self.__items.get(key)
+       Gets the contents of a Room in the dungeon.
+       :param key: a tuple representation of the row, column Room coordinates (0, 0)
+       :return: the contents of the specified Room, in the format specified in the __str__() method in Room class.
+       """
+        # symbols_dict = self._get_object_symbols()
+        # return symbols_dict.items(key)
+        item = self.__items.get(key)
+        # print(f"self.__items.get(key): \n {self.__items.get(key)}")
+        # print(f"this is item \n {item}")
+        symbols = ""
+        if item.get_healing_potion():
+            symbols += "H"
+        elif item.get_vision_potion():
+            symbols += "V"
+        elif item.get_pit():
+            symbols += "X"
+        elif item.get_entrance():
+            symbols += "i"
+        elif item.get_exit():
+            symbols += "O"
+        elif item.get_multiple_items():
+            symbols += "M"
+        elif item.get_empty_room():
+            symbols += " "
+        elif item.get_abstraction_pillar():
+            symbols += "A"
+        elif item.get_polymorphism_pillar():
+            symbols += "P"
+        elif item.get_inheritance_pillar():
+            symbols += "I"
+        elif item.get_encapsulation_pillar():
+            symbols += "E"
+
+        # symbols_dict[(row, col)] = symbols
+        return symbols
 
     def print_dictionary(self):
         """
