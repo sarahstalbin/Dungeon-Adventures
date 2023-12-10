@@ -49,12 +49,12 @@ class Dungeon:
         """
         return self.__maze[0][0]
 
-    def get_room_str(self):
+    def get_room_str(self, key):
         """
         Gets the entrance Room coordinates of the Dungeon's maze.
         :return: Room
         """
-        return self.__maze[0][0]
+        return self.__items.get(key)
 
     def get_room_contents(self, key):
         """
@@ -325,41 +325,27 @@ class Dungeon:
 
     def _place_items(self):
         """
-        Internal method that randomly places items in the Dungeon.
-        :return: None
+        Internal method that randomly places healing potions, vision potions, and pits.
+        :return:
         """
-
-        pillars = {
-            "abstraction": 0,
-            "encapsulation": 0,
-            "polymorphism": 0,
-            "inheritance": 0
-        }
-
         for (row, col), room in self.__items.items():
             if room.get_impasse() or room.get_entrance() or room.get_exit():
                 continue
-
             else:
+                possibility = random.randint(0, 100)
+                # Place the healing potion
+                if possibility <= 10:
+                    room.set_healing_potion(True)
 
-                if random.random() <= 0.04 and pillars["abstraction"] < 1:
-                    room.set_abstraction_pillar()
-                    pillars["abstraction"] += 1
-                elif random.random() <= 0.04 and pillars["encapsulation"] < 1:
-                    room.set_encapsulation_pillar()
-                    pillars["encapsulation"] += 1
-                elif random.random() <= 0.04 and pillars["polymorphism"] < 1:
-                    room.set_polymorphism_pillar()
-                    pillars["polymorphism"] += 1
-                elif random.random() <= 0.04 and pillars["inheritance"] < 1:
-                    room.set_inheritance_pillar()
-                    pillars["inheritance"] += 1
+                # Place the vision potion
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_vision_potion(True)
 
-            possibility = random.randint(0, 100)
-            if possibility <= 10:
-                room.set_healing_potion(True)
-                room.set_pit(True)
-                room.set_vision_potion(True)
+                # Place the pit
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_pit(True)
 
     def _get_maze_dictionary(self):
         """
@@ -405,6 +391,6 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(5, 5)
+dungeon = Dungeon(10, 10)
 dungeon.print_dungeon()
-print(dungeon.get_room_contents((0, 1)))
+dungeon.print_dictionary()
