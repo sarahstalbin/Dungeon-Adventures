@@ -148,35 +148,42 @@ class Dungeon:
         Prints a simple visual representation of the Dungeon's maze.
         :return: None.
         """
-        print("+", end="")
-        for _ in range(self.__rows * 2):
-            print("-", end="")
-        print("+")
+        # Saves top strings of all rooms in dungeon
+        top = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                top.append(str(self.__maze[col][row])[0:3] + "  ")
 
-        # Print each row of Rooms
-        for col in range(self.__cols):
-            # Print left wall
-            print("|", end="")
-
-            # Print each Room's doors
-            for row in range(self.__rows):
-                room = self.__maze[col][row]
-                if room.get_entrance():
-                    print(" E", end="")
-                elif room.get_exit():
-                    print(" X", end="")
-                elif room.get_impasse():
-                    print(" #", end="")
+        # saves mid string of all rooms in dungeon
+        mid = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if len(str(self.__maze[col][row])) == 10:
+                    mid.append(str(self.__maze[col][row])[4:6]+ "   ")
                 else:
-                    print(" " if room.get_west_door() else " |", end="")
-                    print(" " if room.get_south_door() else "-", end="")
-            print("|")
+                    mid.append(str(self.__maze[col][row])[4:7] + "  ")
 
-        # Print bottom border
-        print("+", end="")
-        for _ in range(self.__rows * 2):
-            print("-", end="")
-        print("+")
+        # Saves bottom strings of all rooms in dungeon
+        bottom = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if len(str(self.__maze[col][row])) == 10:
+                    bottom.append(str(self.__maze[col][row])[7:10] + "  ")
+                else:
+                    bottom.append(str(self.__maze[col][row])[8:11] + "  ")
+
+        #prints dungeon according to the dimensons
+        for i in range(0, self.__rows):
+            print(end="\n")
+            for room in range(i*self.__cols, (i+1)*self.__cols):
+                print(top[room], end="")
+            print(end="\n")
+            for room in range(i*self.__cols, (i+1)*self.__cols):
+                print(mid[room], end="")
+            print(end="\n")
+            for room in range(i * self.__cols, (i+1) * self.__cols):
+                print(bottom[room], end="")
+        print("\n")
 
     # Internal methods
 
