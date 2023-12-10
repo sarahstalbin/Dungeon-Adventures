@@ -322,6 +322,7 @@ class Dungeon:
             if possibility <= 10:
                 room.set_healing_potion(True)
                 room.set_pit(True)
+                room.set_vision_potion(True)
 
     def _get_maze_dictionary(self):
         """
