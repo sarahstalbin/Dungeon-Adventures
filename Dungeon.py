@@ -57,6 +57,65 @@ class Dungeon:
         """
         return self.__items.get(key)
 
+    def get_doors(self,current_key, new_key, direction="N"):
+        """
+        Get attributes of room
+        :return: attributes
+        """
+        attributes_current = self.__items.get(current_key) #grabbing room attributes
+        attributes_new = self.__items.get(new_key) #grabbing room attributes
+
+        if direction == "N":
+            boo_results = attributes_current.get_north_door() and attributes_new.get_south_door()
+            return boo_results
+
+        if direction == "S":
+            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door() # hopefully return boolean
+            return boo_results
+
+        if direction == "E":
+            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door() # hopefully return boolean
+            return boo_results
+
+        if direction == "W":
+            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()# hopefully return boolean
+            return boo_results
+        # return attributes.get_north_door()
+
+    def set_room_empty(self, key = (0,0), pit=False):
+        item = self.__items.get(key)
+        if item.get_healing_potion():
+            item.set_healing_potion(False)
+            # item.set_vision_potion(False)
+            # item.set_multiple_items(False)
+            item.set_empty_room()
+        elif item.get_vision_potion():
+            # item.set_healing_potion(False)
+            item.set_vision_potion(False)
+            # item.set_multiple_items(False)
+            item.set_empty_room()
+        elif item.get_multiple_items():
+            # item.set_healing_potion(False)
+            # item.set_vision_potion(False)
+            item.set_multiple_items(False)
+            # item.set_abstraction_pillar(False)
+            if pit:
+                item.set_pit(True)
+            else:
+                item.set_empty_room()
+        elif item.get_abstraction_pillar():
+            item.set_abstraction_pillar(False)
+            item.set_empty_room()
+        elif item.get_polymorphism_pillar():
+            item.set_polymorphism_pillar(False)
+            item.set_empty_room()
+        elif item.get_inheritance_pillar():
+            item.set_inheritance_pillar(False)
+            item.set_empty_room()
+        elif item.get_encapsulation_pillar():
+            item.set_encapsulation_pillar(False)
+            item.set_empty_room()
+
     def get_room_contents(self, key):
         """
        Gets the contents of a Room in the dungeon.
