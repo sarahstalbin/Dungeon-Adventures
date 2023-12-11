@@ -429,41 +429,38 @@ class Dungeon:
                     room.set_empty_room()
 
 
-    def _place_pillars(self):
+    def _place_items(self):
         """
-        Internal method that randomly places Pillars in eligible Rooms throughout the maze.
-        :return: None
+        Internal method that randomly places healing potions, vision potions, and pits.
+        :return:
         """
-        abstraction = False
-        encapsulation = False
-        inheritance = False
-        polymorphism = False
-
-        qualified_rooms = [room for (row, col), room in self.__items.items()
-                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()]
-                           # and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()
-                           # and not room.get_multiple_items]
-
-        selected_rooms = random.sample(qualified_rooms, 4)
-
-        # for rooms in selected_rooms:
-        #     print(rooms)
-
-        for room in selected_rooms:
-            if not abstraction:
-                room.set_abstraction_pillar(True)
-                abstraction = True
-            elif not encapsulation:
-                room.set_encapsulation_pillar(True)
-                encapsulation = True
-            elif not inheritance:
-                room.set_inheritance_pillar(True)
-                inheritance = True
-            elif not polymorphism:
-                room.set_polymorphism_pillar(True)
-                polymorphism = True
+        for (row, col), room in self.__items.items():
+            # if room.get_impasse() or room.get_entrance() or room.get_exit():
+            #     continue
+            if room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
+            or room.get_polymorphism_pillar() or room.get_inheritance_pillar() or room.get_encapsulation_pillar():
+                continue
             else:
-                break
+                possibility = random.randint(0, 100)
+                # Place the healing potion
+                if possibility <= 10:
+                    items = ["V", "H", "P", "M"]
+                    results = random.choice(items)
+                    # Place the healing potion
+                    if results == "H":
+                        room.set_healing_potion(True)
+                    # Place the vision
+                    elif results == "V":
+                        room.set_vision_potion(True)
+                    # Place the pit
+                    elif results == "P":
+                        room.set_pit(True)
+                    # Place the multi item
+                    elif results == "M":
+                        room.set_multiple_items(True)
+                else:
+                    room.set_empty_room()
+                
 
     def _get_maze_dictionary(self):
         """
