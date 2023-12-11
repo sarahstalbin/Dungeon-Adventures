@@ -1,3 +1,4 @@
+
 from room import Room
 import random
 
@@ -6,6 +7,7 @@ class Dungeon:
     """
     Creates a Dungeon for the DungeonAdventure Game.
     """
+
     def __init__(self, rows, cols):
         self.__rows = rows
         self.__cols = cols
@@ -13,7 +15,7 @@ class Dungeon:
         self.__maze = [[Room() for _ in range(rows)] for _ in range(cols)]
         self.build_dungeon()
 
-    # External methods
+        # External methods
 
     def build_dungeon(self):
         """
@@ -39,9 +41,10 @@ class Dungeon:
             self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
                             in range(self.__rows)}
             self._place_items()  # Randomly add pillars, potions, and other objects to it
+            self._place_pillars()  # Randomly add pillars
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
-
+    """ ----------------------------------------------------------------------------------------------------------"""
     def get_entrance(self):
         """
         Gets the entrance Room coordinates of the Dungeon's maze.
@@ -51,10 +54,63 @@ class Dungeon:
 
     def get_room_str(self, key):
         """
-        Gets the entrance Room coordinates of the Dungeon's maze.
+        Gets the
         :return: Room
         """
         return self.__items.get(key)
+
+    def get_doors(self,current_key, new_key, direction):
+        """
+        Get attributes of room
+        :return: attributes
+        """
+        attributes_current = self.__items.get(current_key) #grabbing room attributes
+        attributes_new = self.__items.get(new_key) #grabbing room attributes
+
+        if direction == "N":
+            boo_results = attributes_current.get_north_door() and attributes_new.get_south_door()
+            return boo_results
+
+        if direction == "S":
+            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door() # hopefully return boolean
+            return boo_results
+
+        if direction == "E":
+            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door() # hopefully return boolean
+            return boo_results
+
+        if direction == "W":
+            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()# hopefully return boolean
+            return boo_results
+
+
+            # return attributes.get_north_door()
+    def set_room_empty(self, key, pit=False):
+        item = self.__items.get(key)
+        if item.get_healing_potion():
+            item.set_healing_potion(False)
+            item.set_empty_room()
+        elif item.get_vision_potion():
+            item.set_vision_potion(False)
+            item.set_empty_room()
+        elif item.get_multiple_items():
+            item.set_multiple_items(False)
+            if pit:
+                item.set_pit(True)
+            else:
+                item.set_empty_room()
+        elif item.get_abstraction_pillar():
+            item.set_abstraction_pillar(False)
+            item.set_empty_room()
+        elif item.get_polymorphism_pillar():
+            item.set_polymorphism_pillar(False)
+            item.set_empty_room()
+        elif item.get_inheritance_pillar():
+            item.set_inheritance_pillar(False)
+            item.set_empty_room()
+        elif item.get_encapsulation_pillar():
+            item.set_encapsulation_pillar(False)
+            item.set_empty_room()
 
     def get_room_contents(self, key):
         """
@@ -67,33 +123,34 @@ class Dungeon:
         item = self.__items.get(key)
         # print(f"self.__items.get(key): \n {self.__items.get(key)}")
         # print(f"this is item \n {item}")
-        symbols = ""
+        # symbols = ""
         if item.get_healing_potion():
-            symbols += "H"
+            return "H"
         elif item.get_vision_potion():
-            symbols += "V"
+            return "V"
         elif item.get_pit():
-            symbols += "X"
+            return "X"
         elif item.get_entrance():
-            symbols += "i"
+            return "i"
         elif item.get_exit():
-            symbols += "O"
+            return "O"
         elif item.get_multiple_items():
-            symbols += "M"
+            return "M"
         elif item.get_empty_room():
-            symbols += " "
+            return " "
         elif item.get_abstraction_pillar():
-            symbols += "A"
+            return "A"
         elif item.get_polymorphism_pillar():
-            symbols += "P"
+            return "P"
         elif item.get_inheritance_pillar():
-            symbols += "I"
+            return "I"
         elif item.get_encapsulation_pillar():
-            symbols += "E"
+            return "E"
 
         # symbols_dict[(row, col)] = symbols
-        return symbols
+        # return symbols
 
+    """ ----------------------------------------------------------------------------------------------------------"""
     def print_dictionary(self):
         """
         Prints the contents of each Room without the symbols from Room's __str__() method.
@@ -159,7 +216,7 @@ class Dungeon:
         for row in range(self.__rows):
             for col in range(self.__cols):
                 if len(str(self.__maze[col][row])) == 10:
-                    mid.append(str(self.__maze[col][row])[4:6]+ "   ")
+                    mid.append(str(self.__maze[col][row])[4:6] + "   ")
                 else:
                     mid.append(str(self.__maze[col][row])[4:7] + "  ")
 
@@ -172,53 +229,20 @@ class Dungeon:
                 else:
                     bottom.append(str(self.__maze[col][row])[8:11] + "  ")
 
-        #prints dungeon according to the dimensons
+        # prints dungeon according to the dimensons
         for i in range(0, self.__rows):
             print(end="\n")
-            for room in range(i*self.__cols, (i+1)*self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(top[room], end="")
             print(end="\n")
-            for room in range(i*self.__cols, (i+1)*self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(mid[room], end="")
             print(end="\n")
-            for room in range(i * self.__cols, (i+1) * self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(bottom[room], end="")
         print("\n")
 
-
-        """------------------------------------------------------------------"""
-
-        # print("+", end="")
-        # for _ in range(self.__rows * 2):
-        #     print("-", end="")
-        # print("+")
-        #
-        # # Print each row of Rooms
-        # for col in range(self.__cols):
-        #     # Print left wall
-        #     print("|", end="")
-        #
-        #     # Print each Room's doors
-        #     for row in range(self.__rows):
-        #         room = self.__maze[col][row]
-        #         if room.get_entrance():
-        #             print(" E", end="")
-        #         elif room.get_exit():
-        #             print(" X", end="")
-        #         elif room.get_impasse():
-        #             print(" #", end="")
-        #         else:
-        #             print(" " if room.get_west_door() else " |", end="")
-        #             print(" " if room.get_south_door() else "-", end="")
-        #     print("|")
-        #
-        # # Print bottom border
-        # print("+", end="")
-        # for _ in range(self.__rows * 2):
-        #     print("-", end="")
-        # print("+")
-
-    # Internal methods
+        # Internal methods
 
     def _create_maze(self, room, current_row, current_col):
         """
@@ -302,8 +326,6 @@ class Dungeon:
         """
         # Set the entrance and exit
         self.__maze[0][0].set_entrance()
-        # print(f"This is row {len(self.__maze[self.__rows])}")
-        # print(f"This is col {len(self.__maze)}")
         self.__maze[self.__rows - 1][self.__cols - 1].set_exit()
 
         # Set them as passable
@@ -367,43 +389,67 @@ class Dungeon:
 
     def _place_items(self):
         """
-        Internal method that randomly places items in the Dungeon.
-        :return: None
+        Internal method that randomly places healing potions, vision potions, and pits.
+        :return:
         """
-
-        pillars = {
-            "abstraction": 0,
-            "encapsulation": 0,
-            "polymorphism": 0,
-            "inheritance": 0
-        }
-
         for (row, col), room in self.__items.items():
             if room.get_impasse() or room.get_entrance() or room.get_exit():
                 continue
-
             else:
+                possibility = random.randint(0, 100)
+                # Place the healing potion
+                if possibility <= 10:
+                    room.set_healing_potion(True)
 
-                if random.random() <= 0.04 and pillars["abstraction"] < 1:
-                    room.set_abstraction_pillar()
-                    pillars["abstraction"] += 1
-                elif random.random() <= 0.04 and pillars["encapsulation"] < 1:
-                    room.set_encapsulation_pillar()
-                    pillars["encapsulation"] += 1
-                elif random.random() <= 0.04 and pillars["polymorphism"] < 1:
-                    room.set_polymorphism_pillar()
-                    pillars["polymorphism"] += 1
-                elif random.random() <= 0.04 and pillars["inheritance"] < 1:
-                    room.set_inheritance_pillar()
-                    pillars["inheritance"] += 1
+                # Place the vision potion
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_vision_potion(True)
 
-            possibility = random.randint(0, 100)
-            if possibility <= 10:
-                room.set_healing_potion(True)
-            if possibility <= 12:
-                room.set_pit(True)
-            if possibility <= 20:
-                room.set_vision_potion(True)
+                # Place the pit
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_pit(True)
+
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_multiple_items(True)
+
+
+    def _place_pillars(self):
+        """
+        Internal method that randomly places Pillars in eligible Rooms throughout the maze.
+        :return: None
+        """
+        abstraction = False
+        encapsulation = False
+        inheritance = False
+        polymorphism = False
+
+        qualified_rooms = [room for (row, col), room in self.__items.items()
+                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()
+                           and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()]
+
+        selected_rooms = random.sample(qualified_rooms, 4)
+
+        # for rooms in selected_rooms:
+        #     print(rooms)
+
+        for room in selected_rooms:
+            if not abstraction:
+                room.set_abstraction_pillar(True)
+                abstraction = True
+            elif not encapsulation:
+                room.set_encapsulation_pillar(True)
+                encapsulation = True
+            elif not inheritance:
+                room.set_inheritance_pillar(True)
+                inheritance = True
+            elif not polymorphism:
+                room.set_polymorphism_pillar(True)
+                polymorphism = True
+            else:
+                break
 
     def _get_maze_dictionary(self):
         """
@@ -447,12 +493,16 @@ class Dungeon:
         return symbols_dict
 
 
-
-
-
-
-# Example usage
-dungeon = Dungeon(10, 10)
-dungeon.print_dungeon()
+# # Example usage
+# dungeon = Dungeon(5, 5)
+# dungeon.print_dungeon()
+# # print(dungeon)
+# print(dungeon.get_door((1,0),"N"))
+# print(dungeon.get_door((1,1),"N"))
+# print(dungeon.get_door((1,2),"N"))
+# print(dungeon.get_door((1,3),"N"))
+# print(dungeon.get_door((1,4),"N"))
+# # print(dungeon.get_room_str((1,2)))
+# print(dungeon.get_room_info())
 # dungeon.print_dictionary()
-# print(dungeon.get_room_contents((0, 1)))
+# print(dungeon)
