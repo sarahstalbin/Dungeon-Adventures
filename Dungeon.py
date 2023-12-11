@@ -38,8 +38,8 @@ class Dungeon:
         if self._is_traversable(0, 0):  # If it's traversable
             self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
                             in range(self.__rows)}
-            self._place_items()  # Randomly add pillars, potions, and other objects to it
             self._place_pillars()  # Randomly add pillars
+            self._place_items()  # Randomly add pillars, potions, and other objects to it
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
 
@@ -355,6 +355,10 @@ class Dungeon:
                 if possibility <= 10:
                     room.set_pit(True)
 
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_multiple_items(True)
+
     def _place_pillars(self):
         """
         Internal method that randomly places Pillars in eligible Rooms throughout the maze.
@@ -433,6 +437,6 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(10, 10)
+dungeon = Dungeon(5, 5)
 dungeon.print_dungeon()
 dungeon.print_dictionary()
