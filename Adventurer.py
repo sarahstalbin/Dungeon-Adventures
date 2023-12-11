@@ -55,8 +55,8 @@ class Adventurer:
         self.adventurer_dict["Pillar Count"] += 1
     def dec_HP(self):
         """Decrease HP if falling in pit"""
-        # self.adventurer_dict["HP"] -= random.randint(1, 10)
-        self.adventurer_dict["HP"] -= 100
+        self.adventurer_dict["HP"] -= random.randint(1, 10)
+        # self.adventurer_dict["HP"] -= 100
 
     def dec_vision_potion(self):
         self.adventurer_dict["Vision Potion Count"] -= 1
