@@ -10,7 +10,11 @@ class Dungeon:
         self.__rows = rows
         self.__cols = cols
         self.__items = {}
-        self.__maze = [[Room() for _ in range(rows)] for _ in range(cols)]
+        self.__maze = []
+
+        for r in range(0, self.__rows):
+            self.__maze.append([Room() for c in range(0, self.__cols)])
+
         self.build_dungeon()
 
     # External methods
@@ -23,7 +27,7 @@ class Dungeon:
         # Randomly select a starting Room
         start_row = random.randint(0, self.__rows - 1)
         start_col = random.randint(0, self.__cols - 1)
-        start_room = self.__maze[start_col][start_row]
+        start_room = self.__maze[start_row][start_col]
 
         # Generate the maze
         self._create_maze(start_room, start_row, start_col)
@@ -36,8 +40,8 @@ class Dungeon:
 
         # Verify that the maze is still traversable from entrance to exit
         if self._is_traversable(0, 0):  # If it's traversable
-            self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
-                            in range(self.__rows)}
+            self.__items = {(row, col): self.__maze[row][col] for row in range(self.__rows) for col
+                            in range(self.__cols)}
             self._place_pillars()  # Randomly add pillars
             self._place_items()  # Randomly add pillars, potions, and other objects to it
         else:
@@ -57,7 +61,7 @@ class Dungeon:
         """
         return self.__items.get(key)
 
-    def get_doors(self,current_key, new_key, direction="N"):
+    def get_doors(self, current_key, new_key, direction="N"):
         """
         Get attributes of room
         :return: attributes
@@ -82,7 +86,7 @@ class Dungeon:
             return boo_results
         # return attributes.get_north_door()
 
-    def set_room_empty(self, key = (0,0), pit=False):
+    def set_room_empty(self, key=(0, 0), pit=False):
         item = self.__items.get(key)
         if item.get_healing_potion():
             item.set_healing_potion(False)
@@ -179,9 +183,9 @@ class Dungeon:
         :return: String
         """
         dungeon_info = ""
-        for col in range(self.__cols):
-            for row in range(self.__rows):
-                room = self.__maze[col][row]
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                room = self.__maze[row][col]
                 dungeon_info += f"Room at ({row}, {col}):"
                 dungeon_info += f"\n  - North Door: {room.get_north_door()}"
                 dungeon_info += f"\n  - South Door: {room.get_south_door()}"
@@ -212,25 +216,25 @@ class Dungeon:
         top = []
         for row in range(self.__rows):
             for col in range(self.__cols):
-                top.append(str(self.__maze[col][row])[0:3] + "  ")
+                top.append(str(self.__maze[row][col])[0:3] + "  ")
 
         # saves mid string of all rooms in dungeon
         mid = []
         for row in range(self.__rows):
             for col in range(self.__cols):
-                if len(str(self.__maze[col][row])) == 10:
-                    mid.append(str(self.__maze[col][row])[4:6]+ "   ")
+                if len(str(self.__maze[row][col])) == 10:
+                    mid.append(str(self.__maze[row][col])[4:6]+ "   ")
                 else:
-                    mid.append(str(self.__maze[col][row])[4:7] + "  ")
+                    mid.append(str(self.__maze[row][col])[4:7] + "  ")
 
         # Saves bottom strings of all rooms in dungeon
         bottom = []
         for row in range(self.__rows):
             for col in range(self.__cols):
-                if len(str(self.__maze[col][row])) == 10:
-                    bottom.append(str(self.__maze[col][row])[7:10] + "  ")
+                if len(str(self.__maze[row][col])) == 10:
+                    bottom.append(str(self.__maze[row][col])[7:10] + "  ")
                 else:
-                    bottom.append(str(self.__maze[col][row])[8:11] + "  ")
+                    bottom.append(str(self.__maze[row][col])[8:11] + "  ")
 
         #prints dungeon according to the dimensons
         for i in range(0, self.__rows):
@@ -266,7 +270,7 @@ class Dungeon:
         for direction in directions:
             neighbor_row, neighbor_col = self._get_neighbor_coords(current_row, current_col, direction)
             if self.is_valid_room(neighbor_row, neighbor_col):
-                neighbor_room = self.__maze[neighbor_col][neighbor_row]
+                neighbor_room = self.__maze[neighbor_row][neighbor_col]
                 if not neighbor_room.get_visited():  # If the neighboring room hasn't been visited...
                     # Knock down the doors between them
                     self._knock_down_door(room, direction)
@@ -496,5 +500,5 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(5, 5)
+dungeon = Dungeon(30, 15)
 dungeon.print_dungeon()
