@@ -373,57 +373,57 @@ class DungeonAdventure:
         #SE - ES
         vision_rooms.append(self.get_vision_rm_corner("E", "S"))
 
+        row = 0
+        col = 0
         # Splitting room view by top, middle, bottom
         # top string
         top = []
         for rooms in vision_rooms:
-            top.append(str(rooms)[0:3] + "  ")
+            if str(rooms) != "":
+                top.append(str(rooms)[0:3] + "  ")
+                row +=1
 
         # mid
         mid = []
         for rooms in vision_rooms:
-            if len(str(rooms)) == 10:
-                mid.append(str(rooms)[4:6] + "   ")
-            else:
-                mid.append(str(rooms)[4:7] + "  ")
-        print(end="\n")
+            if str(rooms) != "":
+                if len(str(rooms)) == 10:
+                    mid.append(str(rooms)[4:6] + "   ")
+                else:
+                    mid.append(str(rooms)[4:7] + "  ")
+            # print(end="\n")
 
         # bottom
         bottom = []
         for rooms in vision_rooms:
-            if len(str(rooms)) == 10:
-                bottom.append(str(rooms)[7:10] + "  ")
-            else:
-                bottom.append(str(rooms)[8:11] + "  ")
+            if str(rooms) != "":
+                if len(str(rooms)) == 10:
+                    bottom.append(str(rooms)[7:10] + "  ")
+                else:
+                    bottom.append(str(rooms)[8:11] + "  ")
+        if row == 4:
+            row =2
+            col = 2
+        if row == 6:
+            row = 2
+            col = 3
+        if row == 9:
+            row = 3
+            col = 3
 
         #Printing View
-        for i in range(3):
-            print(top[i], end="")
-        print(end="\n")
-        for i in range(3):
-            print(mid[i], end="")
-        print(end="\n")
-        for i in range(3):
-            print(bottom[i], end="")
-        print(end="\n")
-        for i in range(3, 6):
-            print(top[i], end="")
-        print(end="\n")
-        for i in range(3, 6):
-            print(mid[i], end="")
-        print(end="\n")
-        for i in range(3, 6):
-            print(bottom[i], end="")
-        print(end="\n")
-        for i in range(6,9):
-            print(top[i], end="")
-        print(end="\n")
-        for i in range(6, 9):
-            print(mid[i], end="")
-        print(end="\n")
-        for i in range(6, 9):
-            print(bottom[i], end="")
+        for  i in range (0, row):
+            print(end="\n")
+            for room in range(i *col, (i + 1) * col):
+                print(top[room], end="")
+            print(end="\n")
+            for room in range(i * col, (i + 1) * col):
+                print(mid[room], end="")
+            print(end="\n")
+            for room in range(i * col, (i + 1) * col):
+                print(bottom[room], end="")
         print("\n")
+
 
     def player_results(self):
         """
