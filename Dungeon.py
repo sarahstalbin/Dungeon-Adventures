@@ -39,7 +39,7 @@ class Dungeon:
             self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
                             in range(self.__rows)}
             self._place_items()  # Randomly add pillars, potions, and other objects to it
-            self._place_pillars()  # Randomly add pillars 
+            self._place_pillars()  # Randomly add pillars
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
 
@@ -365,10 +365,11 @@ class Dungeon:
         inheritance = False
         polymorphism = False
 
-        qualified_rooms = [room for (row, col), room in self.__items.items()
-                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()]
+        print(self.__items)
 
-        print(f"Qualified Rooms: {qualified_rooms}")
+        qualified_rooms = [room for (row, col), room in self.__items.items()
+                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()
+                           and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()]
 
         selected_rooms = random.sample(qualified_rooms, 4)
 
