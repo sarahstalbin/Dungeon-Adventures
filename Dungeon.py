@@ -365,35 +365,27 @@ class Dungeon:
 
     def _traverse_the_maze(self, row, col):
         """
-        Internal method that traverses the Dungeon from entrance to exit to verify that it is passable.
-        :param row: starting row, usually 0.
-        :param col: starting column, usually 0.
-        :return: boolean.
+        :param row: starting row coordinate of the Room
+        :param col: starting column coordinate of the Room
+        :return: True if the maze is traversable, false if not.
         """
-        # Check that the starting room is valid
+        target = self.__maze[self.__rows - 1][self.__cols - 1]  # Identify the coordinates of the exit
 
-        found_exit = False
-        if self.is_valid_room(row, col):
-            self.__maze[row][col].set_visited(True)
-            # Check if the Room is the exit
-            if self.__maze[row][col].get_exit():
-                return True
-            # If it isn't the exit, try another Room to the South, East, North, and West
-            found_exit = self._traverse_the_maze(row + 1, col)  # South
-            if not found_exit:
-                found_exit = self._traverse_the_maze(row, col + 1)  # East
-            if not found_exit:
-                found_exit = self._traverse_the_maze(row - 1, col)  # North
-            if not found_exit:
-                found_exit = self._traverse_the_maze(row, col - 1)  # West
-
-            # If the exit was not found in this Room, mark it as visited
-            if not found_exit:
-                self.__maze[row][col].set_visited(True)
-
-        else:  # If the Room is not valid
+        if not self.is_valid_room(row, col):  # Check if the Room is valid
             return False
-        return found_exit
+
+        if self.__maze[row][col] == target:  # Check if the Room is the exit
+            return True
+
+        self.__maze[row][col].set_visited(True)  # Set the starting Room as visited
+
+        directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]  # Check Rooms to the South, East, North, and West
+        for d_row, d_col in directions:
+            if self._traverse_the_maze(row + d_row, col + d_col):
+                return True
+
+        self.__maze[row][col].set_visited(True)  # If no exit is found in any direction, mark Room as unvisited
+        return False
 
     def _place_items(self):
         """
