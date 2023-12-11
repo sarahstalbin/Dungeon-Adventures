@@ -160,16 +160,9 @@ class Room:
         """ setting visited """
         self.__visited = visited
 
-    def multiple_items(self, multiple_items):
+    def set_multiple_items(self, multiple_items):
         """ This method is for one or more items in a room """
-        count = 0
-        if self.__healing_potion:
-            count += 1
-        if self.__vision_potion:
-            count += 1
-
-        if count > 1:
-            self.__multiple_items = multiple_items
+        self.__multiple_items = multiple_items
 
     def can_enter(self):
         """ This method can be called if there is no impasse and if it is not visited """
