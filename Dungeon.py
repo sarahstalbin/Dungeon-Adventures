@@ -39,6 +39,7 @@ class Dungeon:
             self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
                             in range(self.__rows)}
             self._place_items()  # Randomly add pillars, potions, and other objects to it
+            self._place_pillars()  # Randomly add pillars 
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
 
@@ -353,6 +354,39 @@ class Dungeon:
                 possibility = random.randint(0, 100)
                 if possibility <= 10:
                     room.set_pit(True)
+
+    def _place_pillars(self):
+        """
+        Internal method that randomly places Pillars in eligible Rooms throughout the maze.
+        :return: None
+        """
+        abstraction = False
+        encapsulation = False
+        inheritance = False
+        polymorphism = False
+
+        qualified_rooms = [room for (row, col), room in self.__items.items()
+                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()]
+
+        print(f"Qualified Rooms: {qualified_rooms}")
+
+        selected_rooms = random.sample(qualified_rooms, 4)
+
+        for room in selected_rooms:
+            if not abstraction:
+                room.set_abstraction_pillar()
+                abstraction = True
+            elif not encapsulation:
+                room.set_encapsulation_pillar()
+                encapsulation = True
+            elif not inheritance:
+                room.set_inheritance_pillar()
+                inheritance = True
+            elif not polymorphism:
+                room.set_polymorphism_pillar()
+                polymorphism = True
+            else:
+                break
 
     def _get_maze_dictionary(self):
         """
