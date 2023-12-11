@@ -124,21 +124,21 @@ class Room:
         """ setting west_door """
         self.__west_door = True
 
-    def set_abstraction_pillar(self):
+    def set_abstraction_pillar(self, abstraction_pillar):
         """ setting abstraction_pillar """
-        self.__abstraction_pillar = True
+        self.__abstraction_pillar = abstraction_pillar
 
-    def set_encapsulation_pillar(self):
+    def set_encapsulation_pillar(self, encapsulation_pillar):
         """ setting encapsulation_pillar """
-        self.__encapsulation_pillar = True
+        self.__encapsulation_pillar = encapsulation_pillar
 
-    def set_inheritance_pillar(self):
+    def set_inheritance_pillar(self, inheritance_pillar):
         """ setting inheritance_pillar """
-        self.__inheritance_pillar = True
+        self.__inheritance_pillar = inheritance_pillar
 
-    def set_polymorphism_pillar(self):
+    def set_polymorphism_pillar(self, polymorphism_pillar):
         """ setting polymorphism_pillar """
-        self.__polymorphism_pillar = True
+        self.__polymorphism_pillar = polymorphism_pillar
 
     def set_empty_room(self):
         """ setting empty_room """
@@ -160,7 +160,7 @@ class Room:
         """ setting visited """
         self.__visited = visited
 
-    def multiple_items(self):
+    def multiple_items(self, multiple_items):
         """ This method is for one or more items in a room """
         count = 0
         if self.__healing_potion:
@@ -169,7 +169,7 @@ class Room:
             count += 1
 
         if count > 1:
-            self.__multiple_items = True
+            self.__multiple_items = multiple_items
 
     def can_enter(self):
         """ This method can be called if there is no impasse and if it is not visited """
