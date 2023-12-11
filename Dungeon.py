@@ -6,6 +6,7 @@ class Dungeon:
     """
     Creates a Dungeon for the DungeonAdventure Game.
     """
+
     def __init__(self, rows, cols):
         self.__rows = rows
         self.__cols = cols
@@ -66,23 +67,23 @@ class Dungeon:
         Get attributes of room
         :return: attributes
         """
-        attributes_current = self.__items.get(current_key) #grabbing room attributes
-        attributes_new = self.__items.get(new_key) #grabbing room attributes
+        attributes_current = self.__items.get(current_key)  # grabbing room attributes
+        attributes_new = self.__items.get(new_key)  # grabbing room attributes
 
         if direction == "N":
             boo_results = attributes_current.get_north_door() and attributes_new.get_south_door()
             return boo_results
 
         if direction == "S":
-            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door() # hopefully return boolean
+            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door()  # hopefully return boolean
             return boo_results
 
         if direction == "E":
-            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door() # hopefully return boolean
+            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door()  # hopefully return boolean
             return boo_results
 
         if direction == "W":
-            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()# hopefully return boolean
+            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()  # hopefully return boolean
             return boo_results
         # return attributes.get_north_door()
 
@@ -223,7 +224,7 @@ class Dungeon:
         for row in range(self.__rows):
             for col in range(self.__cols):
                 if len(str(self.__maze[row][col])) == 10:
-                    mid.append(str(self.__maze[row][col])[4:6]+ "   ")
+                    mid.append(str(self.__maze[row][col])[4:6] + "   ")
                 else:
                     mid.append(str(self.__maze[row][col])[4:7] + "  ")
 
@@ -236,16 +237,16 @@ class Dungeon:
                 else:
                     bottom.append(str(self.__maze[row][col])[8:11] + "  ")
 
-        #prints dungeon according to the dimensons
+        # prints dungeon according to the dimensons
         for i in range(0, self.__rows):
             print(end="\n")
-            for room in range(i*self.__cols, (i+1)*self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(top[room], end="")
             print(end="\n")
-            for room in range(i*self.__cols, (i+1)*self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(mid[room], end="")
             print(end="\n")
-            for room in range(i * self.__cols, (i+1) * self.__cols):
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(bottom[room], end="")
         print("\n")
 
@@ -400,7 +401,10 @@ class Dungeon:
         :return:
         """
         for (row, col), room in self.__items.items():
-            if room.get_impasse() or room.get_entrance() or room.get_exit():
+            # if room.get_impasse() or room.get_entrance() or room.get_exit():
+            #     continue
+            if room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
+                    or room.get_polymorphism_pillar() or room.get_inheritance_pillar() or room.get_encapsulation_pillar():
                 continue
             else:
                 possibility = random.randint(0, 100)
@@ -496,7 +500,6 @@ class Dungeon:
                 symbols += "E"
             symbols_dict[(row, col)] = symbols
         return symbols_dict
-
 
 
 # Example usage
