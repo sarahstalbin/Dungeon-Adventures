@@ -40,8 +40,9 @@ class Dungeon:
         if self._is_traversable(0, 0):  # If it's traversable
             self.__items = {(row, col): self.__maze[col][row] for col in range(self.__cols) for row
                             in range(self.__rows)}
-            self._place_items()  # Randomly add pillars, potions, and other objects to it
             self._place_pillars()  # Randomly add pillars
+            self._place_items()  # Randomly add pillars, potions, and other objects to it
+
         else:
             self._create_maze(start_room, start_row, start_col)  # Otherwise generate a new maze if not passable
     """ ----------------------------------------------------------------------------------------------------------"""
@@ -52,14 +53,14 @@ class Dungeon:
         """
         return self.__maze[0][0]
 
-    def get_room_str(self, key):
+    def get_room_str(self, key = (0,0)):
         """
         Gets the
         :return: Room
         """
         return self.__items.get(key)
 
-    def get_doors(self,current_key, new_key, direction):
+    def get_doors(self,current_key, new_key, direction="N"):
         """
         Get attributes of room
         :return: attributes
@@ -85,16 +86,23 @@ class Dungeon:
 
 
             # return attributes.get_north_door()
-    def set_room_empty(self, key, pit=False):
+    def set_room_empty(self, key = (0,0), pit=False):
         item = self.__items.get(key)
         if item.get_healing_potion():
             item.set_healing_potion(False)
+            # item.set_vision_potion(False)
+            # item.set_multiple_items(False)
             item.set_empty_room()
         elif item.get_vision_potion():
+            # item.set_healing_potion(False)
             item.set_vision_potion(False)
+            # item.set_multiple_items(False)
             item.set_empty_room()
         elif item.get_multiple_items():
+            # item.set_healing_potion(False)
+            # item.set_vision_potion(False)
             item.set_multiple_items(False)
+            # item.set_abstraction_pillar(False)
             if pit:
                 item.set_pit(True)
             else:
@@ -393,7 +401,10 @@ class Dungeon:
         :return:
         """
         for (row, col), room in self.__items.items():
-            if room.get_impasse() or room.get_entrance() or room.get_exit():
+
+            if  room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
+                    or room.get_polymorphism_pillar() or room.get_inheritance_pillar() or room.get_encapsulation_pillar():
+
                 continue
             else:
                 possibility = random.randint(0, 100)
@@ -414,6 +425,8 @@ class Dungeon:
                 possibility = random.randint(0, 100)
                 if possibility <= 10:
                     room.set_multiple_items(True)
+                else:
+                    room.set_empty_room()
 
 
     def _place_pillars(self):
@@ -427,8 +440,9 @@ class Dungeon:
         polymorphism = False
 
         qualified_rooms = [room for (row, col), room in self.__items.items()
-                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()
-                           and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()]
+                           if not room.get_entrance() and not room.get_exit() and not room.get_impasse()]
+                           # and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()
+                           # and not room.get_multiple_items]
 
         selected_rooms = random.sample(qualified_rooms, 4)
 
@@ -494,9 +508,9 @@ class Dungeon:
 
 
 # # Example usage
-# dungeon = Dungeon(5, 5)
-# dungeon.print_dungeon()
-# # print(dungeon)
+dungeon = Dungeon(4, 4)
+dungeon.print_dungeon()
+# # # print(dungeon)
 # print(dungeon.get_door((1,0),"N"))
 # print(dungeon.get_door((1,1),"N"))
 # print(dungeon.get_door((1,2),"N"))
