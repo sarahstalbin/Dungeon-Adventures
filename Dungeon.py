@@ -357,7 +357,9 @@ class Dungeon:
 
                 possibility = random.randint(0, 100)
                 if possibility <= 10:
-                    room.set_multiple_items(True)
+                    room.set_multiple_items()
+                else:
+                    room.set_empty_room()
 
     def _place_pillars(self):
         """
@@ -369,8 +371,6 @@ class Dungeon:
         inheritance = False
         polymorphism = False
 
-        print(self.__items)
-
         qualified_rooms = [room for (row, col), room in self.__items.items()
                            if not room.get_entrance() and not room.get_exit() and not room.get_impasse()
                            and not room.get_vision_potion() and not room.get_pit() and not room.get_healing_potion()]
@@ -379,16 +379,16 @@ class Dungeon:
 
         for room in selected_rooms:
             if not abstraction:
-                room.set_abstraction_pillar()
+                room.set_abstraction_pillar(True)
                 abstraction = True
             elif not encapsulation:
-                room.set_encapsulation_pillar()
+                room.set_encapsulation_pillar(True)
                 encapsulation = True
             elif not inheritance:
-                room.set_inheritance_pillar()
+                room.set_inheritance_pillar(True)
                 inheritance = True
             elif not polymorphism:
-                room.set_polymorphism_pillar()
+                room.set_polymorphism_pillar(True)
                 polymorphism = True
             else:
                 break
@@ -439,4 +439,3 @@ class Dungeon:
 # Example usage
 dungeon = Dungeon(5, 5)
 dungeon.print_dungeon()
-dungeon.print_dictionary()
