@@ -416,7 +416,7 @@ class Dungeon:
 
                 possibility = random.randint(0, 100)
                 if possibility <= 10:
-                    room.set_multiple_items()
+                    room.set_multiple_items(True)
                 else:
                     room.set_empty_room()
 
