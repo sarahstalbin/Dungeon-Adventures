@@ -85,7 +85,7 @@ class Dungeon:
 
 
             # return attributes.get_north_door()
-    def set_room_empty(self, key, pit):
+    def set_room_empty(self, key, pit=False):
         item = self.__items.get(key)
         if item.get_healing_potion():
             item.set_healing_potion(False)
