@@ -85,8 +85,32 @@ class Dungeon:
 
 
             # return attributes.get_north_door()
-    def set_room_empty(self, key):
-        pass
+    def set_room_empty(self, key, pit):
+        item = self.__items.get(key)
+        if item.get_healing_potion():
+            item.set_healing_potion(False)
+            item.set_empty_room()
+        elif item.get_vision_potion():
+            item.set_vision_potion(False)
+            item.set_empty_room()
+        elif item.get_multiple_items():
+            item.set_multiple_items(False)
+            if pit:
+                item.set_pit(True)
+            else:
+                item.set_empty_room()
+        elif item.get_abstraction_pillar():
+            item.set_abstraction_pillar(False)
+            item.set_empty_room()
+        elif item.get_polymorphism_pillar():
+            item.set_polymorphism_pillar(False)
+            item.set_empty_room()
+        elif item.get_inheritance_pillar():
+            item.set_inheritance_pillar(False)
+            item.set_empty_room()
+        elif item.get_encapsulation_pillar():
+            item.set_encapsulation_pillar(False)
+            item.set_empty_room()
 
     def get_room_contents(self, key):
         """
@@ -99,32 +123,32 @@ class Dungeon:
         item = self.__items.get(key)
         # print(f"self.__items.get(key): \n {self.__items.get(key)}")
         # print(f"this is item \n {item}")
-        symbols = ""
+        # symbols = ""
         if item.get_healing_potion():
-            symbols += "H"
+            return "H"
         elif item.get_vision_potion():
-            symbols += "V"
+            return "V"
         elif item.get_pit():
-            symbols += "X"
+            return "X"
         elif item.get_entrance():
-            symbols += "i"
+            return "i"
         elif item.get_exit():
-            symbols += "O"
+            return "O"
         elif item.get_multiple_items():
-            symbols += "M"
+            return "M"
         elif item.get_empty_room():
-            symbols += " "
+            return " "
         elif item.get_abstraction_pillar():
-            symbols += "A"
+            return "A"
         elif item.get_polymorphism_pillar():
-            symbols += "P"
+            return "P"
         elif item.get_inheritance_pillar():
-            symbols += "I"
+            return "I"
         elif item.get_encapsulation_pillar():
-            symbols += "E"
+            return "E"
 
         # symbols_dict[(row, col)] = symbols
-        return symbols
+        # return symbols
 
     """ ----------------------------------------------------------------------------------------------------------"""
     def print_dictionary(self):
@@ -387,6 +411,11 @@ class Dungeon:
                 if possibility <= 10:
                     room.set_pit(True)
 
+                possibility = random.randint(0, 100)
+                if possibility <= 10:
+                    room.set_multiple_items(True)
+
+
     def _place_pillars(self):
         """
         Internal method that randomly places Pillars in eligible Rooms throughout the maze.
@@ -403,21 +432,21 @@ class Dungeon:
 
         selected_rooms = random.sample(qualified_rooms, 4)
 
-        for rooms in selected_rooms:
-            print(rooms)
+        # for rooms in selected_rooms:
+        #     print(rooms)
 
         for room in selected_rooms:
             if not abstraction:
-                room.set_abstraction_pillar()
+                room.set_abstraction_pillar(True)
                 abstraction = True
             elif not encapsulation:
-                room.set_encapsulation_pillar()
+                room.set_encapsulation_pillar(True)
                 encapsulation = True
             elif not inheritance:
-                room.set_inheritance_pillar()
+                room.set_inheritance_pillar(True)
                 inheritance = True
             elif not polymorphism:
-                room.set_polymorphism_pillar()
+                room.set_polymorphism_pillar(True)
                 polymorphism = True
             else:
                 break
