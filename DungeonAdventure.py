@@ -21,7 +21,7 @@ class DungeonAdventure:
         self.adventurer = Adventurer()
         self.player_loc_col = 3
         self.player_loc_row = 3
-        #creating dungeon and adventure (initializing them)
+
 
     def play_whole_game(self):
         """
@@ -39,7 +39,7 @@ class DungeonAdventure:
             self.player_results()
             play = input("Would you like to play again? \"y\" to keep playing or any key to exit. ")
 
-        self.print_end()
+        # self.print_end()
 
     def print_introduction(self):
         """
@@ -106,7 +106,7 @@ class DungeonAdventure:
         """
         Sets up the game by creating the dungeon maze and locating the starting coordinates
         """
-        self.dungeon.build_dungeon()
+        # self.dungeon.build_dungeon()
         self.player_str = self.dungeon.get_entrance()
 
         #better to use code to find the entrance coordinates _______________------------------
@@ -150,7 +150,7 @@ class DungeonAdventure:
                 item = self.move_adventurer(menu_command)
 
                 #if the player reaches an exit or dies, break out of the game
-                if item == "O" or self.adventurer.get_HP() < 0: #or self.adventurer.get_pillar() == 4:
+                if item == "O" or self.adventurer.get_HP() <= 0: #or self.adventurer.get_pillar() == 4:
                     break
             elif str(menu_command).lower() == "map":
                 self.dungeon.print_dungeon()
@@ -227,7 +227,7 @@ class DungeonAdventure:
                 if item == "O":
                     print("You found the exit to the dungeon")
                     return item
-                if self.adventurer.get_HP() < 0:
+                if self.adventurer.get_HP() <= 0:
                     print("You have died and lost the game!")
                     return item
 
@@ -249,33 +249,55 @@ class DungeonAdventure:
         if item == "H":
             self.adventurer.inc_healing_potion_count()
             print(f"Increased healing: {self.adventurer.__get_health_potion_count__()}")
+            self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), False)
 
         elif item == "V":  # vision
             self.adventurer.inc_vision_potion_count()
             print(f"Increased vision: {self.adventurer.__get_vision_potion_count__()}")
+            self.dungeon.set_room_empty((self.player_loc_row,self.player_loc_col),False)
         elif item == "X":  # pit- come back to it ----------------------------------------------
             self.adventurer.dec_HP()
             print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
         elif item == "O":  # exit
             return item
         elif item == "M":  # get multiple items- come back to it----------------------------
-            self.adventurer.inc_healing_potion_count()
-            self.adventurer.inc_vision_potion_count()
-            print(f"Increased healing: {self.adventurer.__get_health_potion_count__()}\n")
-            print(f"Increased vision: {self.adventurer.__get_vision_potion_count__()}")
+            self.multi_items()
         elif item == "A":  # abstraction
             self.adventurer.inc_pillar()
+            self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
             print(f"You found the Abstraction pillar! Total Pillars: {self.adventurer.get_pillar()}")
         elif item == "P":  # polymorphism
             self.adventurer.inc_pillar()
+            self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
             print(f"You found the Polymorphism pillar! Total Pillars: {self.adventurer.get_pillar()}")
         elif item == "I":  # inheritance
             self.adventurer.inc_pillar()
+            self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
             print(f"You found the Inheritance pillar! Total Pillars: {self.adventurer.get_pillar()}")
         elif item == "E":  # encapsulation
             self.adventurer.inc_pillar()
+            self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
             print(f"You found the Encapsulation pillar! Total Pillars: {self.adventurer.get_pillar()}")
         # print(f"this is self.adventurer after update{self.adventurer}")
+
+    def multi_items(self):
+        items = ["V", "H", "P", ""]
+        results = random.sample(items, 3)
+        pit = False
+        for value in results:
+            if value == "V":
+                self.adventurer.inc_vision_potion_count()
+                print(f"Increased vision: {self.adventurer.__get_vision_potion_count__()}")
+            if value == "H":
+                self.adventurer.inc_healing_potion_count()
+                print(f"Increased healing: {self.adventurer.__get_health_potion_count__()}")
+            if value == "P":
+                self.adventurer.dec_HP()
+                print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
+                pit = True
+        self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
+
+
 
 
     def get_vision_rm_corner(self, row, col):
