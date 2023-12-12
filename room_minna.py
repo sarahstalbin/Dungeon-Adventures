@@ -21,6 +21,7 @@ class Room:
         self.__inheritance_pillar = False
         self.__polymorphism_pillar = False
         self.__empty_room = False
+        self.__current_room = False
 
     # getter methods
     def get_healing_potion(self):
@@ -91,6 +92,10 @@ class Room:
         """ gets exit boolean value """
         return self.__exit
 
+    def get_current_room(self):
+        """ gets current_room boolean value """
+        return self.__current_room
+
     # setter methods
 
     def set_healing_potion(self, add_potion):
@@ -124,29 +129,29 @@ class Room:
         """ setting west_door """
         self.__west_door = True
 
-    def set_abstraction_pillar(self, pillar):
+    def set_abstraction_pillar(self, abstraction_pillar):
         """ setting abstraction_pillar """
-        self.__abstraction_pillar = pillar
+        self.__abstraction_pillar = abstraction_pillar
 
-    def set_encapsulation_pillar(self, pillar):
+    def set_encapsulation_pillar(self, encapsulation_pillar):
         """ setting encapsulation_pillar """
-        self.__encapsulation_pillar = pillar
+        self.__encapsulation_pillar = encapsulation_pillar
 
-    def set_inheritance_pillar(self, pillar):
+    def set_inheritance_pillar(self, inheritance_pillar):
         """ setting inheritance_pillar """
-        self.__inheritance_pillar = pillar
+        self.__inheritance_pillar = inheritance_pillar
 
-    def set_polymorphism_pillar(self, pillar):
+    def set_polymorphism_pillar(self, polymorphism_pillar):
         """ setting polymorphism_pillar """
-        self.__polymorphism_pillar = pillar
+        self.__polymorphism_pillar = polymorphism_pillar
 
-    def set_empty_room(self):
+    def set_empty_room(self, isEmpty):
         """ setting empty_room """
-        self.__empty_room = True
+        self.__empty_room = isEmpty
 
-    def set_entrance(self):
+    def set_entrance(self, entrance):
         """ setting entrance """
-        self.__entrance = True
+        self.__entrance = entrance
 
     def set_exit(self):
         """ setting exit """
@@ -160,20 +165,13 @@ class Room:
         """ setting visited """
         self.__visited = visited
 
-    def set_multiple_items(self, items):
-        """ setting multiple items """
-        self.__multiple_items = items
+    def set_multiple_items(self, multiple_items):
+        """ This method is for one or more items in a room """
+        self.__multiple_items = multiple_items
 
-    # def multiple_items(self):
-    #     """ This method is for one or more items in a room """
-    #     count = 0
-    #     if self.__healing_potion:
-    #         count += 1
-    #     if self.__vision_potion:
-    #         count += 1
-    #
-    #     if count > 1:
-    #         self.__multiple_items = True
+    def set_current_room(self, current_room):
+        """ setting current_room """
+        self.__current_room = current_room
 
     def can_enter(self):
         """ This method can be called if there is no impasse and if it is not visited """
@@ -183,7 +181,7 @@ class Room:
         """ str method prints the layout of the room class with its abbreviated names and symbols"""
         layout = ""
         if self.__north_door:
-            layout += "---"
+            layout += "*_*"
         else:
             layout += "***"
         layout += "\n"
@@ -205,6 +203,8 @@ class Room:
             layout += "M"
         elif self.__empty_room:
             layout += " "
+        elif self.__current_room:
+            layout += "#"
         elif self.__abstraction_pillar:
             layout += "A"
         elif self.__polymorphism_pillar:
@@ -219,8 +219,7 @@ class Room:
             layout += "*"
         layout += "\n"
         if self.__south_door:
-            layout += "---"
+            layout += "*_*"
         else:
             layout += "***"
         return layout
-
