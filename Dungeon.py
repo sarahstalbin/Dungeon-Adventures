@@ -68,6 +68,12 @@ class Dungeon:
         """
         return self.__items.get(key)
 
+    def get_col_length(self):
+        return self.__cols
+
+    def get_row_length(self):
+        return self.__rows
+
     def get_doors(self, current_key, new_key, direction="N"):
         """
         Get attributes of room
@@ -92,6 +98,19 @@ class Dungeon:
             boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()  # hopefully return boolean
             return boo_results
         # return attributes.get_north_door()
+
+    def set_current_room(self, room):
+        room.set_healing_potion(False)
+        room.set_vision_potion(False)
+        room.set_pit(False)
+        room.set_multiple_items(False)
+        room.set_entrance(False)
+        room.set_empty_room(False)
+        room.set_abstraction_pillar(False)
+        room.set_polymorphism_pillar(False)
+        room.set_inheritance_pillar(False)
+        room.set_encapsulation_pillar(False)
+        room.set_current_room(True)
 
     def set_room_empty(self, key=(0, 0), pit=False):
         item = self.__items.get(key)
