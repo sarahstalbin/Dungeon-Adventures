@@ -27,7 +27,7 @@ class HealingPotion(Potion):
         self.health_points = random.randint(minimum, maximum)
 
     def use_potion(self):
-        " Implementing use_potion method for HealingPotion class"
+        """ Implementing use_potion method for HealingPotion class"""
         return self.health_points
 
 
