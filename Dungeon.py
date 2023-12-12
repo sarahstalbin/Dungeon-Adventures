@@ -409,30 +409,27 @@ class Dungeon:
         :return:
         """
         for (row, col), room in self.__items.items():
-            # if room.get_impasse() or room.get_entrance() or room.get_exit():
-            #     continue
             if room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
                     or room.get_polymorphism_pillar() or room.get_inheritance_pillar() or room.get_encapsulation_pillar():
                 continue
             else:
+                item_list = ["V", "H", "M", "P"]
+                choice = random.choice(item_list)
                 possibility = random.randint(0, 100)
                 # Place the healing potion
-                if possibility <= 10:
-                    room.set_healing_potion(True)
-
-                # Place the vision potion
-                possibility = random.randint(0, 100)
-                if possibility <= 10:
-                    room.set_vision_potion(True)
-
-                # Place the pit
-                possibility = random.randint(0, 100)
-                if possibility <= 10:
-                    room.set_pit(True)
-
-                possibility = random.randint(0, 100)
-                if possibility <= 10:
-                    room.set_multiple_items(True)
+                if possibility <= 30:
+                    # Place the vision potion
+                    if choice == "V":
+                        room.set_vision_potion(True)
+                    # Place health potion
+                    if choice == "H":
+                        room.set_healing_potion(True)
+                    # Place multi item
+                    if choice == "M":
+                        room.set_multiple_items(True)
+                    # Place the pit
+                    if choice == "P":
+                        room.set_pit(True)
                 else:
                     room.set_empty_room(True)
 
