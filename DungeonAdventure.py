@@ -164,7 +164,7 @@ class DungeonAdventure:
                 if item == "O" or self.adventurer.get_HP() <= 0:
                     break
             elif str(menu_command).lower() == "map":
-                self.dungeon.print_dungeon()
+                self.dungeon.print_dungeon(self.player_loc_row, self.player_loc_col)
                 # self.original_dungeon.print_dungeon()
             else:
                 print("Not a valid command")
@@ -358,7 +358,22 @@ class DungeonAdventure:
         # elif menu_command == "a":
         #     direction = "N" #go left
         #     real_direction = "W"
+        current_room = copy.deepcopy(self.dungeon.get_room_str((self.player_loc_row, self.player_loc_col)))
+        self.dungeon.set_current_room(current_room)
+        row = 3
+        col = 3
+        if self.player_loc_row == 0 or self.player_loc_row == self.dungeon.get_col_length()-1:
+            if 0 < self.player_loc_col < self.dungeon.get_row_length()-1:
+                row = 2
+                col = 3
+            elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
+                row = 2
+                col = 2
 
+        elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
+            if 0 < self.player_loc_row < self.dungeon.get_col_length()-1:
+                row = 3
+                col = 2
         #NW - W/N
         vision_rooms.append(self.get_vision_rm_corner("W", "N"))
         #N - W
@@ -369,7 +384,7 @@ class DungeonAdventure:
         #W = N
         vision_rooms.append(self.get_vision_rm_one("N"))
         #self
-        vision_rooms.append(self.dungeon.get_room_str((self.player_loc_row, self.player_loc_col)))
+        vision_rooms.append(current_room)
         #E - S
         vision_rooms.append(self.get_vision_rm_one("S"))
         #/n
@@ -380,24 +395,22 @@ class DungeonAdventure:
         #SE - ES
         vision_rooms.append(self.get_vision_rm_corner("E", "S"))
 
-        row = 0
-        col = 0
+
         # Splitting room view by top, middle, bottom
         # top string
         top = []
         for rooms in vision_rooms:
             if str(rooms) != "":
-                top.append(str(rooms)[0:3] + "  ")
-                row +=1
+                top.append(str(rooms)[0:3] + "    ")
 
         # mid
         mid = []
         for rooms in vision_rooms:
             if str(rooms) != "":
                 if len(str(rooms)) == 10:
-                    mid.append(str(rooms)[4:6] + "   ")
+                    mid.append(str(rooms)[4:6] + "     ")
                 else:
-                    mid.append(str(rooms)[4:7] + "  ")
+                    mid.append(str(rooms)[4:7] + "    ")
             # print(end="\n")
 
         # bottom
@@ -405,23 +418,17 @@ class DungeonAdventure:
         for rooms in vision_rooms:
             if str(rooms) != "":
                 if len(str(rooms)) == 10:
-                    bottom.append(str(rooms)[7:10] + "  ")
+                    bottom.append(str(rooms)[7:10] + "    ")
                 else:
-                    bottom.append(str(rooms)[8:11] + "  ")
-        if row == 4:
-            row =2
-            col = 2
-        if row == 6:
-            row = 2
-            col = 3
-        if row == 9:
-            row = 3
-            col = 3
+                    bottom.append(str(rooms)[8:11] + "    ")
+
+
+
 
         #Printing View
-        for  i in range (0, row):
-            print(end="\n")
-            for room in range(i *col, (i + 1) * col):
+        print("\n")
+        for i in range(0, row):
+            for room in range(i * col, (i + 1) * col):
                 print(top[room], end="")
             print(end="\n")
             for room in range(i * col, (i + 1) * col):
@@ -429,7 +436,8 @@ class DungeonAdventure:
             print(end="\n")
             for room in range(i * col, (i + 1) * col):
                 print(bottom[room], end="")
-        print("\n")
+            print("\n")
+
 
 
     def player_results(self):
