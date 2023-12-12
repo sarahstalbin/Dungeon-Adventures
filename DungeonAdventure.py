@@ -6,8 +6,8 @@ Dungeon Adventure
 
 """contains main logic on playing the game"""
 from Adventurer import Adventurer
-from Dungeon_minna import Dungeon
-from potion import Potion, VisionPotion, HealingPotion
+from Dungeon import Dungeon
+from Potion import Potion, VisionPotion, HealingPotion
 import random
 import sys, time
 import copy
@@ -34,17 +34,15 @@ class DungeonAdventure:
         """
         self.print_introduction()
         play = "y"
-        while play.lower() == "y":
+        while play.lower() == "y" or play.lower() == "yes":
             self.set_play_mode()
             # print(play_game.menu_str())
             self.set_up_player()
-
             self.player_command()
-            print("Your maze:\n")
-            self.dungeon.print_dungeon()
             print("Original maze:\n")
             self.original_dungeon.print_dungeon()
-            # dungeon_old.print_dungeon()
+            print("Your maze:\n")
+            self.dungeon.print_dungeon()
             self.player_results()
 
             play = input("Would you like to play again? \"y\" to keep playing or any key to exit. ")
@@ -72,6 +70,8 @@ class DungeonAdventure:
         :return: None
         """
         input_play_mode = input(f"Choose: Easy, Medium, or Hard? Default will be Easy. ")
+
+        # ----------------------------------Delete for debugging ------------------------------------------
         # print("Choose: Easy, Medium, or Hard? Default will be Easy. ") #for debugging purposes
         # input_play_mode = "hard" #for debugging purposes
         if input_play_mode.lower() == "medium":
@@ -133,7 +133,7 @@ class DungeonAdventure:
         """
         menu_command = ""
         item = ""
-        while item != "O" or menu_command.lower() != "q":
+        while isExit != "O" or menu_command.lower() != "q":
             menu_command = input("What is your next move? Enter \"m\" for menu: ")
             # while still in maze and not quit
             if menu_command.lower() == "q":
@@ -163,10 +163,10 @@ class DungeonAdventure:
             elif (menu_command.lower() == "w" or menu_command.lower() == "a" or menu_command.lower() == "s" or
                   menu_command.lower() == "d"):
                 #moving character
-                item = self.move_adventurer(menu_command)
+                isExit = self.move_adventurer(menu_command)
 
                 #if the player reaches an exit or dies, break out of the game
-                if item == "O" or self.adventurer.get_HP() <= 0:
+                if isExit == "O" or self.adventurer.get_HP() <= 0:
                     break
             elif str(menu_command).lower() == "map":
                 self.dungeon.print_dungeon(self.player_loc_row, self.player_loc_col)
@@ -176,7 +176,7 @@ class DungeonAdventure:
 
 
         # ask if player wants to use potion or vision
-    def move_adventurer(self, menu_command):
+    def move_adventurer(self, menu_command="g"):
         """
         Player's input is a direction, check to see if that direction is possible and move that direction.
         If moving to next room is possible, collect items and make traveled rooms empty unless pit
@@ -218,7 +218,7 @@ class DungeonAdventure:
             #check if door is available to go into coordinates
 
 
-            # if self.dungeon.get_doors(current_key, new_key, real_direction): #able to move into the room
+            # if self.dungeon.get_doors(current_key, new_key, real_direction): #able to move into the room - DO NOT DELETE
             # ---------- testing, delete later-------------------
             if True:
                 # ---------- testing, delete later-------------------
@@ -250,7 +250,7 @@ class DungeonAdventure:
             print(f"Current location: row: {self.player_loc_row} col: {self.player_loc_col}")
             return
 
-    def collect_item(self, item):
+    def collect_item(self, item="g"):
         """
         Items in room affects the player
         :return: any collected
@@ -264,12 +264,12 @@ class DungeonAdventure:
             self.adventurer.inc_vision_potion_count()
             print(f"Increased vision: {self.adventurer.__get_vision_potion_count__()}")
             self.dungeon.set_room_empty((self.player_loc_row,self.player_loc_col),False)
-        elif item == "X":  # pit- come back to it ----------------------------------------------
+        elif item == "X":  # pit-
             self.adventurer.dec_HP()
             print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
         elif item == "O":  # exit
             return item
-        elif item == "M":  # get multiple items- come back to it----------------------------
+        elif item == "M":  # get multiple items
             self.multi_items()
         elif item == "A":  # abstraction
             self.adventurer.inc_pillar()
@@ -287,6 +287,8 @@ class DungeonAdventure:
             self.adventurer.inc_pillar()
             self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
             print(f"You found the Encapsulation pillar! Total Pillars: {self.adventurer.get_pillar()}")
+        else:
+            return item
         # print(f"this is self.adventurer after update{self.adventurer}")
 
     def multi_items(self):
@@ -305,6 +307,43 @@ class DungeonAdventure:
                 print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
                 pit = True
         self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
+
+
+    def player_results(self):
+        """
+        Game has ended and prints Adventurer results
+        """
+        if self.adventurer.get_pillar() == 4:
+            print(f"You won the game and found all {self.adventurer.get_pillar()} pillars!")
+
+        elif self.adventurer.get_pillar() == 1:
+                print(f"Sorry, you only found {self.adventurer.get_pillar()} pillar. You have lost the game")
+        else:
+            print(f"Sorry, you only found {self.adventurer.get_pillar()} pillars. You have lost the game")
+        # see_stats = input("\nDo you want to see your stats? y/n ")
+        # if see_stats.lower() == "y" or see_stats.lower() == "yes":
+        print(self.adventurer)
+        # else:
+        #     print("I guess you'll never know")
+
+    def print_end(self):
+        """
+        Prints closing title slides
+        """
+        time.sleep(1)
+        group_names = ("\nSarah St. Albin\nAqueno Amalraj  \nMinna Chae \n")
+        teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
+        print("Thank you for playing Dungeon Adventure. \nThis game was created by")
+        for character in group_names:
+            sys.stdout.write(character)
+            sys.stdout.flush()
+            time.sleep(.05)
+        print("\nA special thanks to our instructors ")
+        for character in teacher_names:
+            sys.stdout.write(character)
+            sys.stdout.flush()
+            time.sleep(.05)
+        print("\nWe could not have done it without you.")
 
     # def get_vision_rm_corner(self, row, col):
     #     """
@@ -432,45 +471,6 @@ class DungeonAdventure:
     #         for room in range(i * col, (i + 1) * col):
     #             print(bottom[room], end="")
     #         print("\n")
-
-
-
-    def player_results(self):
-        """
-        Game has ended and prints Adventurer results
-        """
-        if self.adventurer.get_pillar() == 4:
-            print(f"You won the game and found all {self.adventurer.get_pillar()} pillars!")
-
-        elif self.adventurer.get_pillar() == 1:
-                print(f"Sorry, you only found {self.adventurer.get_pillar()} pillar. You have lost the game")
-        else:
-            print(f"Sorry, you only found {self.adventurer.get_pillar()} pillars. You have lost the game")
-        # see_stats = input("\nDo you want to see your stats? y/n ")
-        # if see_stats.lower() == "y" or see_stats.lower() == "yes":
-        print(self.adventurer)
-        # else:
-        #     print("I guess you'll never know")
-
-    def print_end(self):
-        """
-        Prints closing title slides
-        """
-        time.sleep(1)
-        group_names = ("\nSarah St. Albin\nAqueno Amalraj  \nMinna Chae \n")
-        teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
-        print("Thank you for playing Dungeon Adventure. \nThis game was created by")
-        for character in group_names:
-            sys.stdout.write(character)
-            sys.stdout.flush()
-            time.sleep(.05)
-        print("\nA special thanks to our instructors ")
-        for character in teacher_names:
-            sys.stdout.write(character)
-            sys.stdout.flush()
-            time.sleep(.05)
-        print("\nWe could not have done it without you.")
-
 
 
     # Prints the current room(this is based on the Adventurer 's current location)
