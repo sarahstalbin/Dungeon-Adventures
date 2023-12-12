@@ -6,7 +6,8 @@ Dungeon Adventure
 
 """contains main logic on playing the game"""
 from Adventurer import Adventurer
-from Dungeon import Dungeon
+from Dungeon_minna import Dungeon
+from potion import Potion, VisionPotion, HealingPotion
 import random
 import sys, time
 import copy
@@ -23,6 +24,7 @@ class DungeonAdventure:
         self.player_loc_col = 0
         self.player_loc_row = 0
         self.original_dungeon = ""
+        self.potion = VisionPotion()
 
 
     def play_whole_game(self):
@@ -150,13 +152,16 @@ class DungeonAdventure:
                 #use vision potion
                 if self.adventurer.__get_vision_potion_count__() > 0:
                     self.adventurer.dec_vision_potion()
-                    self.use_vision()
+                    # self.use_vision()
+                    self.potion.use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
+                                           self.dungeon.get_row_length(), self.dungeon)
                 else:
                     print("You don't have any vision potions left")
 
             elif str(menu_command).lower() == "stats":
                 print(self.adventurer)
-            elif menu_command.lower() == "w" or menu_command.lower() == "a" or menu_command.lower() == "s" or menu_command.lower() == "d":
+            elif (menu_command.lower() == "w" or menu_command.lower() == "a" or menu_command.lower() == "s" or
+                  menu_command.lower() == "d"):
                 #moving character
                 item = self.move_adventurer(menu_command)
 
@@ -192,13 +197,7 @@ class DungeonAdventure:
             direction = "N" #go left
             real_direction = "W"
         else:
-
-            # ---------- testing, delete later-------------------
-            print(f"How did I get in move? {menu_command}")
-            # ---------- testing, delete later-------------------
-
             return menu_command
-
         #get coordinates for next move
         new_row, new_col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
                                                              direction)
@@ -307,136 +306,132 @@ class DungeonAdventure:
                 pit = True
         self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
 
-    def get_vision_rm_corner(self, row, col):
-        """
-        Retrieves and returns column and row for corner rooms
-        :return: New column and row
-        """
-        #Grab new column
-        temp, north_col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
-                                                            col)
-        # Grab new row
-        west_row, temp = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
-                                                           row)
-        #If it is a true room, return the
-        if self.dungeon.is_valid_room(west_row, north_col):
-            return self.dungeon.get_room_str((west_row, north_col))
-        return ""
+    # def get_vision_rm_corner(self, row, col):
+    #     """
+    #     Retrieves and returns column and row for corner rooms
+    #     :return: New column and row
+    #     """
+    #     #Grab new column
+    #     temp, north_col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
+    #                                                         col)
+    #     # Grab new row
+    #     west_row, temp = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
+    #                                                        row)
+    #     #If it is a true room, return the
+    #     if self.dungeon.is_valid_room(west_row, north_col):
+    #         return self.dungeon.get_room_str((west_row, north_col))
+    #     return ""
+    #
+    # def get_vision_rm_one(self, direction):
+    #     """
+    #     Retrieves and returns column and row for directly touching rooms
+    #     :return: New column and row
+    #     """
+    #     # row, col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
+    #     #                                                     direction)
+    #     row, col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
+    #                                                         direction)
+    #
+    #     # print(f"valid? {self.dungeon.is_valid_room(row, col)}")
+    #     if self.dungeon.is_valid_room(row, col):
+    #         # print("I am printing?")
+    #         return self.dungeon.get_room_str((row, col))
+    #     return ""
 
-    def get_vision_rm_one(self, direction):
-        """
-        Retrieves and returns column and row for directly touching rooms
-        :return: New column and row
-        """
-        # row, col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
-        #                                                     direction)
-        row, col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
-                                                            direction)
-
-        # print(f"valid? {self.dungeon.is_valid_room(row, col)}")
-        if self.dungeon.is_valid_room(row, col):
-            # print("I am printing?")
-            return self.dungeon.get_room_str((row, col))
-        return ""
-
-    def use_vision(self):
-        """
-        Prints a 3x3 view of the surrounding rooms at current location. Used for Vision Potion
-        :return: None
-        """
-        vision_rooms = []
-        #
-        # if menu_command == "w":
-        #     direction = "W" #go up
-        #     real_direction = "N"
-        # elif menu_command == "s":
-        #     direction = "E" #go down
-        #     real_direction = "S"
-        # elif menu_command == "d":
-        #     direction = "S" #go right
-        #     real_direction = "E"
-        # elif menu_command == "a":
-        #     direction = "N" #go left
-        #     real_direction = "W"
-        current_room = copy.deepcopy(self.dungeon.get_room_str((self.player_loc_row, self.player_loc_col)))
-        self.dungeon.set_current_room(current_room)
-        row = 3
-        col = 3
-        if self.player_loc_row == 0 or self.player_loc_row == self.dungeon.get_col_length()-1:
-            if 0 < self.player_loc_col < self.dungeon.get_row_length()-1:
-                row = 2
-                col = 3
-            elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
-                row = 2
-                col = 2
-
-        elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
-            if 0 < self.player_loc_row < self.dungeon.get_col_length()-1:
-                row = 3
-                col = 2
-        #NW - W/N
-        vision_rooms.append(self.get_vision_rm_corner("W", "N"))
-        #N - W
-        vision_rooms.append(self.get_vision_rm_one("W"))
-        #NE - WS
-        vision_rooms.append(self.get_vision_rm_corner("W", "S"))
-        #new line
-        #W = N
-        vision_rooms.append(self.get_vision_rm_one("N"))
-        #self
-        vision_rooms.append(current_room)
-        #E - S
-        vision_rooms.append(self.get_vision_rm_one("S"))
-        #/n
-        #SW - E/N
-        vision_rooms.append(self.get_vision_rm_corner("E", "N"))
-        #S - E
-        vision_rooms.append(self.get_vision_rm_one("E"))
-        #SE - ES
-        vision_rooms.append(self.get_vision_rm_corner("E", "S"))
-
-
-        # Splitting room view by top, middle, bottom
-        # top string
-        top = []
-        for rooms in vision_rooms:
-            if str(rooms) != "":
-                top.append(str(rooms)[0:3] + "    ")
-
-        # mid
-        mid = []
-        for rooms in vision_rooms:
-            if str(rooms) != "":
-                if len(str(rooms)) == 10:
-                    mid.append(str(rooms)[4:6] + "     ")
-                else:
-                    mid.append(str(rooms)[4:7] + "    ")
-            # print(end="\n")
-
-        # bottom
-        bottom = []
-        for rooms in vision_rooms:
-            if str(rooms) != "":
-                if len(str(rooms)) == 10:
-                    bottom.append(str(rooms)[7:10] + "    ")
-                else:
-                    bottom.append(str(rooms)[8:11] + "    ")
-
-
-
-
-        #Printing View
-        print("\n")
-        for i in range(0, row):
-            for room in range(i * col, (i + 1) * col):
-                print(top[room], end="")
-            print(end="\n")
-            for room in range(i * col, (i + 1) * col):
-                print(mid[room], end="")
-            print(end="\n")
-            for room in range(i * col, (i + 1) * col):
-                print(bottom[room], end="")
-            print("\n")
+    # def use_vision(self):
+    #     """
+    #     Prints a 3x3 view of the surrounding rooms at current location. Used for Vision Potion
+    #     :return: None
+    #     """
+    #     vision_rooms = []
+    #     #
+    #     # if menu_command == "w":
+    #     #     direction = "W" #go up
+    #     #     real_direction = "N"
+    #     # elif menu_command == "s":
+    #     #     direction = "E" #go down
+    #     #     real_direction = "S"
+    #     # elif menu_command == "d":
+    #     #     direction = "S" #go right
+    #     #     real_direction = "E"
+    #     # elif menu_command == "a":
+    #     #     direction = "N" #go left
+    #     #     real_direction = "W"
+    #     current_room = copy.deepcopy(self.dungeon.get_room_str((self.player_loc_row, self.player_loc_col)))
+    #     self.dungeon.set_current_room(current_room)
+    #     row = 3
+    #     col = 3
+    #     if self.player_loc_row == 0 or self.player_loc_row == self.dungeon.get_col_length()-1:
+    #         if 0 < self.player_loc_col < self.dungeon.get_row_length()-1:
+    #             row = 2
+    #             col = 3
+    #         elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
+    #             row = 2
+    #             col = 2
+    #
+    #     elif self.player_loc_col == 0 or self.player_loc_col == self.dungeon.get_row_length()-1:
+    #         if 0 < self.player_loc_row < self.dungeon.get_col_length()-1:
+    #             row = 3
+    #             col = 2
+    #     #NW - W/N
+    #     vision_rooms.append(self.get_vision_rm_corner("W", "N"))
+    #     #N - W
+    #     vision_rooms.append(self.get_vision_rm_one("W"))
+    #     #NE - WS
+    #     vision_rooms.append(self.get_vision_rm_corner("W", "S"))
+    #     #new line
+    #     #W = N
+    #     vision_rooms.append(self.get_vision_rm_one("N"))
+    #     #self
+    #     vision_rooms.append(current_room)
+    #     #E - S
+    #     vision_rooms.append(self.get_vision_rm_one("S"))
+    #     #/n
+    #     #SW - E/N
+    #     vision_rooms.append(self.get_vision_rm_corner("E", "N"))
+    #     #S - E
+    #     vision_rooms.append(self.get_vision_rm_one("E"))
+    #     #SE - ES
+    #     vision_rooms.append(self.get_vision_rm_corner("E", "S"))
+    #
+    #     # Splitting room view by top, middle, bottom
+    #     # top string
+    #     top = []
+    #     for rooms in vision_rooms:
+    #         if str(rooms) != "":
+    #             top.append(str(rooms)[0:3] + "    ")
+    #
+    #     # mid
+    #     mid = []
+    #     for rooms in vision_rooms:
+    #         if str(rooms) != "":
+    #             if len(str(rooms)) == 10:
+    #                 mid.append(str(rooms)[4:6] + "     ")
+    #             else:
+    #                 mid.append(str(rooms)[4:7] + "    ")
+    #         # print(end="\n")
+    #
+    #     # bottom
+    #     bottom = []
+    #     for rooms in vision_rooms:
+    #         if str(rooms) != "":
+    #             if len(str(rooms)) == 10:
+    #                 bottom.append(str(rooms)[7:10] + "    ")
+    #             else:
+    #                 bottom.append(str(rooms)[8:11] + "    ")
+    #
+    #     #Printing All
+    #     print("\n")
+    #     for i in range(0, row):
+    #         for room in range(i * col, (i + 1) * col):
+    #             print(top[room], end="")
+    #         print(end="\n")
+    #         for room in range(i * col, (i + 1) * col):
+    #             print(mid[room], end="")
+    #         print(end="\n")
+    #         for room in range(i * col, (i + 1) * col):
+    #             print(bottom[room], end="")
+    #         print("\n")
 
 
 
