@@ -513,6 +513,7 @@ class Dungeon:
             symbols_dict[(row, col)] = symbols
         return symbols_dict
 
+        
 # Example usage
 # dungeon = Dungeon(30, 15)
 # dungeon.print_dungeon()
