@@ -6,9 +6,10 @@ Dungeon Adventure
 
 """contains main logic on playing the game"""
 from Adventurer import Adventurer
-from Dungeon_Minna import Dungeon
+from Dungeon import Dungeon
 import random
 import sys, time
+import copy
 
 
 class DungeonAdventure:
@@ -19,8 +20,9 @@ class DungeonAdventure:
         self.hidden_menu_option = "map" #prints dungeon
         self.dungeon = Dungeon(5,5)
         self.adventurer = Adventurer()
-        self.player_loc_col = 3
-        self.player_loc_row = 3
+        self.player_loc_col = 0
+        self.player_loc_row = 0
+        self.original_dungeon = ""
 
 
     def play_whole_game(self):
@@ -34,9 +36,15 @@ class DungeonAdventure:
             self.set_play_mode()
             # print(play_game.menu_str())
             self.set_up_player()
+
             self.player_command()
+            print("Your maze:\n")
             self.dungeon.print_dungeon()
+            print("Original maze:\n")
+            self.original_dungeon.print_dungeon()
+            # dungeon_old.print_dungeon()
             self.player_results()
+
             play = input("Would you like to play again? \"y\" to keep playing or any key to exit. ")
 
         # self.print_end()
@@ -68,19 +76,22 @@ class DungeonAdventure:
             HP = random.randint(75, 100)
             healing_potion_count = random.randint(0, 2)
             vision_potion_count = random.randint(0, 1)
-            self.dungeon = Dungeon(15, 15) #static number
+            self.dungeon = Dungeon(10, 10) #static number
+            self.original_dungeon = copy.deepcopy(self.dungeon)
             print(f"Play mode is Medium")
         elif input_play_mode.lower() == "hard":
             HP = random.randint(75, 90)
             healing_potion_count = 0
             vision_potion_count = 0
-            self.dungeon = Dungeon(10, 10) #static number
+            self.dungeon = Dungeon(15, 15) #static number
+            self.original_dungeon = copy.deepcopy(self.dungeon)
             print(f"Play mode is Hard")
         else:
             HP = 100
             healing_potion_count = 3
             vision_potion_count = random.randint(100, 200)
             self.dungeon = Dungeon(5, 5) #static number
+            self.original_dungeon = copy.deepcopy(self.dungeon)
             print(f"Play mode is Easy")
 
         # name = input("What is your name? ")
@@ -90,6 +101,7 @@ class DungeonAdventure:
         # ----------------debug--------------------------------------------------
 
         self.adventurer.__init__(name, HP, healing_potion_count, vision_potion_count)
+        return self.dungeon
 
 
     def menu_str(self):
@@ -106,7 +118,6 @@ class DungeonAdventure:
         """
         Sets up the game by creating the dungeon maze and locating the starting coordinates
         """
-        # self.dungeon.build_dungeon()
         self.player_str = self.dungeon.get_entrance()
 
         #better to use code to find the entrance coordinates _______________------------------
@@ -150,12 +161,11 @@ class DungeonAdventure:
                 item = self.move_adventurer(menu_command)
 
                 #if the player reaches an exit or dies, break out of the game
-                if item == "O" or self.adventurer.get_HP() <= 0: #or self.adventurer.get_pillar() == 4:
+                if item == "O" or self.adventurer.get_HP() <= 0:
                     break
             elif str(menu_command).lower() == "map":
                 self.dungeon.print_dungeon()
-                # self.dungeon.print_dictionary()
-
+                # self.original_dungeon.print_dungeon()
             else:
                 print("Not a valid command")
 
@@ -296,9 +306,6 @@ class DungeonAdventure:
                 print(f"Pit! Decreased HP: {self.adventurer.get_HP()}")
                 pit = True
         self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
-
-
-
 
     def get_vision_rm_corner(self, row, col):
         """
