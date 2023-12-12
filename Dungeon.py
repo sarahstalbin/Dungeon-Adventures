@@ -1,3 +1,9 @@
+"""
+Sarah St. Albin
+TCSS 501 and 502
+Dungeon Adventure Game
+"""
+
 from room import Room
 import random
 
@@ -208,7 +214,7 @@ class Dungeon:
 
         return dungeon_info
 
-    def print_dungeon(self):
+    def print_dungeon(self, current_row=-1, current_col=-1):
         """
         Prints a simple visual representation of the Dungeon's maze.
         :return: None.
@@ -217,25 +223,31 @@ class Dungeon:
         top = []
         for row in range(self.__rows):
             for col in range(self.__cols):
-                top.append(str(self.__maze[row][col])[0:3] + "  ")
+                top.append(str(self.__maze[row][col])[0:3] + "     ")
 
         # saves mid string of all rooms in dungeon
         mid = []
         for row in range(self.__rows):
             for col in range(self.__cols):
-                if len(str(self.__maze[row][col])) == 10:
-                    mid.append(str(self.__maze[row][col])[4:6] + "   ")
+                if row == current_row and col == current_col:
+                    current = str(self.__maze[row][col])[4]
+                    current += "#"
+                    current += str(self.__maze[row][col])[6]  + "     "
+                    mid.append(current)
                 else:
-                    mid.append(str(self.__maze[row][col])[4:7] + "  ")
+                    if len(str(self.__maze[row][col])) == 10:
+                        mid.append(str(self.__maze[row][col])[4:6] + "      ")
+                    else:
+                        mid.append(str(self.__maze[row][col])[4:7] + "     ")
 
         # Saves bottom strings of all rooms in dungeon
         bottom = []
         for row in range(self.__rows):
             for col in range(self.__cols):
                 if len(str(self.__maze[row][col])) == 10:
-                    bottom.append(str(self.__maze[row][col])[7:10] + "  ")
+                    bottom.append(str(self.__maze[row][col])[7:10] + "     ")
                 else:
-                    bottom.append(str(self.__maze[row][col])[8:11] + "  ")
+                    bottom.append(str(self.__maze[row][col])[8:11] + "     ")
 
         # prints dungeon according to the dimensons
         for i in range(0, self.__rows):
@@ -248,7 +260,7 @@ class Dungeon:
             print(end="\n")
             for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(bottom[room], end="")
-        print("\n")
+            print("\n")
 
     # Internal methods
 
@@ -288,8 +300,8 @@ class Dungeon:
         :param direction: the current direction that the maze is following during generation
         :return: the new row and column coordinates
         """
-        d_row = {"N": 0, "S": 0, "E": 1, "W": -1}
-        d_col = {"N": -1, "S": 1, "E": 0, "W": 0}
+        d_row = {"N": -1, "S": 1, "E": 0, "W": 0}
+        d_col = {"N": 0, "S": 0, "E": 1, "W": -1}
 
         new_row = row + d_row[direction]
         new_col = col + d_col[direction]
@@ -333,7 +345,7 @@ class Dungeon:
         :return: None.
         """
         # Set the entrance and exit
-        self.__maze[0][0].set_entrance()
+        self.__maze[0][0].set_entrance(True)
         self.__maze[self.__rows - 1][self.__cols - 1].set_exit()
 
         # Set them as passable
@@ -341,8 +353,12 @@ class Dungeon:
         self.__maze[self.__rows - 1][self.__cols - 1].set_impasse(False)
 
         # Set them as empty
-        self.__maze[0][0].set_empty_room()
-        self.__maze[self.__rows - 1][self.__cols - 1].set_empty_room()
+        self.__maze[0][0].set_empty_room(True)
+        self.__maze[self.__rows - 1][self.__cols - 1].set_empty_room(True)
+
+        # Set exterior doors
+        self.__maze[0][0].set_west_door()
+        self.__maze[self.__rows - 1][self.__cols - 1].set_east_door()
 
     def _make_impassable(self):
         """
@@ -418,7 +434,7 @@ class Dungeon:
                 if possibility <= 10:
                     room.set_multiple_items(True)
                 else:
-                    room.set_empty_room()
+                    room.set_empty_room(True)
 
     def _place_pillars(self):
         """
@@ -495,5 +511,5 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(30, 15)
+dungeon = Dungeon(10, 10)
 dungeon.print_dungeon()
