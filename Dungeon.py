@@ -307,7 +307,7 @@ class Dungeon:
             for col in range(self.__cols):
                 if row == current_row and col == current_col:
                     current = str(self.__maze[row][col])[4]
-                    current += "#"
+                    current += "@"
                     current += str(self.__maze[row][col])[6]  + "     "
                     mid.append(current)
                 else:
