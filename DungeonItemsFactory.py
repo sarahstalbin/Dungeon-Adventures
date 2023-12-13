@@ -1,5 +1,11 @@
-from Pillar import AbstractionPillar, EncapsulationPillar, InheritancePillar, PolymorphismPillar
+"""
+Name: Aqueno Nirasmi, Minna Chae, Sarah St. Albin
+TCSS 501 and 502
+Dungeon Adventure
+"""
+
 from DungeonItems import HealingPotion, VisionPotion, Pit
+import random
 
 
 class DungeonItemsFactory:
@@ -26,26 +32,25 @@ class DungeonItemsFactory:
             return HealingPotion(*args)
         elif item_type == "X":
             return Pit(*args)
-        elif item_type == "A":
-            return AbstractionPillar("A")
-        elif item_type == "E":
-            return EncapsulationPillar("E")
-        elif item_type == "I":
-            return InheritancePillar("I")
-        elif item_type == "P":
-            return PolymorphismPillar("P")
         else:
             raise ValueError("Invalid item type")
 
+    @staticmethod
+    def create_multiple_items(*args):
+        items = ["V", "H", "X"]
+        results = random.sample(items, 3)
+        created_items = []
 
-# Example usage
-vision_potion = DungeonItemsFactory.create_item("V")
-healing_potion = DungeonItemsFactory.create_item("H", 2, 4)
-pit = DungeonItemsFactory.create_item("P", 2, 5)
-abstraction = DungeonItemsFactory.create_item("A")
-encapsulation = DungeonItemsFactory.create_item("E")
-inheritance = DungeonItemsFactory.create_item("I")
-polymorphism = DungeonItemsFactory.create_item("P")
+        for value in results:
+            if value == "V":
+                created_items.append(VisionPotion())
+            elif value == "H":
+                created_items.append(HealingPotion(*args))
+            elif value == "X":
+                created_items.append(Pit(*args))
+            else:
+                raise ValueError("Invalid item type")
+        return created_items
 
 
 
