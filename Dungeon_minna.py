@@ -97,6 +97,9 @@ class Dungeon:
 
 
     def set_current_room(self, room):
+        """
+        Sets player's current coordinates as current room. Used in vision potion
+        """
         room.set_healing_potion(False)
         room.set_vision_potion(False)
         room.set_pit(False)
@@ -111,6 +114,9 @@ class Dungeon:
 
 
     def set_room_empty(self, key=(0, 0), pit=False):
+        """
+        If room traveled, removes items but leaves pit
+        """
         item = self.__items.get(key)
         if item.get_healing_potion():
             item.set_healing_potion(False)
@@ -171,7 +177,24 @@ class Dungeon:
             symbols += "E"
         return symbols
 
-
+    """---------------------MINNA code new 12/12 7:00pm-----------------------------------------------------------"""
+    # def multi_items(self):
+    #     items = ["V", "H", "P", ""]
+    #     results = random.sample(items, 3)
+    #     pit = False
+    #     print_string = ""
+    #     for value in results:
+    #         if value == "V":
+    #             self.adventurer.inc_vision_potion_count() #should be Factory
+    #             print_string += f"Increased vision: {self.adventurer.__get_vision_potion_count__()}"
+    #         if value == "H":
+    #             self.adventurer.inc_healing_potion_count()
+    #             print_string += f"Increased healing: {self.adventurer.__get_health_potion_count__()}"
+    #         if value == "P":
+    #             self.adventurer.dec_HP()
+    #             print_string += f"Pit! Decreased HP: {self.adventurer.get_HP()}"
+    #             pit = True
+    #     self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
 
     """---------------------MINNA code ends-----------------------------------------------------------"""
     def print_dictionary(self):
@@ -222,8 +245,72 @@ class Dungeon:
                 dungeon_info += "\n\n"
 
         return dungeon_info
+    """--------------------------Minna addition 12/12 8pm---------------------------------------"""
+    def print_play_dungeon(self, current_row=-1, current_col=-1):
+        """
+        Prints a simple visual representation of the Dungeon's maze as player is playing
+        :return: None.
+        """
 
-    """ -------------Minna edited below 12/11 9:35pm--------------------------------"""
+        top = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    top.append(str(self.__maze[row][col])[0:3] + "     ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        top.append("---     ")
+                    else:
+                        top.append("^^^     ")
+
+        # saves mid string of all rooms in dungeon
+        mid = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    if len(str(self.__maze[row][col])) == 10:
+                        mid.append(str(self.__maze[row][col])[4:6] + "      ")
+                    else:
+                        mid.append(str(self.__maze[row][col])[4:7] + "     ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        mid.append("---     ")
+                    else:
+                        mid.append("^^^     ")
+
+        # Saves bottom strings of all rooms in dungeon
+        bottom = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    if len(str(self.__maze[row][col])) == 10:
+                        bottom.append(str(self.__maze[row][col])[7:10] + "     ")
+                    else:
+                        bottom.append(str(self.__maze[row][col])[8:11] + "     ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        bottom.append("---     ")
+                    else:
+                        bottom.append("^^^     ")
+
+        # prints dungeon according to the dimensons
+        for i in range(0, self.__rows):
+            print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(top[room], end="")
+            print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(mid[room], end="")
+            print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(bottom[room], end="")
+            print("\n")
+    """--------------------------Minna addition 12/12 8pm---------------------------------------"""
+    def set_player_traveled(self, key):
+        room = self.__items.get(key)
+        room.set_player_traveled()
+
+    """-----------------------------------------------------------------"""
     def print_dungeon(self, current_row=-1, current_col=-1):
         """
         Prints a simple visual representation of the Dungeon's maze.
@@ -272,7 +359,7 @@ class Dungeon:
                 print(bottom[room], end="")
             print("\n")
 
-        # Internal methods
+    # Internal methods
 
     def _create_maze(self, room, current_row, current_col):
         """
@@ -310,8 +397,8 @@ class Dungeon:
         :param direction: the current direction that the maze is following during generation
         :return: the new row and column coordinates
         """
-        d_row = {"N": 0, "S": 0, "E": 1, "W": -1}
-        d_col = {"N": -1, "S": 1, "E": 0, "W": 0}
+        d_row = {"N": -1, "S": 1, "E": 0, "W": 0}
+        d_col = {"N": 0, "S": 0, "E": 1, "W": -1}
 
         new_row = row + d_row[direction]
         new_col = col + d_col[direction]
@@ -366,6 +453,10 @@ class Dungeon:
         self.__maze[0][0].set_empty_room(True)
         self.__maze[self.__rows - 1][self.__cols - 1].set_empty_room(True)
 
+        # Set exterior doors
+        self.__maze[0][0].set_west_door()
+        self.__maze[self.__rows - 1][self.__cols - 1].set_east_door()
+
     def _make_impassable(self):
         """
         Internal method that randomly sets some Rooms as impassable.
@@ -409,7 +500,6 @@ class Dungeon:
         self.__maze[row][col].set_visited(True)  # If no exit is found in any direction, mark Room as unvisited
         return False
 
-    """ -------------Minna edited below 12/11 9:35pm----------____----------------------"""
     def _place_items(self):
         """
         Internal method that randomly places healing potions, vision potions, and pits.
@@ -513,7 +603,7 @@ class Dungeon:
             symbols_dict[(row, col)] = symbols
         return symbols_dict
 
-        
+
 # Example usage
 # dungeon = Dungeon(30, 15)
 # dungeon.print_dungeon()
