@@ -7,7 +7,7 @@ Dungeon Adventure
 
 from Adventurer import Adventurer
 from Dungeon import Dungeon
-from ItemFactory import DungeonItemsFactory
+from ItemsFactory import DungeonItemsFactory
 import random
 import sys, time
 import copy
@@ -185,6 +185,7 @@ class DungeonAdventure:
         """
         menu_command = ""
         item = ""
+        response = ""
         self.dungeon.print_play_dungeon(self.player_loc_row, self.player_loc_col)
         while item != "O" or menu_command.lower() != "q":
             menu_command = input("What is your next move? Enter \"m\" for menu: ")
@@ -221,7 +222,25 @@ class DungeonAdventure:
                 item = self.move_adventurer(menu_command)
 
                 #if the player reaches an exit or dies, break out of the game
-                if item == "O" or self.adventurer.get_HP() <= 0:
+                if self.adventurer.get_HP() <= 0:
+                    break
+                #reached exit
+                elif item == "O":
+                    while(True):
+                        response = input("You have reached the exit. Would you like to leave the maze? (y to leave, "
+                                         "pillar to view pillar count, or n to stay: ")
+                        if response.lower() == "y" or response.lower() == "yes":
+                            break
+                        elif response.lower() == "pillar":
+                            if self.adventurer.get_pillar() == 1:
+                                print(f"You have found {self.adventurer.get_pillar()} pillar so far.")
+                            else:
+                                print(f"You have found {self.adventurer.get_pillar()} pillars so far.")
+                        elif response.lower() == "n" or response.lower() == "no":
+                            break
+                        else:
+                            response = input("Please enter y to leave, pillar to view pillar count, or n to stay: ")
+                if response.lower() == "y" or response.lower() == "yes":
                     break
             elif str(menu_command).lower() == "map":
                 self.dungeon.print_dungeon(self.player_loc_row, self.player_loc_col)
@@ -397,6 +416,8 @@ class DungeonAdventure:
             time.sleep(.05)
         print("\nWe could not have done it without you.")
 
+    # Determines the Adventurer 's options (Move, Use a Potion)
+    # Continues this process until the Adventurer wins or dies
 game_play = DungeonAdventure()
 game_play.play_whole_game()
 # game_play.use_vision()
