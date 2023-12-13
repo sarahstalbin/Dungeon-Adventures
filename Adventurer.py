@@ -3,7 +3,7 @@ Minna Chae
 TCSS 501 and 502
 Dungeon Adventure
 """
-import random #to be removed after Factory
+
 
 class Adventurer:
     def __init__(self, name="", HP=0, healing_potion_count =0, vision_potion_count=0):
