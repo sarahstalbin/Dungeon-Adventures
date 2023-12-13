@@ -62,6 +62,9 @@ class Dungeon:
         """
         return self.__maze[0][0]
 
+    def get_maze_array(self):
+        return self.__maze
+
     def get_room_str(self, key):
         """
         Gets the entrance Room coordinates of the Dungeon's maze.
