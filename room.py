@@ -216,7 +216,7 @@ class Room:
         elif self.__empty_room:
             layout += " "
         elif self.__current_room:
-            layout += "#"
+            layout += "@"
         elif self.__abstraction_pillar:
             layout += "A"
         elif self.__polymorphism_pillar:
