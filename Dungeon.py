@@ -235,12 +235,12 @@ class Dungeon:
         for row in range(self.__rows):
             for col in range(self.__cols):
                 if row == current_row and col == current_col:
-                    top.append(str(self.__maze[row][col])[0:3] + "     ")
+                    top.append(str(self.__maze[row][col])[0:3] + "  ")
                 else:
                     if self.__items.get((row, col)).get_player_traveled():
-                        top.append("---     ")
+                        top.append("---  ")
                     else:
-                        top.append("^^^     ")
+                        top.append("^^^  ")
 
         # saves mid string of all rooms in dungeon
         mid = []
@@ -248,14 +248,14 @@ class Dungeon:
             for col in range(self.__cols):
                 if row == current_row and col == current_col:
                     if len(str(self.__maze[row][col])) == 10:
-                        mid.append(str(self.__maze[row][col])[4:6] + "      ")
+                        mid.append(str(self.__maze[row][col])[4:6] + "   ")
                     else:
-                        mid.append(str(self.__maze[row][col])[4:7] + "     ")
+                        mid.append(str(self.__maze[row][col])[4:7] + "  ")
                 else:
                     if self.__items.get((row, col)).get_player_traveled():
-                        mid.append("---     ")
+                        mid.append("---  ")
                     else:
-                        mid.append("^^^     ")
+                        mid.append("^^^  ")
 
         # Saves bottom strings of all rooms in dungeon
         bottom = []
@@ -263,18 +263,18 @@ class Dungeon:
             for col in range(self.__cols):
                 if row == current_row and col == current_col:
                     if len(str(self.__maze[row][col])) == 10:
-                        bottom.append(str(self.__maze[row][col])[7:10] + "     ")
+                        bottom.append(str(self.__maze[row][col])[7:10] + "  ")
                     else:
-                        bottom.append(str(self.__maze[row][col])[8:11] + "     ")
+                        bottom.append(str(self.__maze[row][col])[8:11] + "  ")
                 else:
                     if self.__items.get((row, col)).get_player_traveled():
-                        bottom.append("---     ")
+                        bottom.append("---  ")
                     else:
-                        bottom.append("^^^     ")
+                        bottom.append("^^^  ")
 
         # prints dungeon according to the dimensons
         for i in range(0, self.__rows):
-            print(end="\n")
+            # print(end="\n")
             for room in range(i * self.__cols, (i + 1) * self.__cols):
                 print(top[room], end="")
             print(end="\n")
