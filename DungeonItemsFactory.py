@@ -39,7 +39,13 @@ class DungeonItemsFactory:
 
 
 # Example usage
-abstraction = DungeonItemsFactory.create_item("H", 2, 4)
+vision_potion = DungeonItemsFactory.create_item("V")
+healing_potion = DungeonItemsFactory.create_item("H", 2, 4)
+pit = DungeonItemsFactory.create_item("P", 2, 5)
+abstraction = DungeonItemsFactory.create_item("A")
+encapsulation = DungeonItemsFactory.create_item("E")
+inheritance = DungeonItemsFactory.create_item("I")
+polymorphism = DungeonItemsFactory.create_item("P")
 
 
 
