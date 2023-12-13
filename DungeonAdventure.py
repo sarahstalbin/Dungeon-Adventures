@@ -27,10 +27,8 @@ class DungeonAdventure:
         self.vision_potion = DungeonItemsFactory.create_item("V")
         self.healing_potion = DungeonItemsFactory.create_item("H", 1, 5)
         self.pit = DungeonItemsFactory.create_item("X", 1, 15)
-        # self.abstraction = DungeonItemsFactory.create_item("A")
-        # encapsulation = DungeonItemsFactory.create_item("E")
-        # inheritance = DungeonItemsFactory.create_item("I")
-        # polymorphism = DungeonItemsFactory.create_item("P")
+
+
 
 
     def play_whole_game(self):
@@ -42,7 +40,7 @@ class DungeonAdventure:
         play = "y"
         while play.lower() == "y" or play.lower() == "yes":
             self.set_play_mode()
-            # print(play_game.menu_str())
+            print(self.menu_str())
             self.set_up_player()
             self.player_command()
             print("\nOriginal maze:\n")
@@ -50,10 +48,8 @@ class DungeonAdventure:
             print("Your maze:\n")
             self.dungeon.print_dungeon()
             self.player_results()
-
-            play = input("Would you like to play again? \"y\" to keep playing or any key to exit. ")
-
-        # self.print_end()
+            play = input("Would you like to play again? \"y\" to keep playing or press any key to exit. ")
+        self.print_end()
 
     def print_introduction(self):
         """
@@ -78,8 +74,6 @@ class DungeonAdventure:
         input_play_mode = input(f"Choose: Easy/e, Medium/m, Hard/h, or players choice (c/choice)? Default will be Easy. ")
 
         # ----------------------------------Delete for debugging ------------------------------------------
-        # print("Choose: Easy, Medium, or Hard? Default will be Easy. ") #for debugging purposes
-        # input_play_mode = "hard" #for debugging purposes
         if input_play_mode.lower() == "medium" or input_play_mode.lower() == "m":
             HP = random.randint(75, 100)
             healing_potion_count = random.randint(0, 2)
@@ -112,27 +106,33 @@ class DungeonAdventure:
                     healing_potion_count = int(choice)
                     break
                 except ValueError:
-                    print("\nMust be a number")
+                    print("\nMust be a number.")
             while True:
                 choice = input("Vision Potion count? ")
                 try:
                     vision_potion_count = int(choice)
                     break
                 except ValueError:
-                    print("\nMust be a number")
+                    print("\nMust be a number.")
             while True:
-                row = input("Row Dimension? ")
+                row = input("Row Dimension? Must be larger than 2. ")
                 try:
                     row = int(row)
-                    break
+                    if row >= 3:
+                        break
+                    else:
+                        print("\nRow dimension must not be smaller than 2")
                 except ValueError:
                     print("\nMust be a number")
 
             while True:
-                col = input("Column Dimension? ")
+                col = input("Column Dimension? Must be larger than 2 ")
                 try:
                     col = int(col)
-                    break
+                    if col >= 3:
+                        break
+                    else:
+                        print("\nRow dimension must not be smaller than 2.")
                 except ValueError:
                     print("\nMust be a number")
 
@@ -154,7 +154,6 @@ class DungeonAdventure:
 
         self.adventurer.__init__(name, HP, healing_potion_count, vision_potion_count)
         print(f"Your stats: {self.adventurer}")
-        return self.dungeon
 
 
     def menu_str(self):
@@ -163,8 +162,8 @@ class DungeonAdventure:
         Creates the menu string to be printed
         :return: menu str
         """
-        formatted_list = [item + " : " + values for item, values in self.menu.items()]
-        return "\n" + "\n".join(formatted_list) + "\n"
+        formatted_list = ["    " + item + " : " + values for item, values in self.menu.items()]
+        return "\n".join(formatted_list) + "\n"
 
 
     def set_up_player(self):
@@ -173,7 +172,6 @@ class DungeonAdventure:
         """
         self.player_str = self.dungeon.get_entrance()
 
-        #better to use code to find the entrance coordinates _______________------------------
         self.player_loc_col = 0
         self.player_loc_row = 0
         self.dungeon.set_player_traveled((self.player_loc_row,self.player_loc_col))
@@ -186,12 +184,15 @@ class DungeonAdventure:
         menu_command = ""
         item = ""
         response = ""
-        self.dungeon.print_play_dungeon(self.player_loc_row, self.player_loc_col)
-        while item != "O" or menu_command.lower() != "q":
+
+        while self.adventurer.get_HP() > 0:
+            self.dungeon.print_play_dungeon(self.player_loc_row, self.player_loc_col)
             menu_command = input("What is your next move? Enter \"m\" for menu: ")
             # while still in maze and not quit
             if menu_command.lower() == "q":
-                return "q"
+                break
+            # if self.adventurer.get_HP() <= 0:
+            #     break
             elif str(menu_command).lower() == "m":
                 #call for menu
                 print(self.menu_str())
@@ -268,38 +269,16 @@ class DungeonAdventure:
         #get coordinates for next move
         new_row, new_col = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col,
                                                              real_direction)
-        # ---------- testing, delete later-------------------
-        # print(f"this is real_direction: {real_direction}")
-        # ---------- testing, delete later-------------------
-
-        #check if door is available to go into coordinates
         if self.dungeon.is_valid_room(new_row, new_col):
             new_key = self.dungeon._get_neighbor_coords(self.player_loc_row, self.player_loc_col, real_direction)
             current_key = self.player_loc_row, self.player_loc_col
-
-            # ---------- testing, delete later-------------------
-
-
-            # print(f"this is door boolean: {self.dungeon.get_doors(current_key, new_key, real_direction)}")
-            # ---------- testing, delete later-------------------
-            #check if door is available to go into coordinates
-
 
             if self.dungeon.get_doors(current_key, new_key, real_direction): #able to move into the room - DO NOT DELETE
 
                 self.player_loc_row, self.player_loc_col = new_row, new_col
                 self.dungeon.print_play_dungeon(self.player_loc_row, self.player_loc_col)
                 print(self.dungeon.get_room_str((new_row, new_col)))
-                # print(f"this is location row: {new_row} col: {new_col}")
-                # keeps historical log of where player traveled
                 self.dungeon.set_player_traveled((self.player_loc_row, self.player_loc_col))
-
-                # ---------- testing, delete later-------------------
-                # print(f"this is new coors row: {self.player_loc_row} col: {self.player_loc_col}")
-                # print(self.dungeon.get_room_str((new_row, new_col)))
-                # print(f"{self.dungeon.get_room_contents((self.player_loc_row, self.player_loc_col))}")
-                # ---------- testing, delete later-------------------
-
                 item = self.dungeon.get_room_contents((self.player_loc_row, self.player_loc_col))
                 item = self.collect_item(item)
                 if item == "O":
@@ -308,8 +287,6 @@ class DungeonAdventure:
                 if self.adventurer.get_HP() <= 0:
                     print("You have died and lost the game!")
                     return item
-
-                # Collecting Item code
 
             else:
                 print("Cannot move that direction because there is no door")
@@ -340,10 +317,7 @@ class DungeonAdventure:
         elif item == "O":  # exit
             return item
         elif item == "M":  # get multiple items
-            # return_string = self.dungeon.multi_items()
-            # print(return_string)
             self.multi_items()
-
         elif item == "A":  # abstraction
             self.adventurer.inc_pillar()
             self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col),False)
@@ -362,7 +336,8 @@ class DungeonAdventure:
             print(f"You found the Encapsulation pillar! Total Pillars: {self.adventurer.get_pillar()}")
         else:
             return item
-        # print(f"this is self.adventurer after update{self.adventurer}")
+
+
     def multi_items(self):
         items = ["V", "H", "X", ""]
         results = random.sample(items, 3)
@@ -380,6 +355,7 @@ class DungeonAdventure:
                 print(f"You fell into a Pit! You lost {self.pit.use_item()} points. Current HP: {self.adventurer.get_HP()}.")
                 pit = True
         self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), pit)
+
     def player_results(self):
         """
         Game has ended and prints Adventurer results
@@ -420,6 +396,3 @@ class DungeonAdventure:
     # Continues this process until the Adventurer wins or dies
 game_play = DungeonAdventure()
 game_play.play_whole_game()
-# game_play.use_vision()
-
-# game_play.player_command()
