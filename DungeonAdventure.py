@@ -184,9 +184,9 @@ class DungeonAdventure:
         menu_command = ""
         item = ""
         response = ""
-
-        while self.adventurer.get_HP() > 0:
+        if self.adventurer.get_HP() > 0:
             self.dungeon.print_play_dungeon(self.player_loc_row, self.player_loc_col)
+        while self.adventurer.get_HP() > 0:
             menu_command = input("What is your next move? Enter \"m\" for menu: ")
             # while still in maze and not quit
             if menu_command.lower() == "q":
@@ -293,7 +293,7 @@ class DungeonAdventure:
 
         else:
             print("Not valid direction")
-            print(f"Current location: row: {self.player_loc_row} col: {self.player_loc_col}")
+            # print(f"Current location: row: {self.player_loc_row} col: {self.player_loc_col}")
             return
 
     def collect_item(self, item="g"):
