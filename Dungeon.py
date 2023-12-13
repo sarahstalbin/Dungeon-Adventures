@@ -65,6 +65,13 @@ class Dungeon:
     def get_maze_array(self):
         return self.__maze
 
+    def _get_maze_dictionary(self):
+        """
+        Internal getter method that returns the dictionary.
+        :return: the dictionary instantiated in the class constructor.
+        """
+        return self.__items
+
     def get_room_str(self, key):
         """
         Gets the entrance Room coordinates of the Dungeon's maze.
@@ -550,13 +557,6 @@ class Dungeon:
                 polymorphism = True
             else:
                 break
-
-    def _get_maze_dictionary(self):
-        """
-        Internal getter method that returns the dictionary.
-        :return: the dictionary instantiated in the class constructor.
-        """
-        return self.__items
 
     def _get_object_symbols(self):
         """
