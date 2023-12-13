@@ -13,8 +13,8 @@ class DungeonItemsFactory:
     Creates and returns Item objects for the Dungeon Adventure Game.
     All Items should be created via the DungeonItemsFactory.
 
-    Contains one method: create_item(), which creates an Item object of a specified type along with the relevant
-    data for creating that Item.
+    Contains two methods: create_item(), which creates an Item object of a specified type using relevant data for
+    creating that Item, and create_multiple_items(), which creates multiple Item objects.
 
     """
 
@@ -37,6 +37,11 @@ class DungeonItemsFactory:
 
     @staticmethod
     def create_multiple_items(*args):
+        """
+        Creates multiple Item objects using relevant data for instantiating that object.
+        :param args: necessary data for instantiating an object. Some objects require no parameters.
+        :return: an array of Item objects.
+        """
         items = ["V", "H", "X"]
         results = random.sample(items, 3)
         created_items = []
