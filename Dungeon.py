@@ -1,10 +1,11 @@
 """
-Sarah St. Albin
+Name: Aqueno Nirasmi, Minna Chae, Sarah St. Albin
 TCSS 501 and 502
-Dungeon Adventure Game
+Dungeon Adventure
 """
 
 from room import Room
+from DungeonItemsFactoryTest import DungeonItemsFactory
 import random
 
 
@@ -87,19 +88,21 @@ class Dungeon:
             return boo_results
 
         if direction == "S":
-            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door()  # hopefully return boolean
+            boo_results = attributes_current.get_south_door() and attributes_new.get_north_door()
             return boo_results
 
         if direction == "E":
-            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door()  # hopefully return boolean
+            boo_results = attributes_current.get_east_door() and attributes_new.get_west_door()
             return boo_results
 
         if direction == "W":
-            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()  # hopefully return boolean
+            boo_results = attributes_current.get_west_door() and attributes_new.get_east_door()
             return boo_results
-        # return attributes.get_north_door()
 
     def set_current_room(self, room):
+        """
+        Sets player's current coordinates as current room. Used in vision potion
+        """
         room.set_healing_potion(False)
         room.set_vision_potion(False)
         room.set_pit(False)
@@ -113,38 +116,34 @@ class Dungeon:
         room.set_current_room(True)
 
     def set_room_empty(self, key=(0, 0), pit=False):
+        """
+        If room traveled, removes items but leaves pit
+        """
         item = self.__items.get(key)
         if item.get_healing_potion():
             item.set_healing_potion(False)
-            # item.set_vision_potion(False)
-            # item.set_multiple_items(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
         elif item.get_vision_potion():
-            # item.set_healing_potion(False)
             item.set_vision_potion(False)
-            # item.set_multiple_items(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
         elif item.get_multiple_items():
-            # item.set_healing_potion(False)
-            # item.set_vision_potion(False)
             item.set_multiple_items(False)
-            # item.set_abstraction_pillar(False)
             if pit:
                 item.set_pit(True)
             else:
-                item.set_empty_room()
+                item.set_empty_room(True)
         elif item.get_abstraction_pillar():
             item.set_abstraction_pillar(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
         elif item.get_polymorphism_pillar():
             item.set_polymorphism_pillar(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
         elif item.get_inheritance_pillar():
             item.set_inheritance_pillar(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
         elif item.get_encapsulation_pillar():
             item.set_encapsulation_pillar(False)
-            item.set_empty_room()
+            item.set_empty_room(True)
 
     def get_room_contents(self, key):
         """
@@ -152,11 +151,8 @@ class Dungeon:
        :param key: a tuple representation of the row, column Room coordinates (0, 0)
        :return: the contents of the specified Room, in the format specified in the __str__() method in Room class.
        """
-        # symbols_dict = self._get_object_symbols()
-        # return symbols_dict.items(key)
+
         item = self.__items.get(key)
-        # print(f"self.__items.get(key): \n {self.__items.get(key)}")
-        # print(f"this is item \n {item}")
         symbols = ""
         if item.get_healing_potion():
             symbols += "H"
@@ -180,8 +176,6 @@ class Dungeon:
             symbols += "I"
         elif item.get_encapsulation_pillar():
             symbols += "E"
-
-        # symbols_dict[(row, col)] = symbols
         return symbols
 
     def print_dictionary(self):
@@ -233,6 +227,70 @@ class Dungeon:
 
         return dungeon_info
 
+    def print_play_dungeon(self, current_row=-1, current_col=-1):
+        """
+        Prints a simple visual representation of the Dungeon's maze as player is playing
+        :return: None.
+        """
+        top = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    top.append(str(self.__maze[row][col])[0:3] + "  ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        top.append("---  ")
+                    else:
+                        top.append("^^^  ")
+
+        # saves mid string of all rooms in dungeon
+        mid = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    if len(str(self.__maze[row][col])) == 10:
+                        mid.append(str(self.__maze[row][col])[4:6] + "   ")
+                    else:
+                        mid.append(str(self.__maze[row][col])[4:7] + "  ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        mid.append("---  ")
+                    else:
+                        mid.append("^^^  ")
+
+        # Saves bottom strings of all rooms in dungeon
+        bottom = []
+        for row in range(self.__rows):
+            for col in range(self.__cols):
+                if row == current_row and col == current_col:
+                    if len(str(self.__maze[row][col])) == 10:
+                        bottom.append(str(self.__maze[row][col])[7:10] + "  ")
+                    else:
+                        bottom.append(str(self.__maze[row][col])[8:11] + "  ")
+                else:
+                    if self.__items.get((row, col)).get_player_traveled():
+                        bottom.append("---  ")
+                    else:
+                        bottom.append("^^^  ")
+
+        # prints dungeon according to the dimensons
+        for i in range(0, self.__rows):
+            # print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(top[room], end="")
+            print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(mid[room], end="")
+            print(end="\n")
+            for room in range(i * self.__cols, (i + 1) * self.__cols):
+                print(bottom[room], end="")
+            print("\n")
+
+    def set_player_traveled(self, key):
+        room = self.__items.get(key)
+        room.set_player_traveled()
+
+
     def print_dungeon(self, current_row=-1, current_col=-1):
         """
         Prints a simple visual representation of the Dungeon's maze.
@@ -250,7 +308,7 @@ class Dungeon:
             for col in range(self.__cols):
                 if row == current_row and col == current_col:
                     current = str(self.__maze[row][col])[4]
-                    current += "#"
+                    current += "@"
                     current += str(self.__maze[row][col])[6]  + "     "
                     mid.append(current)
                 else:
@@ -439,16 +497,21 @@ class Dungeon:
                 if possibility <= 30:
                     # Place the vision potion
                     if choice == "V":
-                        room.set_vision_potion(True)
+                        vision_potion = DungeonItemsFactory.create_item("V")
+                        room.set_vision_potion(vision_potion)
                     # Place health potion
                     if choice == "H":
-                        room.set_healing_potion(True)
+                        healing_potion = DungeonItemsFactory.create_item("H", 1, 10)
+                        room.set_healing_potion(healing_potion)
                     # Place multi item
                     if choice == "M":
-                        room.set_multiple_items(True)
+                        multiple_items = DungeonItemsFactory.create_multiple_items(1, 10)
+                        for item in multiple_items:
+                            room.set_multiple_items(item)
                     # Place the pit
                     if choice == "P":
-                        room.set_pit(True)
+                        pit = DungeonItemsFactory.create_item("X", 1, 10)
+                        room.set_pit(pit)
                 else:
                     room.set_empty_room(True)
 
@@ -524,8 +587,3 @@ class Dungeon:
                 symbols += "E"
             symbols_dict[(row, col)] = symbols
         return symbols_dict
-
-
-# Example usage
-dungeon = Dungeon(5, 3)
-dungeon.print_dungeon()
