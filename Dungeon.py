@@ -527,5 +527,5 @@ class Dungeon:
 
 
 # Example usage
-dungeon = Dungeon(10, 10)
+dungeon = Dungeon(5, 3)
 dungeon.print_dungeon()
