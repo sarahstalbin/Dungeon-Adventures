@@ -5,7 +5,7 @@ Dungeon Adventure
 """
 
 from room import Room
-from DungeonItemsFactoryTest import DungeonItemsFactory
+from DungeonItemsFactory import DungeonItemsFactory
 import random
 
 
@@ -512,6 +512,16 @@ class Dungeon:
                     if choice == "P":
                         pit = DungeonItemsFactory.create_item("X", 1, 10)
                         room.set_pit(pit)
+                        room.set_vision_potion(True)
+                    # Place health potion
+                    if choice == "H":
+                        room.set_healing_potion(True)
+                    # Place multi item
+                    if choice == "M":
+                        room.set_multiple_items(True)
+                    # Place the pit
+                    if choice == "P":
+                        room.set_pit(True)
                 else:
                     room.set_empty_room(True)
 
