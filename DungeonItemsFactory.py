@@ -5,8 +5,8 @@ Dungeon Adventure
 """
 
 from DungeonItems import HealingPotion, VisionPotion, Pit
+from random import randint
 import random
-
 
 class DungeonItemsFactory:
     """
@@ -42,8 +42,8 @@ class DungeonItemsFactory:
         :param args: necessary data for instantiating an object. Some objects require no parameters.
         :return: an array of Item objects.
         """
-        items = ["V", "H", "X"]
-        results = random.sample(items, 3)
+        items = ["V", "H", "X", ""]
+        results = random.sample(items, randint(2,3))
         created_items = []
 
         for value in results:
@@ -53,6 +53,7 @@ class DungeonItemsFactory:
                 created_items.append(HealingPotion(*args))
             elif value == "X":
                 created_items.append(Pit(*args))
+            elif value == "": #allows 2 or 3 items
             else:
                 raise ValueError("Invalid item type")
         return created_items
