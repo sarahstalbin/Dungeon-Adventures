@@ -12,7 +12,35 @@ import random
 import sys, time
 import copy
 
-""" Dungeon Adventure contains the main logic of playing the game."""
+""" 
+Dungeon Adventure contains the main logic of playing the game. 
+Game play must be initiated by creating an instance of the class and calling the module 
+play_whole_game. This file
+will have the set up created after the class.
+
+This game provides 4 levels, Easy, Medium, Hard, and Player's Choice.
+Easy provides a 5x5 dungeon maze with the player at 100 HP, 3 healing potions, random vision
+potions between 1 and 3. Medium provides a 10x10 dungeon maze with the player at random 
+generated HP of 75 to 100, random healing potions of 0 to 2, and random vision potions 
+of 0 to 1. Hard provides a 15x15 dungeon maze with the player at random 
+generated HP of 75 to 90, 0 healing potions, and 0 vision potions. Player's choice allows
+the player to choose any HP, healing potion, vision potion, and dungeon size as long as the
+dungeon size is equal to or larger than 3x3. HP can be negative but player will instantly die.
+Healing and vision potions can be negative but that will count against player.
+
+Players can use the Action menu option to view keyboard inserts "Action Menu": "m", "Go Up": 
+"w", "Go Down": "s", "Go Left": "a", "Go Right": "d", "Use Health Potion": "h", "Use Vision": 
+"v", "View current status": "stats", "Quit Game": "q". The hidden/secret menu option is "map"
+which will print the whole map and item layout.
+
+Each time a player moves, the output will be a display of the map. Traveled Rooms will be 
+indicated by the notation --- and not yet traveled rooms will be indicated by the notation ^^^.
+Player's current location will display the current layout of the room. There is also a print
+of only the current room after the map layout.
+
+If a player picks up items or falls into a pit, a print statement will indicate these added or
+negative points.
+"""
 class DungeonAdventure:
 
     def __init__(self):
