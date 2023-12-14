@@ -7,7 +7,7 @@ Dungeon Adventure
 
 from Adventurer import Adventurer
 from Dungeon import Dungeon
-from ItemsFactory import DungeonItemsFactory
+from DungeonItemsFactory import DungeonItemsFactory
 import random
 import sys, time
 import copy
@@ -55,15 +55,16 @@ class DungeonAdventure:
         """
         Prints Introduction and game play
         """
-        print("Welcome to Dungeon Adventure where you may traverse the dangerous dungeons to find the 4 pillars of OO -"
+        print("Welcome to the Dungeon Adventure Game, where you will traverse a dangerous maze to "
+              "find the 4 pillars of Object Oriented Programming (OOP) -"
               " Abstraction, Encapsulation, Inheritance, and Polymorphism. \n"
-              "To travel, use keys Up (w), down (s), left (a), right (d). "
-              "Within the dungeons you will find a multiple of surprises in each room such as a healing potion, "
-              "vision potion, or fall into a pit. "
-              "\nThe healing potion can be stored and used to heal your HP. The Vision potion and be stored"
-              "and allows you to look at surrounding rooms. \n The pit will take away HP. Be careful not to lose all"
-              "health and die. The goal of this game is to "
-              "survive and find all 4 pillars of OO. Use \"m\" to look at menu options for information.\n")
+              "To travel, use keys Up (w), down (s), left (a), and right (d). "
+              "Within the dungeon's maze you will find many surprises, such as healing potions and "
+              "vision potions. Or you may fall into a pit! "
+              "\nHealing potions can be stored and used to increase your HP, or health points. The Vision potion "
+              "can be stored and allows you to see through the walls of surrounding rooms. \n Falling into a pit will "
+              "lower your HP. Be careful not to lose all your HP and die! The goal of this game is to "
+              "survive and find all 4 pillars of OOP. Use \"m\" to look at menu options for information.\n")
 
     def set_play_mode(self):
         """
