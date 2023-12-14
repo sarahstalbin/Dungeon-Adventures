@@ -16,8 +16,8 @@ import copy
 class DungeonAdventure:
 
     def __init__(self):
-        self.menu = {"Action Menu": "m", "Go up": "w", "Go down": "s", "Go Left": "a", "Go Right": "d",
-                     "Use Health Potion": "h", "Use Vision": "v", "View current status": "stats", "Quit game": "q"}
+        self.menu = {"Action Menu": "m", "Go Up": "w", "Go Down": "s", "Go Left": "a", "Go Right": "d",
+                     "Use Health Potion": "h", "Use Vision": "v", "View current status": "stats", "Quit Game": "q"}
         self.hidden_menu_option = "map" #prints dungeon
         self.dungeon = Dungeon(5, 5)
         self.adventurer = Adventurer()
