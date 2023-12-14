@@ -50,16 +50,14 @@ class DungeonAdventure:
         """
         Prints Introduction and game play
         """
-        print("Welcome to the Dungeon Adventure Game, where you will traverse a dangerous maze to "
-              "find the 4 pillars of Object Oriented Programming (OOP) -"
-              " Abstraction, Encapsulation, Inheritance, and Polymorphism. \n"
-              "To travel, use keys Up (w), down (s), left (a), and right (d). "
-              "Within the dungeon's maze you will find many surprises, such as healing potions and "
-              "vision potions. Or you may fall into a pit! "
-              "\nHealing potions can be stored and used to increase your HP, or health points. The Vision potion "
-              "can be stored and allows you to see through the walls of surrounding rooms. \n Falling into a pit will "
-              "lower your HP. Be careful not to lose all your HP and die! The goal of this game is to "
-              "survive and find all 4 pillars of OOP. Use \"m\" to look at menu options for information.\n")
+        print("\nWelcome to the Dungeon Adventure Game, where you may traverse a dangerous maze in hopes \nof finding "
+              "the 4 pillars of Object Oriented Programing (OOP) - Abstraction, Encapsulation, \nInheritance, "
+              "and Polymorphism. Within the dungeon's maze you will find surprises, such \nas healing potions, "
+              "vision potions, or pits. Items will be stored and healing potions \ncan be used to increase your HP, "
+              "or health points. The Vision potion allows you to see \nthrough the walls of surrounding rooms. Falling "
+              "into a pit will lower your HP. Be careful \nnot to die and lose the game. Survive and find all pillars of OOP to win. "
+              "\n \nTo travel, press keys w for Up, s for Down, a for Left, and d for Right. "
+              "\nPress \"m\" to view menu options for legend key.\n")
 
     def set_play_mode(self):
         """
