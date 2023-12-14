@@ -144,9 +144,8 @@ class DungeonAdventure:
 
 
     def menu_str(self):
-        """Hidden menu option "map" prints dugeon -- specify what the menu option is in your documentation
-        for the DungeonAdventure class
-        Creates the menu string to be printed
+        """
+        Creates the menu string to be printed. Hidden menu option "map" prints dungeon map
         :return: menu str
         """
         formatted_list = ["    " + item + " : " + values for item, values in self.menu.items()]
