@@ -43,7 +43,7 @@ class DungeonAdventure:
             print("Your maze:\n")
             self.dungeon.print_dungeon()
             self.player_results()
-            play = input("Would you like to play again? \"y\" to keep playing or press any key to exit. ")
+            play = input("Would you like to play again? \"y\" to keep playing or enter any key to exit. ")
         self.print_end()
 
     def print_introduction(self):
@@ -372,20 +372,21 @@ class DungeonAdventure:
         """
         Prints closing title slides
         """
-        time.sleep(1)
-        group_names = ("\nAqueno Amalraj \nSarah St. Albin \nMinna Chae \n")
+        time.sleep(.5)
+        group_names = ("Aqueno Amalraj \nSarah St. Albin \nMinna Chae \n")
         teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
-        print("Thank you for playing Dungeon Adventure. \nThis game was created by")
+        print("\n")
+        print("Thank you for playing Dungeon Adventure. \nThis game was created by\n")
         for character in group_names:
             sys.stdout.write(character)
             sys.stdout.flush()
             time.sleep(.05)
-        print("\nA special thanks to our instructors ")
+        print("\nA special thanks to our instructors \n")
         for character in teacher_names:
             sys.stdout.write(character)
             sys.stdout.flush()
             time.sleep(.05)
-        print("\nWe could not have done it without you.")
+        print("\n\nWe could not have done it without you.")
 
 
 game_play = DungeonAdventure()
