@@ -88,7 +88,7 @@ class Dungeon:
     def get_doors(self, current_key, new_key, direction="N"):
         """
         Get attributes of room
-        :return: attributes
+        :return: Boolean
         """
         attributes_current = self.__items.get(current_key)  # grabbing room attributes
         attributes_new = self.__items.get(new_key)  # grabbing room attributes
