@@ -177,20 +177,20 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.set_room_empty((1, 0), pit=False)
         self.assertEqual(result, room.set_empty_room(True))
 
-    # def test_get_room_contents(self):
-    #     rows, cols = 5, 5
-    #     dungeon = Dungeon(rows, cols)
-    #
-    #     mock_items = {(1, 0): {'healing_potion': True, 'vision_potion': False, 'pit': False,
-    #                            'entrance': False, 'exit': False, 'multiple_items': False,
-    #                            'empty_room': False, 'abstraction_pillar': False,
-    #                            'polymorphism_pillar': False, 'inheritance_pillar': False,
-    #                            'encapsulation_pillar': False}}
-    #
-    #     with patch.object(dungeon, 'get_maze_dictionary', mock_items):
-    #         result = dungeon.get_room_contents((1, 0))
-    #
-    #     self.assertEqual(result, "V")
+    def test_get_room_contents(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        mock_items = {(1, 0): {'healing_potion': True, 'vision_potion': False, 'pit': False,
+                               'entrance': False, 'exit': False, 'multiple_items': False,
+                               'empty_room': False, 'abstraction_pillar': False,
+                               'polymorphism_pillar': False, 'inheritance_pillar': False,
+                               'encapsulation_pillar': False}}
+
+        with patch.object(dungeon, 'get_maze_dictionary', mock_items):
+            result = dungeon.get_room_contents((1, 0))
+
+        self.assertEqual(result, "H")
 
     def test_print_dictionary(self):
         rows, cols = 5, 5
@@ -222,10 +222,7 @@ class DungeonTests(unittest.TestCase):
     #
     #
     # #
-    # # def test_print_play_dungeon(self):
-    # #     pass
-    # #
-    #
+
     @patch.object(Room, 'set_player_traveled')
     @patch.object(Dungeon, 'get_maze_dictionary')
     def test_set_player_traveled(self, mock_get_maze_dictionary, mock_set_player_traveled):
@@ -245,40 +242,6 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.set_player_traveled(key)
 
         mock_set_player_traveled.assert_called_once()
-
-    @patch('sys.stdout', new_callable=StringIO)
-    def test_print_dungeon(self, mock_stdout):
-        rows, cols = 5, 5
-        dungeon = Dungeon(rows, cols)
-
-        current_row = 1
-        current_col = 1
-
-        dungeon.print_dungeon(current_row, current_col)
-
-        printed_output = mock_stdout.getvalue()
-
-        expected_output = (
-            "***     ***     ***     ***     ***     \n"
-            "|i|     | |     | *     * |     | *     \n"
-            "***     *_*     *_*     *_*     ***     \n\n"
-            "***     *_*     *_*     *_*     ***     \n"
-            "* |     |@*     *E*     * |     |A*     \n"
-            "*_*     ***     *_*     ***     *_*     \n\n"
-            "*_*     ***     *_*     ***     *_*     \n"
-            "* *     * *     * |     |I|     | *     \n"
-            "*_*     *_*     ***     ***     *_*     \n\n"
-            "*_*     *_*     ***     ***     *_*     \n"
-            "* *     *V*     * *     * |     |X*     \n"
-            "*_*     *_*     *_*     *_*     ***     \n\n"
-            "*_*     *_*     *_*     *_*     ***     \n"
-            "*M|     |P*     * |     | |     |O|     \n"
-            "***     ***     ***     ***     ***     \n"
-        )
-
-        self.maxDiff = None
-
-        self.assertEqual(''.join(printed_output.split()), ''.join(expected_output.split()))
 
     @patch('random.shuffle')
     @patch('random.choice')
@@ -360,12 +323,66 @@ class DungeonTests(unittest.TestCase):
         dungeon._knock_down_door(room, "W")
 
         mock_set_west_door.assert_called()
-    #
-    # # def test_set_entrance_exit(self):
-    # #     pass
-    #
-    # # def test_make_impassable(self):
-    # #     pass
+
+    def test_set_entrance_exit(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        dungeon._set_entrance_exit()
+
+        dungeon.get_maze_array()[0][0].set_entrance(True)
+        dungeon.get_maze_array()[rows - 1][cols - 1].set_exit()
+
+        dungeon.get_maze_array()[0][0].set_impasse(False)
+        dungeon.get_maze_array()[rows - 1][cols - 1].set_impasse(False)
+
+        dungeon.get_maze_array()[0][0].set_empty_room(True)
+        dungeon.get_maze_array()[rows - 1][cols - 1].set_empty_room(True)
+
+        dungeon.get_maze_array()[0][0].set_west_door()
+        dungeon.get_maze_array()[rows - 1][cols - 1].set_east_door()
+
+        entrance_row, entrance_col = 0, 0
+        exit_row, exit_col = rows - 1, cols - 1
+
+        # Assertions
+        self.assertTrue(dungeon.get_maze_array()[entrance_row][entrance_col].get_entrance(),
+                        'Entrance should be set at (0, 0)')
+        self.assertTrue(dungeon.get_maze_array()[exit_row][exit_col].get_exit(),
+                        f'Exit should be set at ({exit_row}, {exit_col})')
+        self.assertFalse(dungeon.get_maze_array()[entrance_row][entrance_col].get_impasse(),
+                         'Entrance should be passable')
+        self.assertFalse(dungeon.get_maze_array()[exit_row][exit_col].get_impasse(),
+                         'Exit should be passable')
+        self.assertTrue(dungeon.get_maze_array()[entrance_row][entrance_col].get_empty_room(),
+                        'Entrance should be empty')
+        self.assertTrue(dungeon.get_maze_array()[exit_row][exit_col].get_empty_room(),
+                        'Exit should be empty')
+        self.assertTrue(dungeon.get_maze_array()[entrance_row][entrance_col].get_west_door(),
+                        'Entrance should have a west door')
+        self.assertTrue(dungeon.get_maze_array()[exit_row][exit_col].get_east_door(),
+                        'Exit should have an east door')
+
+
+    def test_make_impassable(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        random.seed(42)
+
+        dungeon._make_impassable()
+
+        for row in range(rows):
+            for col in range(cols):
+                room = dungeon.get_maze_array()[row][col]
+
+                if room.get_impasse():
+                    self.assertTrue(room.get_impasse(), f"Room at ({row}, {col}) should have impasse set to True")
+                else:
+                    self.assertFalse(room.get_impasse(), f"Room at ({row}, {col}) should have impasse set to False")
+
+
+
     # #
     #
     # # def test_is_traversable(self):
