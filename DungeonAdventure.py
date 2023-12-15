@@ -40,6 +40,7 @@ of only the current room after the map layout.
 
 If a player picks up items or falls into a pit, a print statement will indicate these added or
 negative points.
+
 """
 class DungeonAdventure:
 
@@ -52,7 +53,7 @@ class DungeonAdventure:
         self.player_loc_col = 0
         self.player_loc_row = 0
         self.original_dungeon = copy.deepcopy(self.dungeon)
-        self.vision_potion = DungeonItemsFactory.create_item("V")
+        self.item = DungeonItemsFactory()
 
     def play_whole_game(self):
         """
@@ -106,7 +107,6 @@ class DungeonAdventure:
             healing_potion_count = 0
             vision_potion_count = 0
             self.dungeon = Dungeon(15, 15)
-
             self.original_dungeon = copy.deepcopy(self.dungeon)
             print(f"Play mode is Hard with dungeon dimension of 15x15")
         elif input_play_mode.lower() == "choice" or input_play_mode.lower() == "c":
@@ -211,7 +211,7 @@ class DungeonAdventure:
             # use health potion
             elif str(menu_command).lower() == "h":
                 if self.adventurer.__get_health_potion_count__() > 0:
-                    health_points = DungeonItemsFactory.create_item("H", 1, 10).use_item()
+                    health_points = self.item.create_item("H", 1, 10).use_item()
                     self.adventurer.set_HP(health_points)
                     print(f"You gained {health_points} health points! Your health is now "
                           f"{self.adventurer.get_HP()} and you have "
@@ -222,7 +222,7 @@ class DungeonAdventure:
             elif str(menu_command).lower() == "v":
                 if self.adventurer.__get_vision_potion_count__() > 0:
                     self.adventurer.dec_vision_potion()
-                    self.vision_potion.use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
+                    self.item.create_item("V").use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
                                            self.dungeon.get_row_length(), self.dungeon)
                 else:
                     print("You don't have any vision potions left")
@@ -306,7 +306,7 @@ class DungeonAdventure:
             print("Not valid direction")
             return
 
-    def collect_item(self, item="g"):
+    def collect_item(self, item="a"):
         """
         Items in room affects the player
         :return: any collected
@@ -323,7 +323,7 @@ class DungeonAdventure:
             self.dungeon.set_room_empty((self.player_loc_row,self.player_loc_col),False)
         # Encounter Pit
         elif item == "X":
-            pit_points = DungeonItemsFactory.create_item("X", 1, 15)
+            pit_points = self.item.create_item("X", 1, 15)
             self.adventurer.set_HP(pit_points.use_item())
             print(f"You fell into a Pit! You lost {pit_points.use_item()} points. Current HP: {self.adventurer.get_HP()}.")
         # find exit
@@ -371,7 +371,7 @@ class DungeonAdventure:
                 self.adventurer.inc_healing_potion_count()
                 print(f"Gained 1 Healing Potion. Total Healing Potion count: {self.adventurer.__get_health_potion_count__()}")
             if value == "X":
-                pit_points = DungeonItemsFactory.create_item("X", 1, 15)
+                pit_points = self.item.create_item("X", 1, 15)
                 self.adventurer.set_HP(pit_points.use_item())
                 print(
                     f"You fell into a Pit! You lost {pit_points.use_item()} points. Current HP: {self.adventurer.get_HP()}.")
@@ -418,3 +418,4 @@ class DungeonAdventure:
 
 game_play = DungeonAdventure()
 game_play.play_whole_game()
+# game_play.set_play_mode()
