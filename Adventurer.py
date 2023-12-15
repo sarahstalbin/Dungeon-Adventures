@@ -81,5 +81,5 @@ class Adventurer:
         """
         Printing Adventurer's statistics
         """
-        formatted_list = [str(item) + " : " + str(values) for item, values in self.adventurer_dict.items()]
+        formatted_list = ["    "+str(item) + " : " + str(values) for item, values in self.adventurer_dict.items()]
         return "\n" + "\n".join(formatted_list) + "\n"

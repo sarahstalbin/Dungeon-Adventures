@@ -65,6 +65,13 @@ class Dungeon:
     def get_maze_array(self):
         return self.__maze
 
+    def _get_maze_dictionary(self):
+        """
+        Internal getter method that returns the dictionary.
+        :return: the dictionary instantiated in the class constructor.
+        """
+        return self.__items
+
     def get_room_str(self, key):
         """
         Gets the entrance Room coordinates of the Dungeon's maze.
@@ -219,10 +226,10 @@ class Dungeon:
                 dungeon_info += f"\n  - Exit: {room.get_exit()}"
                 dungeon_info += f"\n  - Impasse: {room.get_impasse()}"
                 dungeon_info += f"\n  - Empty Room: {room.get_empty_room()}"
-                dungeon_info += f"\n  - Abstraction Pillar: {room.set_abstraction_pillar()}"
-                dungeon_info += f"\n  - Encapsulation Pillar: {room.set_encapsulation_pillar()}"
-                dungeon_info += f"\n  - Inheritance Pillar: {room.set_inheritance_pillar()}"
-                dungeon_info += f"\n  - Polymorphism Pillar: {room.set_polymorphism_pillar()}"
+                dungeon_info += f"\n  - Abstraction Pillar: {room.set_abstraction_pillar(True)}"
+                dungeon_info += f"\n  - Encapsulation Pillar: {room.set_encapsulation_pillar(True)}"
+                dungeon_info += f"\n  - Inheritance Pillar: {room.set_inheritance_pillar(True)}"
+                dungeon_info += f"\n  - Polymorphism Pillar: {room.set_polymorphism_pillar(True)}"
                 dungeon_info += f"\n  - Healing Potion: {room.set_healing_potion(True)}"
                 dungeon_info += f"\n  - Vision Potion: {room.set_vision_potion(True)}"
                 dungeon_info += f"\n  - Pit: {room.set_pit(True)}"
@@ -493,7 +500,7 @@ class Dungeon:
                     or room.get_polymorphism_pillar() or room.get_inheritance_pillar() or room.get_encapsulation_pillar():
                 continue
             else:
-                item_list = ["V", "H", "M", "P"]
+                item_list = ["V", "H", "M", "X"]
                 choice = random.choice(item_list)
                 possibility = random.randint(0, 100)
                 # Place the healing potion
@@ -512,10 +519,9 @@ class Dungeon:
                         for item in multiple_items:
                             room.set_multiple_items(item)
                     # Place the pit
-                    if choice == "P":
+                    if choice == "X":
                         pit = DungeonItemsFactory.create_item("X", 1, 10)
                         room.set_pit(pit)
-                        room.set_vision_potion(True)
                 else:
                     room.set_empty_room(True)
 
@@ -550,13 +556,6 @@ class Dungeon:
                 polymorphism = True
             else:
                 break
-
-    def _get_maze_dictionary(self):
-        """
-        Internal getter method that returns the dictionary.
-        :return: the dictionary instantiated in the class constructor.
-        """
-        return self.__items
 
     def _get_object_symbols(self):
         """

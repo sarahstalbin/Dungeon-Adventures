@@ -5,8 +5,8 @@ Dungeon Adventure
 """
 
 from DungeonItems import HealingPotion, VisionPotion, Pit
+from random import randint
 import random
-
 
 class DungeonItemsFactory:
     """
@@ -43,7 +43,7 @@ class DungeonItemsFactory:
         :return: an array of Item objects.
         """
         items = ["V", "H", "X"]
-        results = random.sample(items, 3)
+        results = random.sample(items, randint(2, 3))
         created_items = []
 
         for value in results:
