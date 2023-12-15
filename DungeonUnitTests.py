@@ -245,10 +245,40 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.set_player_traveled(key)
 
         mock_set_player_traveled.assert_called_once()
-    #
-    # #
-    # # def test_print_dungeon(self):
-    # #     pass
+
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_print_dungeon(self, mock_stdout):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        current_row = 1
+        current_col = 1
+
+        dungeon.print_dungeon(current_row, current_col)
+
+        printed_output = mock_stdout.getvalue()
+
+        expected_output = (
+            "***     ***     ***     ***     ***     \n"
+            "|i|     | |     | *     * |     | *     \n"
+            "***     *_*     *_*     *_*     ***     \n\n"
+            "***     *_*     *_*     *_*     ***     \n"
+            "* |     |@*     *E*     * |     |A*     \n"
+            "*_*     ***     *_*     ***     *_*     \n\n"
+            "*_*     ***     *_*     ***     *_*     \n"
+            "* *     * *     * |     |I|     | *     \n"
+            "*_*     *_*     ***     ***     *_*     \n\n"
+            "*_*     *_*     ***     ***     *_*     \n"
+            "* *     *V*     * *     * |     |X*     \n"
+            "*_*     *_*     *_*     *_*     ***     \n\n"
+            "*_*     *_*     *_*     *_*     ***     \n"
+            "*M|     |P*     * |     | |     |O|     \n"
+            "***     ***     ***     ***     ***     \n"
+        )
+
+        self.maxDiff = None
+
+        self.assertEqual(''.join(printed_output.split()), ''.join(expected_output.split()))
 
     @patch('random.shuffle')
     @patch('random.choice')
