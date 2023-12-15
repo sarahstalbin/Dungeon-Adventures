@@ -96,11 +96,71 @@ class DungeonTests(unittest.TestCase):
 
         result = dungeon.get_row_length()
         self.assertEqual(result, rows)
-    #
-    # # def test_get_doors(self, mock_room):
-    # #     pass
-    #
-    #
+
+    def test_get_doors_north(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        current = (1,0)
+        next = (0,0)
+        direction = "N"
+        is_current_room_north_door = dungeon.get_room_str(current).get_north_door()
+        is_next_room_north_door = dungeon.get_room_str(next).get_south_door()
+        results = dungeon.get_doors(current, next, direction)
+
+        if is_current_room_north_door and is_next_room_north_door:
+            self.assertTrue(results, "Test get doors north true failed")
+        else:
+            self.assertFalse(results, "Test get doors north false failed")
+
+    def test_get_doors_south(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        current = (1,1)
+        next = (2,1)
+        direction = "S"
+        is_current_room_north_door = dungeon.get_room_str(current).get_south_door()
+        is_next_room_north_door = dungeon.get_room_str(next).get_north_door()
+        results = dungeon.get_doors(current, next, direction)
+
+        if is_current_room_north_door and is_next_room_north_door:
+            self.assertTrue(results, "Test get doors south true failed")
+        else:
+            self.assertFalse(results, "Test get doors south false failed")
+
+    def test_get_doors_east(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        current = (1,1)
+        next = (1,2)
+        direction = "E"
+        is_current_room_north_door = dungeon.get_room_str(current).get_east_door()
+        is_next_room_north_door = dungeon.get_room_str(next).get_west_door()
+        results = dungeon.get_doors(current, next, direction)
+
+        if is_current_room_north_door and is_next_room_north_door:
+            self.assertTrue(results, "Test get doors east true failed")
+        else:
+            self.assertFalse(results, "Test get doors east false failed")
+
+    def test_get_doors_west(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        current = (1,1)
+        next = (1,0)
+        direction = "W"
+        is_current_room_north_door = dungeon.get_room_str(current).get_west_door()
+        is_next_room_north_door = dungeon.get_room_str(next).get_east_door()
+        results = dungeon.get_doors(current, next, direction)
+
+        if is_current_room_north_door and is_next_room_north_door:
+            self.assertTrue(results, "Test get doors west true failed")
+        else:
+            self.assertFalse(results, "Test get doors west false failed")
+
     def test_set_current_room(self):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
