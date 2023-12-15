@@ -9,7 +9,7 @@ from DungeonAdventure import DungeonAdventure
 
 
 
-class dungeon_adventure(unittest.TestCase):
+class DungeonAdventureTest(unittest.TestCase):
 
     @patch('builtins.input', side_effect=['easy', "Minna"])
     def test_set_play_mode_easy(self, prompt):
