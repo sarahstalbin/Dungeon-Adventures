@@ -1,12 +1,11 @@
 """
 Name: Aqueno Nirasmi, Minna Chae, Sarah St. Albin
 TCSS 501 and 502
-Dungeon Adventure
+Dungeon Adventure: dungeon adventure unit test
 """
 import unittest
 from unittest.mock import patch
 from DungeonAdventure import DungeonAdventure
-
 
 
 class DungeonAdventureTest(unittest.TestCase):
@@ -18,7 +17,7 @@ class DungeonAdventureTest(unittest.TestCase):
         :return: None
         """
         expect_output = {"Name": "Minna", "HP": 100, "Healing Potion Count": 3,
-                                "Vision Potion Count": range(1,3), "Pillar Count": 0}
+                                "Vision Potion Count": 0, "Pillar Count": 0}
 
         da = DungeonAdventure()
         da.set_play_mode()
@@ -87,6 +86,31 @@ class DungeonAdventureTest(unittest.TestCase):
                                                           "column length failed")
         self.assertEqual(da.dungeon.get_row_length(), 15, "Testing Easy for row length failed")
 
+    @patch('builtins.input', side_effect=['c', 50, 20, 25, 20, 20, "Minna"])
+    def test_set_play_mode_hard(self, prompt):
+        """
+        Testing Hard play mode
+        :return: None
+        """
+        expect_output = {"Name": "Minna", "HP": 50, "Healing Potion Count": 20,
+                         "Vision Potion Count": 25, "Pillar Count": 0}
+
+        da = DungeonAdventure()
+        da.set_play_mode()
+        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+                                                                              "name failed")
+        self.assertEqual(da.adventurer.get_HP(), expect_output["HP"], "Testing hard for HP failed")
+        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+                         "Testing hard for health potion failed")
+
+        self.assertEqual(da.adventurer.__get_vision_potion_count__(), expect_output["Vision Potion Count"],
+                         "Testing hard for Vision Potion Count failed")
+        self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"], "Testing hard for "
+                                                                                    "Pillar count failed")
+        self.assertEqual(da.dungeon.get_col_length(), 20, "Testing Easy for "
+                                                          "column length failed")
+        self.assertEqual(da.dungeon.get_row_length(), 20, "Testing Easy for row length failed")
+
     def test_menu_str(self):
         """
         Tests the menu string to be printed
@@ -101,23 +125,18 @@ class DungeonAdventureTest(unittest.TestCase):
         actual_string = da.menu_str()
         self.assertEqual(actual_string, string_test, "Not equal")
 
-    # def test_set_up_player(self):
-    #     """
-    #     Test starting coordinates
-    #     :return: None
-    #     """
-    #     pass
-
-
-    def test_player_command(self):
+    @patch('builtins.input', side_effect=['e', 'Minna', 'h', 'q'])
+    def test_player_command(self, prompt):
         """
         Execute player's menu inputs
         :return: None
         """
-        # with patch('builtins.input', return_value='M')
-        #     choice = self.da.move_adventurer()
-        #     self.assertEqual(choice, 'M')
-        pass
+        da = DungeonAdventure()
+        da.set_play_mode() #sets default values - easy, name:"Minna", health potion: 3,
+        da.player_command()
+        health_potion_count = da.adventurer.__get_health_potion_count__()
+        self.assertEqual(health_potion_count, 2, "Test player command h healing count failed")
+        self.assertTrue(da.adventurer.get_HP() > 100, "Testing player command h HP failed")
 
     def test_move_adventurer_south(self):
         """
