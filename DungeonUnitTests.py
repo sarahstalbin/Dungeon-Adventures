@@ -5,7 +5,7 @@ Class: TCSS 502
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, call, Mock
 from room import Room
 from DungeonTest import Dungeon
 from DungeonItemsFactoryTest import DungeonItemsFactory
@@ -13,6 +13,11 @@ import random
 
 
 class DungeonTests(unittest.TestCase):
+
+    class MockRoom:
+        def __init__(self, **kwargs):
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
     @classmethod
     def setUpClass(cls):
@@ -63,8 +68,6 @@ class DungeonTests(unittest.TestCase):
 
         result = dungeon.get_entrance()
         self.assertEqual(result, dungeon.get_maze_array()[0][0])
-
-
 
     def test_get_maze_array(self):
         rows, cols = 5, 5
@@ -143,7 +146,7 @@ class DungeonTests(unittest.TestCase):
         with patch.object(dungeon, 'get_maze_dictionary', mock_items):
             result = dungeon.get_room_contents((1, 0))
 
-        self.assertEqual(result, "I")
+        self.assertEqual(result, "V")
 
     def test_print_dictionary(self):
         rows, cols = 5, 5
@@ -170,13 +173,11 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.is_valid_room(row, col)
         self.assertEqual(result, True)
 
-
     # def test_str_(self):
     #     rows, cols = 5, 5
     #     dungeon = Dungeon(rows, cols)
     #
     #     dungeon_item_string =
-
 
     #
     # def test_print_play_dungeon(self):
@@ -209,7 +210,6 @@ class DungeonTests(unittest.TestCase):
     #
     # def test_create_maze(self):
     #     pass
-
 
     def test_get_neighbor_coords(self):
         row, col = 5, 5
@@ -271,18 +271,25 @@ class DungeonTests(unittest.TestCase):
 
         mock_set_west_door.assert_called()
 
-    # @patch.object(Room, 'set_entrance', 'set_exit', 'set_impasse')
-    # @patch.object(Room, 'set_west_door', 'set_east_door', 'set_empty_room')
-    # def test_set_entrance_exit(self, mock_set_entrance, mock_set_exit, mock_set_impasse, mock_set_west_door,
-    #                            mock_set_east_door, mock_set_empty_room):
-    #     rows, cols = 5, 5
-    #     dungeon = Dungeon(rows, cols)
+    # def test_set_entrance_exit(self):
+    #     with patch.object(Room, "set_entrance") as mock_set_entrance, \
+    #             patch.object(Room, "set_exit") as mock_set_exit, \
+    #             patch.object(Room, "set_impasse") as mock_set_impasse, \
+    #             patch.object(Room, "set_empty_room") as mock_set_empty_room, \
+    #             patch.object(Room, "set_west_door") as mock_set_west_door, \
+    #             patch.object(Room, "set_east_door") as mock_set_east_door:
+    #         rows, cols = 5, 5
     #
-    #     mock_entrance = dungeon.get_maze_array()[0][0]
-    #     mock_exit = dungeon.get_maze_array()[rows - 1][cols - 1]
+    #         dungeon = Dungeon(rows, cols)
+    #         dungeon._set_entrance_exit()
     #
-    #     result = dungeon._set_entrance_exit()
-
+    #         # Verify mocks
+    #         mock_set_entrance.assert_called()
+    #         mock_set_exit.assert_called()
+    #         mock_set_impasse.assert_has_calls([call(False), call(False)], any_order=False)
+    #         mock_set_empty_room.assert_has_calls([call(True), call(True)], any_order=False)
+    #         mock_set_west_door.assert_has_calls([call(), call()], any_order=False)
+    #         mock_set_east_door.assert_has_calls([call(), call()], any_order=False)
 
 
 
@@ -307,12 +314,13 @@ class DungeonTests(unittest.TestCase):
         #
         #     mock_set_player_traveled.assert_called_once()
 
-
     # def test_make_impassable(self):
     #     pass
     #
+
     # def test_is_traversable(self):
     #     pass
+
     #
     # def traverse_the_maze(self):
     #     pass
@@ -323,11 +331,81 @@ class DungeonTests(unittest.TestCase):
     # def test_place_pillars(self):
     #     pass
     #
-    # def test_get_maze_dictionary(self):
-    #     pass
-    #
+
+    def test_get_maze_dictionary(self):
+        rows = 3
+        cols = 3
+        dungeon = Dungeon(rows, cols)
+
+        mock_items = {
+            (0, 0): Mock(spec=Room),
+            (0, 1): Mock(spec=Room),
+            (0, 2): Mock(spec=Room),
+            (1, 0): Mock(spec=Room),
+            (1, 1): Mock(spec=Room),
+            (1, 2): Mock(spec=Room),
+            (2, 0): Mock(spec=Room),
+            (2, 1): Mock(spec=Room),
+            (2, 2): Mock(spec=Room),
+        }
+
+        with patch.object(dungeon, '_Dungeon__items', mock_items):
+            result = dungeon.get_maze_dictionary()
+
+        self.assertEqual(result, mock_items)
+
     # def test_get_object_symbols(self):
-    #     pass
+    #
+    #     message_to_me = "Current issue is getting a mock version of self.__items and a mock version " \
+    #                     "of symbols_dict. Consider manually assigning items (per instructions) to each" \
+    #                     "room."
+    #
+    #     rows = 3
+    #     cols = 3
+    #
+    #     dungeon = Dungeon(rows, cols)
+    #
+    #     mock_items = {
+    #         (1, 0): self.MockRoom(
+    #             healing_potion=True,
+    #             vision_potion=False,
+    #             pit=False,
+    #             entrance=False,
+    #             exit=False,
+    #             multiple_items=False,
+    #             empty_room=False,
+    #             abstraction_pillar=False,
+    #             polymorphism_pillar=False,
+    #             inheritance_pillar=False,
+    #             encapsulation_pillar=False,
+    #         )
+    #     }
+    #
+    #     with unittest.mock.patch.object(dungeon, '_Dungeon__items', mock_items):
+    #         result = dungeon._get_object_symbols()
+    #         expected_result = {
+    #             (0, 0): "H",  # Room with healing_potion=True
+    #             (0, 1): "V",  # Room with vision_potion=True
+    #             (0, 2): "X",  # Room with pit=True
+    #             (1, 0): " ",  # Empty room
+    #             (1, 1): " ",  # Empty room
+    #             (1, 2): " ",  # Empty room
+    #             (2, 0): " ",  # Empty room
+    #             (2, 1): " ",  # Empty room
+    #             (2, 2): " ",  # Empty room
+    #         }
+    #
+
+
+
+
+#
+#         with patch.object(dungeon, 'get_maze_dictionary', return_value=" "):
+#             result = dungeon.print_dictionary()
+#
+#         self.assertEqual(result, None)
+
+
 
 
 if __name__ == '__main__':
