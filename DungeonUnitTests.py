@@ -106,9 +106,7 @@ class DungeonTests(unittest.TestCase):
         next = (0,0)
         direction = "N"
         is_current_room_north_door = dungeon.get_room_str(current).get_north_door()
-        print(f"curren room {is_current_room_north_door}")
         is_next_room_north_door = dungeon.get_room_str(next).get_south_door()
-        print(f" next room {is_next_room_north_door}")
         results = dungeon.get_doors(current, next, direction)
 
         if is_current_room_north_door and is_next_room_north_door:
