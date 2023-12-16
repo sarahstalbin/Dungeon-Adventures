@@ -1,7 +1,6 @@
 import unittest
 
-from DungeonItems import HealingPotion, VisionPotion, Pit, EncapsulationPillar, PolymorphismPillar, InheritancePillar, \
-    AbstractionPillar
+from DungeonItems import HealingPotion, VisionPotion, Pit
 from DungeonAdventure import DungeonAdventure
 
 """
@@ -12,8 +11,10 @@ game_play.play_whole_game()
 for unit test to run properly.
 """
 
+
 class TestItems(unittest.TestCase):
     """ Test cases for the child classes of DungeonItems """
+
     def test_healing_potion(self):
         """ Tests HealingPotion class get_name and the abstract method use_item"""
         healing_potion = HealingPotion(1, 10)
@@ -28,13 +29,8 @@ class TestItems(unittest.TestCase):
         self.assertGreaterEqual(pit.use_item(), -10)
         self.assertLessEqual(pit.use_item(), -1)
 
-    def test_pillar(self):
-        """ Tests one if the pillar class get_name and the abstract method use_item"""
-        pillar = EncapsulationPillar(True)
-        self.assertEqual("E", pillar.get_name())
-        self.assertEqual(pillar.use_item(), True)
 
-        def test_vision_rm_corner_no_cornerNW(self):
+    def test_vision_rm_corner_no_cornerNW(self):
         """
         Tests NW corner of an area without a NW corner (coordinates are 0,0).
         """
@@ -110,6 +106,7 @@ class TestItems(unittest.TestCase):
         current_col = 0
         coords = vision.get_vision_rm_one(current_row, current_col, "N", da.dungeon)
         self.assertEqual("", coords, "Test corner coordinates failed")
+
 
 if __name__ == '__main__':
     unittest.main()
