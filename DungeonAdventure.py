@@ -12,19 +12,48 @@ import random
 import sys, time
 import copy
 
-""" Dungeon Adventure contains the main logic of playing the game."""
+""" 
+Dungeon Adventure contains the main logic of playing the game. 
+Game play must be initiated by creating an instance of the class and calling the module 
+play_whole_game. This file
+will have the set up created after the class.
+
+This game provides 4 levels, Easy, Medium, Hard, and Player's Choice.
+Easy provides a 5x5 dungeon maze with the player at 100 HP, 3 healing potions, random vision
+potions between 1 and 3. Medium provides a 10x10 dungeon maze with the player at random 
+generated HP of 75 to 100, random healing potions of 0 to 2, and random vision potions 
+of 0 to 1. Hard provides a 15x15 dungeon maze with the player at random 
+generated HP of 75 to 90, 0 healing potions, and 0 vision potions. Player's choice allows
+the player to choose any HP, healing potion, vision potion, and dungeon size as long as the
+dungeon size is equal to or larger than 3x3. HP can be negative but player will instantly die.
+Healing and vision potions can be negative but that will count against player.
+
+Players can use the Action menu option to view keyboard inserts "Action Menu": "m", "Go Up": 
+"w", "Go Down": "s", "Go Left": "a", "Go Right": "d", "Use Health Potion": "h", "Use Vision": 
+"v", "View current status": "stats", "Quit Game": "q". The hidden/secret menu option is "map"
+which will print the whole map and item layout.
+
+Each time a player moves, the output will be a display of the map. Traveled Rooms will be 
+indicated by the notation --- and not yet traveled rooms will be indicated by the notation ^^^.
+Player's current location will display the current layout of the room. There is also a print
+of only the current room after the map layout.
+
+If a player picks up items or falls into a pit, a print statement will indicate these added or
+negative points.
+
+"""
 class DungeonAdventure:
 
     def __init__(self):
-        self.menu = {"Action Menu": "m", "Go up": "w", "Go down": "s", "Go Left": "a", "Go Right": "d",
-                     "Use Health Potion": "h", "Use Vision": "v", "View current status": "stats", "Quit game": "q"}
+        self.menu = {"Action Menu": "m", "Go Up": "w", "Go Down": "s", "Go Left": "a", "Go Right": "d",
+                     "Use Health Potion": "h", "Use Vision": "v", "View current status": "stats", "Quit Game": "q"}
         self.hidden_menu_option = "map" #prints dungeon
         self.dungeon = Dungeon(5, 5)
         self.adventurer = Adventurer()
         self.player_loc_col = 0
         self.player_loc_row = 0
         self.original_dungeon = copy.deepcopy(self.dungeon)
-        self.vision_potion = DungeonItemsFactory.create_item("V")
+        self.item = DungeonItemsFactory()
 
     def play_whole_game(self):
         """
@@ -43,23 +72,21 @@ class DungeonAdventure:
             print("Your maze:\n")
             self.dungeon.print_dungeon()
             self.player_results()
-            play = input("Would you like to play again? \"y\" to keep playing or press any key to exit. ")
+            play = input("Would you like to play again? \"y\" to keep playing or enter any key to exit. ")
         self.print_end()
 
     def print_introduction(self):
         """
         Prints Introduction and game play
         """
-        print("Welcome to the Dungeon Adventure Game, where you will traverse a dangerous maze to "
-              "find the 4 pillars of Object Oriented Programming (OOP) -"
-              " Abstraction, Encapsulation, Inheritance, and Polymorphism. \n"
-              "To travel, use keys Up (w), down (s), left (a), and right (d). "
-              "Within the dungeon's maze you will find many surprises, such as healing potions and "
-              "vision potions. Or you may fall into a pit! "
-              "\nHealing potions can be stored and used to increase your HP, or health points. The Vision potion "
-              "can be stored and allows you to see through the walls of surrounding rooms. \n Falling into a pit will "
-              "lower your HP. Be careful not to lose all your HP and die! The goal of this game is to "
-              "survive and find all 4 pillars of OOP. Use \"m\" to look at menu options for information.\n")
+        print("\nWelcome to the Dungeon Adventure Game, where you may traverse a dangerous maze in hopes \nof finding "
+              "the 4 pillars of Object Oriented Programing (OOP) - Abstraction, Encapsulation, \nInheritance, "
+              "and Polymorphism. Within the dungeon's maze you will find surprises, such \nas healing potions, "
+              "vision potions, or pits. Items will be stored and healing potions \ncan be used to increase your HP, "
+              "or health points. The Vision potion allows you to see \nthrough the walls of surrounding rooms. Falling "
+              "into a pit will lower your HP. Be careful \nnot to die and lose the game. Survive and find all pillars of OOP to win. "
+              "\n \nTo travel, press keys w for Up, s for Down, a for Left, and d for Right. "
+              "\nPress \"m\" to view menu options for legend key.\n")
 
     def set_play_mode(self):
         """
@@ -80,7 +107,6 @@ class DungeonAdventure:
             healing_potion_count = 0
             vision_potion_count = 0
             self.dungeon = Dungeon(15, 15)
-
             self.original_dungeon = copy.deepcopy(self.dungeon)
             print(f"Play mode is Hard with dungeon dimension of 15x15")
         elif input_play_mode.lower() == "choice" or input_play_mode.lower() == "c":
@@ -146,10 +172,9 @@ class DungeonAdventure:
 
 
     def menu_str(self):
-        """Hidden menu option "map" prints dugeon -- specify what the menu option is in your documentation
-        for the DungeonAdventure class
-        Creates the menu string to be printed
-        :return: menu str
+        """
+        Creates and returns the menu string. Hidden menu option "map" prints dungeon map
+        :return: str
         """
         formatted_list = ["    " + item + " : " + values for item, values in self.menu.items()]
         return "\n".join(formatted_list) + "\n"
@@ -186,7 +211,7 @@ class DungeonAdventure:
             # use health potion
             elif str(menu_command).lower() == "h":
                 if self.adventurer.__get_health_potion_count__() > 0:
-                    health_points = DungeonItemsFactory.create_item("H", 1, 10).use_item()
+                    health_points = self.item.create_item("H", 1, 10).use_item()
                     self.adventurer.set_HP(health_points)
                     print(f"You gained {health_points} health points! Your health is now "
                           f"{self.adventurer.get_HP()} and you have "
@@ -197,7 +222,7 @@ class DungeonAdventure:
             elif str(menu_command).lower() == "v":
                 if self.adventurer.__get_vision_potion_count__() > 0:
                     self.adventurer.dec_vision_potion()
-                    self.vision_potion.use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
+                    self.item.create_item("V").use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
                                            self.dungeon.get_row_length(), self.dungeon)
                 else:
                     print("You don't have any vision potions left")
@@ -239,7 +264,7 @@ class DungeonAdventure:
         """
         Player's input is a direction, check to see if that direction is possible and move that direction.
         If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        :return: str
         """
         #Getting direction
         if menu_command == "w":
@@ -281,10 +306,10 @@ class DungeonAdventure:
             print("Not valid direction")
             return
 
-    def collect_item(self, item="g"):
+    def collect_item(self, item="a"):
         """
-        Items in room affects the player
-        :return: any collected
+        Items in room affects the player and returns item str if needed
+        :return: str
         """
         # Collect Health potion
         if item == "H":
@@ -298,7 +323,7 @@ class DungeonAdventure:
             self.dungeon.set_room_empty((self.player_loc_row,self.player_loc_col),False)
         # Encounter Pit
         elif item == "X":
-            pit_points = DungeonItemsFactory.create_item("X", 1, 15)
+            pit_points = self.item.create_item("X", 1, 15)
             self.adventurer.set_HP(pit_points.use_item())
             print(f"You fell into a Pit! You lost {pit_points.use_item()} points. Current HP: {self.adventurer.get_HP()}.")
         # find exit
@@ -346,7 +371,7 @@ class DungeonAdventure:
                 self.adventurer.inc_healing_potion_count()
                 print(f"Gained 1 Healing Potion. Total Healing Potion count: {self.adventurer.__get_health_potion_count__()}")
             if value == "X":
-                pit_points = DungeonItemsFactory.create_item("X", 1, 15)
+                pit_points = self.item.create_item("X", 1, 15)
                 self.adventurer.set_HP(pit_points.use_item())
                 print(
                     f"You fell into a Pit! You lost {pit_points.use_item()} points. Current HP: {self.adventurer.get_HP()}.")
@@ -374,20 +399,21 @@ class DungeonAdventure:
         """
         Prints closing title slides
         """
-        time.sleep(1)
-        group_names = ("\nAqueno Amalraj \nSarah St. Albin \nMinna Chae \n")
+        time.sleep(.1)
+        group_names = ("Aqueno Nirasmi Amalraj \nMinna Chae \nSarah St. Albin \n")
         teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
-        print("Thank you for playing Dungeon Adventure. \nThis game was created by")
+        print("\n")
+        print("Thank you for playing Dungeon Adventure. \nThis game was created by\n")
         for character in group_names:
             sys.stdout.write(character)
             sys.stdout.flush()
             time.sleep(.05)
-        print("\nA special thanks to our instructors ")
+        print("\nA special thanks to our instructors \n")
         for character in teacher_names:
             sys.stdout.write(character)
             sys.stdout.flush()
             time.sleep(.05)
-        print("\nWe could not have done it without you.")
+        print("\n\nWe could not have done it without you.")
 
 
 game_play = DungeonAdventure()
