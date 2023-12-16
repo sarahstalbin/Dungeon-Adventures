@@ -214,13 +214,6 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.is_valid_room(row, col)
         self.assertEqual(result, True)
 
-    #
-    # # def test_str_(self):
-    # #     pass
-    #
-    #
-    # #
-
     @patch.object(Room, 'set_player_traveled')
     @patch.object(Dungeon, 'get_maze_dictionary')
     def test_set_player_traveled(self, mock_get_maze_dictionary, mock_set_player_traveled):
@@ -415,6 +408,9 @@ class DungeonTests(unittest.TestCase):
             self.assertFalse(result, "Expected _traverse_the_maze to return False")
 
     def test__str__(self):
+        """
+        Testing str function
+        """
         d = Dungeon(3,3)
 
         dungeon_expected = ""
@@ -440,7 +436,7 @@ class DungeonTests(unittest.TestCase):
                 dungeon_expected += f"\n  - Pit: {room.set_pit(True)}"
                 dungeon_expected += "\n\n"
 
-        self.assertEqual(dungeon_expected, d.__str__(),"Dungeon str failed")
+        self.assertEqual(dungeon_expected, d.__str__(),"Test Dungeon str failed")
 
     def test_place_pillar(self):
         """
