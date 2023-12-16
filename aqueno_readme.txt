@@ -1,0 +1,3 @@
+Name : Aqueno Nirasmi Amalraj 
+
+My part on this assignment was Room class its unit test, DungeonItems (HealingPotion, Pit, and four pillars) its unit test, UML diagram and Output Capture of Winning, Losing and Maze Gen. The challenging part on this assignment for me is figuring out the str method of Room class and I had an issue on calling the class directly with the constructor but it didn't work, and overcame the issue by using getter methods and setter methods to call the class. I had some doubts on the UML relationship between aggregation and composition Varik's explantion provided clarity on relationship between classes. I have spent approximately 20 hours on this assignment.   
