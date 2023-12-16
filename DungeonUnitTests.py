@@ -443,8 +443,31 @@ class DungeonTests(unittest.TestCase):
                 dungeon_expected += "\n\n"
 
         self.assertEqual(dungeon_expected, d.__str__(),"Dungeon str failed")
-        
-    # def create_multiple_items_side_effect(self):
+
+    def test_place_pillar(self):
+        #tests for one instance of each pillar polymorphism, inheritance, encapsulation, abstraction within the maze
+        d = Dungeon(10,10)
+        polymorphism = 0
+        inheritance =0
+        encapsulation = 0
+        abstraction = 0
+
+        for row in range(d.get_row_length()):
+            for col in range(d.get_col_length()):
+                if d.get_room_contents((row, col)) == "P":
+                    polymorphism+=1
+                elif d.get_room_contents((row, col)) == "I":
+                    inheritance +=1
+                elif d.get_room_contents((row, col)) == "E":
+                    encapsulation +=1
+                elif d.get_room_contents((row, col)) == "A":
+                    abstraction +=1
+        self.assertEqual(polymorphism, 1, "Polymorphism test fail")
+        self.assertEqual(inheritance, 1, "Inheritance test fail")
+        self.assertEqual(encapsulation, 1, "Encapsulation test fail")
+        self.assertEqual(abstraction, 1, "Abstraction test fail")
+
+# def create_multiple_items_side_effect(self):
     #     random_items = ["H", "V", "X"]
     #     return [Mock(spec=HealingPotion) for _ in range(random.choice(random_items))]
 
