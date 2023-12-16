@@ -173,8 +173,8 @@ class DungeonAdventure:
 
     def menu_str(self):
         """
-        Creates the menu string to be printed. Hidden menu option "map" prints dungeon map
-        :return: menu str
+        Creates and returns the menu string. Hidden menu option "map" prints dungeon map
+        :return: str
         """
         formatted_list = ["    " + item + " : " + values for item, values in self.menu.items()]
         return "\n".join(formatted_list) + "\n"
@@ -264,7 +264,7 @@ class DungeonAdventure:
         """
         Player's input is a direction, check to see if that direction is possible and move that direction.
         If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        :return: str
         """
         #Getting direction
         if menu_command == "w":
@@ -308,8 +308,8 @@ class DungeonAdventure:
 
     def collect_item(self, item="a"):
         """
-        Items in room affects the player
-        :return: any collected
+        Items in room affects the player and returns item str if needed
+        :return: str
         """
         # Collect Health potion
         if item == "H":
@@ -418,4 +418,3 @@ class DungeonAdventure:
 
 game_play = DungeonAdventure()
 game_play.play_whole_game()
-# game_play.set_play_mode()
