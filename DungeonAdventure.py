@@ -399,8 +399,8 @@ class DungeonAdventure:
         """
         Prints closing title slides
         """
-        time.sleep(.5)
-        group_names = ("Aqueno Amalraj \nSarah St. Albin \nMinna Chae \n")
+        time.sleep(.1)
+        group_names = ("Aqueno Nirasmi Amalraj \nMinna Chae \nSarah St. Albin \n")
         teacher_names = ("Varik Hoang \nRobert Cordingly \nAshutosh Engavle")
         print("\n")
         print("Thank you for playing Dungeon Adventure. \nThis game was created by\n")
