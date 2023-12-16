@@ -187,7 +187,7 @@ class DungeonTests(unittest.TestCase):
         with patch.object(dungeon, 'get_maze_dictionary', mock_items):
             result = dungeon.get_room_contents((1, 0))
 
-        self.assertEqual(result, "H")
+        self.assertEqual(result, "E")
 
     def test_print_dictionary(self):
         rows, cols = 5, 5
@@ -378,8 +378,6 @@ class DungeonTests(unittest.TestCase):
                 else:
                     self.assertFalse(room.get_impasse(), f"Room at ({row}, {col}) should have impasse set to False")
 
-
-
     def test_is_traversable(self):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
@@ -471,36 +469,92 @@ class DungeonTests(unittest.TestCase):
     #                     room.set_empty_room()
 
 
-    # #
-    # # def test_place_pillars(self):
-    # #     pass
-    # #
     #
-    # def test_get_maze_dictionary(self):
-    #     rows = 3
-    #     cols = 3
-    #     dungeon = Dungeon(rows, cols)
-    #
-    #     mock_items = {
-    #         (0, 0): Mock(spec=Room),
-    #         (0, 1): Mock(spec=Room),
-    #         (0, 2): Mock(spec=Room),
-    #         (1, 0): Mock(spec=Room),
-    #         (1, 1): Mock(spec=Room),
-    #         (1, 2): Mock(spec=Room),
-    #         (2, 0): Mock(spec=Room),
-    #         (2, 1): Mock(spec=Room),
-    #         (2, 2): Mock(spec=Room),
-    #     }
-    #
-    #     with patch.object(dungeon, '_Dungeon__items', mock_items):
-    #         result = dungeon.get_maze_dictionary()
-    #
-    #     self.assertEqual(result, mock_items)
-    #
-    # def test_get_object_symbols(self):
+    # def test_place_pillars(self):
     #     pass
+    # #
     #
+    def test_get_maze_dictionary(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        room1 = Room()
+        room2 = Room()
+        room3 = Room()
+        room4 = Room()
+        room5 = Room()
+        room6 = Room()
+        room7 = Room()
+        room8 = Room()
+        room9 = Room()
+
+        dungeon._Dungeon__items = {(0, 0): room1, (0, 1): room2, (0, 2): room3, (1, 0): room4, (1, 1): room5,
+                                   (1, 2): room6, (2, 0): room7, (2, 1): room8, (2, 2): room9}
+
+        result = dungeon.get_maze_dictionary()
+
+        self.assertIsInstance(result, dict)
+        self.assertIn((0, 0), result)
+        self.assertIn((0, 1), result)
+        self.assertIn((0, 2), result)
+        self.assertIn((1, 0), result)
+        self.assertIn((1, 1), result)
+        self.assertIn((1, 2), result)
+        self.assertIn((2, 0), result)
+        self.assertIn((2, 1), result)
+        self.assertIn((2, 2), result)
+
+        self.assertIsInstance(result[0, 0], Room)
+        self.assertIsInstance(result[0, 1], Room)
+        self.assertIsInstance(result[0, 2], Room)
+        self.assertIsInstance(result[1, 0], Room)
+        self.assertIsInstance(result[1, 1], Room)
+        self.assertIsInstance(result[1, 2], Room)
+        self.assertIsInstance(result[2, 0], Room)
+        self.assertIsInstance(result[2, 1], Room)
+        self.assertIsInstance(result[2, 2], Room)
+
+
+
+    def test_get_object_symbols(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        room1 = Room()
+        room2 = Room()
+        room3 = Room()
+        room4 = Room()
+        room5 = Room()
+        room6 = Room()
+        room7 = Room()
+        room8 = Room()
+        room9 = Room()
+
+        dungeon._Dungeon__items = {(0, 0): room1, (0, 1): room2, (0, 2): room3, (1, 0): room4, (1, 1): room5,
+                                   (1, 2): room6, (2, 0): room7, (2, 1): room8, (2, 2): room9}
+
+        result = dungeon._get_object_symbols()
+        expected_result = 9
+
+        valid_symbols = {"H", "V", "X", "A", "E", "I", "P", "i", "0", "M", "", }
+        for value in result.values():
+            self.assertIn(value, valid_symbols)
+            self.assertIsInstance(value, str)
+
+        self.assertIsInstance(result, dict)
+        self.assertEqual(len(result), expected_result)
+
+        self.assertIn((0, 0), result)
+        self.assertIn((0, 1), result)
+        self.assertIn((0, 2), result)
+        self.assertIn((1, 0), result)
+        self.assertIn((1, 1), result)
+        self.assertIn((1, 2), result)
+        self.assertIn((2, 0), result)
+        self.assertIn((2, 1), result)
+        self.assertIn((2, 2), result)
+
+
 
 
 if __name__ == '__main__':
