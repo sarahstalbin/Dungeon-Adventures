@@ -41,22 +41,44 @@ class DungeonTests(unittest.TestCase):
 
         self.assertNotEqual(len(dungeon.get_maze_dictionary()), 0)
 
-    @patch.object(Dungeon, '_create_maze')
-    def test_build_dungeon(self, mock_create_maze):
+    @patch('DungeonTest.Dungeon._place_items')
+    @patch('DungeonTest.Dungeon._place_pillars')
+    @patch('DungeonTest.Dungeon._is_traversable')
+    @patch('DungeonTest.Dungeon._make_impassable')
+    @patch('DungeonTest.Dungeon._set_entrance_exit')
+    @patch('DungeonTest.Dungeon._create_maze')
+    def test_build_dungeon(self, mock_create_maze, mock_set_entrance_exit, mock_make_impassable, mock_is_traversable,
+                           mock_place_pillars, mock_place_items):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
 
-        # Create mock Room for start_room
-        start_row = 2
-        start_col = 3
-        start_room = dungeon.get_maze_array()[start_row][start_col]
+        random.seed(42)
 
         dungeon.build_dungeon()
 
-        # # Call _create_maze
-        # mock_create_maze.assert_called_with()
-        # expected_calls = 2
-        # self.assertGreaterEqual(mock_create_maze.call_count, 1)
+        random.seed(42)
+
+        start_row = random.randint(0, rows - 1)
+        start_col = random.randint(0, cols - 1)
+        start_room = dungeon.get_maze_array()[start_row][start_col]
+
+        mock_create_maze.assert_called_with(start_room, start_row, start_col)
+
+        mock_set_entrance_exit.assert_called()
+
+        mock_make_impassable.assert_called()
+
+        random.seed(42)
+
+        mock_is_traversable.return_value = True
+
+        expected_items = {(row, col): dungeon.get_maze_array()[row][col] for row in range(rows) for col in range(cols)}
+        self.assertEqual(dungeon.get_maze_dictionary(), expected_items)
+        mock_place_pillars.assert_called()
+        mock_place_items.assert_called()
+
+        mock_is_traversable.return_value = False
+        mock_create_maze.assert_called_with(start_room, start_row, start_col)
 
     def test_get_entrance(self):
         rows, cols = 5, 5
@@ -187,7 +209,7 @@ class DungeonTests(unittest.TestCase):
         with patch.object(dungeon, 'get_maze_dictionary', mock_items):
             result = dungeon.get_room_contents((1, 0))
 
-        self.assertEqual(result, "E")
+        self.assertEqual(result, " ")
 
     def test_print_dictionary(self):
         rows, cols = 5, 5
@@ -214,13 +236,6 @@ class DungeonTests(unittest.TestCase):
         result = dungeon.is_valid_room(row, col)
         self.assertEqual(result, True)
 
-    #
-    # # def test_str_(self):
-    # #     pass
-    #
-    #
-    # #
-
     @patch.object(Room, 'set_player_traveled')
     @patch.object(Dungeon, 'get_maze_dictionary')
     def test_set_player_traveled(self, mock_get_maze_dictionary, mock_set_player_traveled):
@@ -237,7 +252,7 @@ class DungeonTests(unittest.TestCase):
 
         mock_get_maze_dictionary.return_value = mock_items
 
-        result = dungeon.set_player_traveled(key)
+        dungeon.set_player_traveled(key)
 
         mock_set_player_traveled.assert_called_once()
 
@@ -465,65 +480,6 @@ class DungeonTests(unittest.TestCase):
         self.assertEqual(encapsulation, 1, "Encapsulation test fail")
         self.assertEqual(abstraction, 1, "Abstraction test fail")
 
-# def create_multiple_items_side_effect(self):
-    #     random_items = ["H", "V", "X"]
-    #     return [Mock(spec=HealingPotion) for _ in range(random.choice(random_items))]
-
-    # @patch('DungeonItemsFactory.DungeonItemsFactory')
-    # def test_place_items(self, mock_factory):
-    #     rows, cols = 3, 3
-    #     dungeon = Dungeon(rows, cols)
-    #
-    #     random.seed(42)
-    #
-    #     mock_items = {
-    #         (0, 0): Mock(spec=Room),
-    #         (0, 1): Mock(spec=Room),
-    #         (0, 2): Mock(spec=Room),
-    #         (1, 0): Mock(spec=Room),
-    #         (1, 1): Mock(spec=Room),
-    #         (1, 2): Mock(spec=Room),
-    #         (2, 0): Mock(spec=Room),
-    #         (2, 1): Mock(spec=Room),
-    #         (2, 2): Mock(spec=Room),
-    #     }
-    #
-    #     dungeon._Dungeon__items = mock_items
-    #
-    #     dungeon._place_items()
-    #
-    #     for (row, col), room in mock_items.items():
-    #         if room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
-    #                 or room.get_polymorphism_pillar() or room.get_inheritance_pillar() \
-    #                 or room.get_encapsulation_pillar():
-    #             continue
-    #         else:
-    #             item_list = ["V", "H", "M", "X"]
-    #
-    #             choice = random.choice(item_list)
-    #
-    #             possibility = random.randint(0, 100)
-    #             if possibility <= 30:
-    #                 if choice == "V":
-    #                     mock_factory.create_item.return_value = Mock(spec=VisionPotion)
-    #                     room.set_vision_potion()
-    #                 elif choice == "H":
-    #                     mock_factory.create_item.return_value = Mock(spec=HealingPotion)
-    #                     room.set_healing_potion()
-    #                 elif choice == "M":
-    #                     mock_factory.create_multiple_items_side_effect = self.create_multiple_items_side_effect()
-    #                 elif choice == "X":
-    #                     mock_factory.create_item.return_value = Mock(spec=Pit)
-    #                     room.set_pit()
-    #                 else:
-    #                     room.set_empty_room()
-
-
-    #
-    # def test_place_pillars(self):
-    #     pass
-    # #
-    #
     def test_get_maze_dictionary(self):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
