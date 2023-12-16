@@ -9,12 +9,12 @@ from unittest.mock import patch, call, Mock, MagicMock
 from io import StringIO
 from room import Room
 from DungeonTest import Dungeon
-from DungeonItemsFactoryTest import DungeonItemsFactory
+from DungeonItemsFactory import DungeonItemsFactory
+from DungeonItems import HealingPotion, VisionPotion, Pit
 import random
 
 
 class DungeonTests(unittest.TestCase):
-
     class MockRoom:
         def __init__(self, **kwargs):
             for key, value in kwargs.items():
@@ -58,9 +58,6 @@ class DungeonTests(unittest.TestCase):
         # expected_calls = 2
         # self.assertGreaterEqual(mock_create_maze.call_count, 1)
 
-
-
-
     def test_get_entrance(self):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
@@ -101,8 +98,8 @@ class DungeonTests(unittest.TestCase):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
 
-        current = (1,0)
-        next = (0,0)
+        current = (1, 0)
+        next = (0, 0)
         direction = "N"
         is_current_room_north_door = dungeon.get_room_str(current).get_north_door()
         is_next_room_north_door = dungeon.get_room_str(next).get_south_door()
@@ -117,8 +114,8 @@ class DungeonTests(unittest.TestCase):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
 
-        current = (1,1)
-        next = (2,1)
+        current = (1, 1)
+        next = (2, 1)
         direction = "S"
         is_current_room_north_door = dungeon.get_room_str(current).get_south_door()
         is_next_room_north_door = dungeon.get_room_str(next).get_north_door()
@@ -133,8 +130,8 @@ class DungeonTests(unittest.TestCase):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
 
-        current = (1,1)
-        next = (1,2)
+        current = (1, 1)
+        next = (1, 2)
         direction = "E"
         is_current_room_north_door = dungeon.get_room_str(current).get_east_door()
         is_next_room_north_door = dungeon.get_room_str(next).get_west_door()
@@ -149,8 +146,8 @@ class DungeonTests(unittest.TestCase):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
 
-        current = (1,1)
-        next = (1,0)
+        current = (1, 1)
+        next = (1, 0)
         direction = "W"
         is_current_room_north_door = dungeon.get_room_str(current).get_west_door()
         is_next_room_north_door = dungeon.get_room_str(next).get_east_door()
@@ -216,6 +213,7 @@ class DungeonTests(unittest.TestCase):
 
         result = dungeon.is_valid_room(row, col)
         self.assertEqual(result, True)
+
     #
     # # def test_str_(self):
     # #     pass
@@ -363,7 +361,6 @@ class DungeonTests(unittest.TestCase):
         self.assertTrue(dungeon.get_maze_array()[exit_row][exit_col].get_east_door(),
                         'Exit should have an east door')
 
-
     def test_make_impassable(self):
         rows, cols = 5, 5
         dungeon = Dungeon(rows, cols)
@@ -383,17 +380,97 @@ class DungeonTests(unittest.TestCase):
 
 
 
-    # #
+    def test_is_traversable(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        start_row = 0
+        start_col = 0
+
+        result = dungeon._is_traversable(start_row, start_col)
+
+        self.assertTrue(isinstance(result, bool), f"Expected boolean, got {type(result)}")
+
+        if result:
+            self.assertTrue(dungeon._is_traversable(start_row, start_col))
+        else:
+            self.assertFalse(dungeon._is_traversable(start_row, start_col))
+
+
+    def traverse_the_maze(self):
+        rows, cols = 5, 5
+        dungeon = Dungeon(rows, cols)
+
+        start_row = 0
+        start_col = 0
+
+        result = dungeon._traverse_the_maze(start_row, start_col)
+
+        self.assertTrue(isinstance(result, bool), f"Expected boolean, got {type(result)}")
+
+        target_room = dungeon.get_maze_array()[rows - 1][cols - 1]
+
+        if result:
+            self.assertTrue(dungeon.is_valid_room(start_row, start_col))
+            self.assertTrue(target_room.get_visited())
+        else:
+            self.assertFalse(result, "Expected _traverse_the_maze to return False")
+
+
+    # def create_multiple_items_side_effect(self):
+    #     random_items = ["H", "V", "X"]
+    #     return [Mock(spec=HealingPotion) for _ in range(random.choice(random_items))]
+
+    # @patch('DungeonItemsFactory.DungeonItemsFactory')
+    # def test_place_items(self, mock_factory):
+    #     rows, cols = 3, 3
+    #     dungeon = Dungeon(rows, cols)
     #
-    # # def test_is_traversable(self):
-    # #     pass
+    #     random.seed(42)
     #
-    # #
-    # # def traverse_the_maze(self):
-    # #     pass
-    # #
-    # # def test_place_items(self):
-    # #     pass
+    #     mock_items = {
+    #         (0, 0): Mock(spec=Room),
+    #         (0, 1): Mock(spec=Room),
+    #         (0, 2): Mock(spec=Room),
+    #         (1, 0): Mock(spec=Room),
+    #         (1, 1): Mock(spec=Room),
+    #         (1, 2): Mock(spec=Room),
+    #         (2, 0): Mock(spec=Room),
+    #         (2, 1): Mock(spec=Room),
+    #         (2, 2): Mock(spec=Room),
+    #     }
+    #
+    #     dungeon._Dungeon__items = mock_items
+    #
+    #     dungeon._place_items()
+    #
+    #     for (row, col), room in mock_items.items():
+    #         if room.get_entrance() or room.get_exit() or room.get_abstraction_pillar() \
+    #                 or room.get_polymorphism_pillar() or room.get_inheritance_pillar() \
+    #                 or room.get_encapsulation_pillar():
+    #             continue
+    #         else:
+    #             item_list = ["V", "H", "M", "X"]
+    #
+    #             choice = random.choice(item_list)
+    #
+    #             possibility = random.randint(0, 100)
+    #             if possibility <= 30:
+    #                 if choice == "V":
+    #                     mock_factory.create_item.return_value = Mock(spec=VisionPotion)
+    #                     room.set_vision_potion()
+    #                 elif choice == "H":
+    #                     mock_factory.create_item.return_value = Mock(spec=HealingPotion)
+    #                     room.set_healing_potion()
+    #                 elif choice == "M":
+    #                     mock_factory.create_multiple_items_side_effect = self.create_multiple_items_side_effect()
+    #                 elif choice == "X":
+    #                     mock_factory.create_item.return_value = Mock(spec=Pit)
+    #                     room.set_pit()
+    #                 else:
+    #                     room.set_empty_room()
+
+
     # #
     # # def test_place_pillars(self):
     # #     pass
@@ -424,9 +501,6 @@ class DungeonTests(unittest.TestCase):
     # def test_get_object_symbols(self):
     #     pass
     #
-
-
-
 
 
 if __name__ == '__main__':
