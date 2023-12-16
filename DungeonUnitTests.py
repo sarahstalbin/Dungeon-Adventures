@@ -443,7 +443,9 @@ class DungeonTests(unittest.TestCase):
         self.assertEqual(dungeon_expected, d.__str__(),"Dungeon str failed")
 
     def test_place_pillar(self):
-        #tests for one instance of each pillar polymorphism, inheritance, encapsulation, abstraction within the maze
+        """
+        Testing for one instance of each pillar polymorphism, inheritance, encapsulation, abstraction within the maze
+        """
         d = Dungeon(10,10)
         polymorphism = 0
         inheritance =0
@@ -465,7 +467,47 @@ class DungeonTests(unittest.TestCase):
         self.assertEqual(encapsulation, 1, "Encapsulation test fail")
         self.assertEqual(abstraction, 1, "Abstraction test fail")
 
-# def create_multiple_items_side_effect(self):
+    def test_place_items(self):
+        """
+        Testing that the percentage of items Vision, Health, Multi Items, and Pits are
+        within the 30% range as set by random.randint within the function.
+        """
+
+        d = Dungeon(25,25)
+        healing = 0
+        vision =0
+        pit = 0
+        multi = 0
+        other_item =0
+
+        for row in range(d.get_row_length()):
+            for col in range(d.get_col_length()):
+                if d.get_room_contents((row, col)) == "H":
+                    healing+=1
+                elif d.get_room_contents((row, col)) == "V":
+                    vision +=1
+                elif d.get_room_contents((row, col)) == "X":
+                    pit +=1
+                elif d.get_room_contents((row, col)) == "M":
+                    multi +=1
+                elif d.get_room_contents((row, col)) == "P":
+                    other_item+=1
+                elif d.get_room_contents((row, col)) == "I":
+                    other_item +=1
+                elif d.get_room_contents((row, col)) == "E":
+                    other_item +=1
+                elif d.get_room_contents((row, col)) == "A":
+                    other_item +=1
+                elif d.get_room_contents((row, col)) == "i":
+                    other_item +=1
+                elif d.get_room_contents((row, col)) == "O":
+                    other_item +=1
+        total_item = healing+vision+pit+multi
+        total_avail_rooms = 625 - other_item
+        percentage = total_item/total_avail_rooms
+        self.assertTrue(.25 < percentage < .35, "Place Item test fail")
+    
+    # def create_multiple_items_side_effect(self):
     #     random_items = ["H", "V", "X"]
     #     return [Mock(spec=HealingPotion) for _ in range(random.choice(random_items))]
 
