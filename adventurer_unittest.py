@@ -29,12 +29,12 @@ class adventurer_test(unittest.TestCase):
         adventurer = Adventurer("Minna",100, 2,1)
         dict_test = {"Name": "Minna", "HP" : 100, "Healing Potion Count": 2, "Vision Potion Count": 1,"Pillar Count": 0}
 
-        self.assertEqual(adventurer.__get_name__(), dict_test["Name"], "Testing for first set name failed")
+        self.assertEqual(adventurer.get_name__(), dict_test["Name"], "Testing for first set name failed")
 
         adventurer.set_name("Johnny")
         dict_test["Name"] = "Johnny"
 
-        self.assertEqual(adventurer.__get_name__(), dict_test["Name"], "Testing for second set_name failed")
+        self.assertEqual(adventurer.get_name__(), dict_test["Name"], "Testing for second set_name failed")
 
     def test_get_name(self):
         """
@@ -42,21 +42,21 @@ class adventurer_test(unittest.TestCase):
         """
         adventurer = Adventurer("Minna", 100, 2, 1)
         test_name = "Minna"
-        self.assertEqual(adventurer.__get_name__(), test_name, "Testing for get name failed")
+        self.assertEqual(adventurer.get_name__(), test_name, "Testing for get name failed")
 
     def test_get_health_potion_count__(self):
         """
         Testing get health potion count
         """
         adventurer = Adventurer("Minna", 100, 2, 1)
-        self.assertEqual(adventurer.__get_health_potion_count__(), 2, "Testing for get name failed")
+        self.assertEqual(adventurer.get_health_potion_count__(), 2, "Testing for get name failed")
 
     def test__get_vision_potion_count__(self):
         """
         Testing get vision potion count
         """
         adventurer = Adventurer("Minna", 100, 2, 1)
-        self.assertEqual(adventurer.__get_vision_potion_count__(), 1, "Testing for get name failed")
+        self.assertEqual(adventurer.get_vision_potion_count__(), 1, "Testing for get name failed")
 
     def test_get_HP(self):
         """
@@ -79,7 +79,7 @@ class adventurer_test(unittest.TestCase):
         """
         adventurer = Adventurer("Minna", 100, 2, 1)
         adventurer.inc_healing_potion_count()
-        self.assertEqual(adventurer.__get_health_potion_count__(), 3, "Testing for increase vision potion count failed")
+        self.assertEqual(adventurer.get_health_potion_count__(), 3, "Testing for increase vision potion count failed")
 
     def test_increase_vision_potion_count(self):
         """
@@ -87,7 +87,7 @@ class adventurer_test(unittest.TestCase):
         """
         adventurer = Adventurer("Minna", 100, 2, 1)
         adventurer.inc_vision_potion_count()
-        self.assertEqual(adventurer.__get_vision_potion_count__(), 2, "Testing for increase vision potion count failed")
+        self.assertEqual(adventurer.get_vision_potion_count__(), 2, "Testing for increase vision potion count failed")
 
     def test_set_HP(self):
         """
