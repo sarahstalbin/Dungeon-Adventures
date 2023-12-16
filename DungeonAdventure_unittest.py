@@ -7,6 +7,13 @@ import unittest
 from unittest.mock import patch
 from DungeonAdventure import DungeonAdventure
 
+"""
+Dungeon Adventure Unit Test. Must delete at end of DungeonAdventure.py 
+game_play = DungeonAdventure()
+game_play.play_whole_game()
+
+for unit test to run properly.
+"""
 
 class DungeonAdventureTest(unittest.TestCase):
 
