@@ -65,7 +65,7 @@ class Dungeon:
     def get_maze_array(self):
         return self.__maze
 
-    def _get_maze_dictionary(self):
+    def get_maze_dictionary(self):
         """
         Internal getter method that returns the dictionary.
         :return: the dictionary instantiated in the class constructor.
@@ -88,7 +88,7 @@ class Dungeon:
     def get_doors(self, current_key, new_key, direction="N"):
         """
         Get attributes of room
-        :return: attributes
+        :return: Boolean
         """
         attributes_current = self.__items.get(current_key)  # grabbing room attributes
         attributes_new = self.__items.get(new_key)  # grabbing room attributes
@@ -590,3 +590,4 @@ class Dungeon:
                 symbols += "E"
             symbols_dict[(row, col)] = symbols
         return symbols_dict
+
