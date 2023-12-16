@@ -210,17 +210,17 @@ class DungeonAdventure:
                 print(self.menu_str())
             # use health potion
             elif str(menu_command).lower() == "h":
-                if self.adventurer.__get_health_potion_count__() > 0:
+                if self.adventurer.get_health_potion_count__() > 0:
                     health_points = self.item.create_item("H", 1, 10).use_item()
                     self.adventurer.set_HP(health_points)
                     print(f"You gained {health_points} health points! Your health is now "
                           f"{self.adventurer.get_HP()} and you have "
-                          f"{self.adventurer.__get_health_potion_count__()} left.")
+                          f"{self.adventurer.get_health_potion_count__()} left.")
                 else:
                     print("You don't have any health potions left")
             # use vision potion
             elif str(menu_command).lower() == "v":
-                if self.adventurer.__get_vision_potion_count__() > 0:
+                if self.adventurer.get_vision_potion_count__() > 0:
                     self.adventurer.dec_vision_potion()
                     self.item.create_item("V").use_vision(self.player_loc_row, self.player_loc_col, self.dungeon.get_col_length(),
                                            self.dungeon.get_row_length(), self.dungeon)
@@ -314,12 +314,12 @@ class DungeonAdventure:
         # Collect Health potion
         if item == "H":
             self.adventurer.inc_healing_potion_count()
-            print(f"Picked up Healing Potion. Total Healing Potions: {self.adventurer.__get_health_potion_count__()}")
+            print(f"Picked up Healing Potion. Total Healing Potions: {self.adventurer.get_health_potion_count__()}")
             self.dungeon.set_room_empty((self.player_loc_row, self.player_loc_col), False) #removing item from dungeon
         # Collect Vision potion
         elif item == "V":
             self.adventurer.inc_vision_potion_count()
-            print(f"Picked up Vision Potion. Total Vision Potions: {self.adventurer.__get_vision_potion_count__()}")
+            print(f"Picked up Vision Potion. Total Vision Potions: {self.adventurer.get_vision_potion_count__()}")
             self.dungeon.set_room_empty((self.player_loc_row,self.player_loc_col),False)
         # Encounter Pit
         elif item == "X":
@@ -366,10 +366,10 @@ class DungeonAdventure:
         for value in results:
             if value == "V":
                 self.adventurer.inc_vision_potion_count()
-                print(f"Gained 1 Vision Potion. Total Vision Potion count: {self.adventurer.__get_vision_potion_count__()}")
+                print(f"Gained 1 Vision Potion. Total Vision Potion count: {self.adventurer.get_vision_potion_count__()}")
             if value == "H":
                 self.adventurer.inc_healing_potion_count()
-                print(f"Gained 1 Healing Potion. Total Healing Potion count: {self.adventurer.__get_health_potion_count__()}")
+                print(f"Gained 1 Healing Potion. Total Healing Potion count: {self.adventurer.get_health_potion_count__()}")
             if value == "X":
                 pit_points = self.item.create_item("X", 1, 15)
                 self.adventurer.set_HP(pit_points.use_item())
