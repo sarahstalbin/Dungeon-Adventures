@@ -128,8 +128,8 @@ class VisionPotion(DungeonItems):
 
     def get_vision_rm_corner(self, current_row, current_col, row_direction, col_direction, dungeon):
         """
-        Retrieves and returns column and row for corner rooms
-        :return: New column and row
+        Retrieves and returns string room for corner rooms
+        :return: str
         """
 
         # Grab new column
@@ -145,8 +145,8 @@ class VisionPotion(DungeonItems):
 
     def get_vision_rm_one(self, current_row, current_col, direction, dungeon):
         """
-        Retrieves and returns column and row for directly touching rooms
-        :return: New column and row
+        Retrieves and returns string room for directly touching rooms
+        :return: str
         """
         row, col = dungeon._get_neighbor_coords(current_row, current_col, direction)
         if dungeon.is_valid_room(row, col):
