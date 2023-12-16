@@ -416,7 +416,34 @@ class DungeonTests(unittest.TestCase):
         else:
             self.assertFalse(result, "Expected _traverse_the_maze to return False")
 
+    def test__str__(self):
+        d = Dungeon(3,3)
 
+        dungeon_expected = ""
+        for row in range(d.get_row_length()):
+            for col in range(d.get_col_length()):
+                room = d.get_room_str((row,col))
+                dungeon_expected += f"Room at ({row}, {col}):"
+                dungeon_expected += f"\n  - North Door: {room.get_north_door()}"
+                dungeon_expected += f"\n  - South Door: {room.get_south_door()}"
+                dungeon_expected += f"\n  - East Door: {room.get_east_door()}"
+                dungeon_expected += f"\n  - West Door: {room.get_west_door()}"
+                dungeon_expected += f"\n  - Visited: {room.get_visited()}"
+                dungeon_expected += f"\n  - Entrance: {room.get_entrance()}"
+                dungeon_expected += f"\n  - Exit: {room.get_exit()}"
+                dungeon_expected += f"\n  - Impasse: {room.get_impasse()}"
+                dungeon_expected += f"\n  - Empty Room: {room.get_empty_room()}"
+                dungeon_expected += f"\n  - Abstraction Pillar: {room.set_abstraction_pillar(True)}"
+                dungeon_expected += f"\n  - Encapsulation Pillar: {room.set_encapsulation_pillar(True)}"
+                dungeon_expected += f"\n  - Inheritance Pillar: {room.set_inheritance_pillar(True)}"
+                dungeon_expected += f"\n  - Polymorphism Pillar: {room.set_polymorphism_pillar(True)}"
+                dungeon_expected += f"\n  - Healing Potion: {room.set_healing_potion(True)}"
+                dungeon_expected += f"\n  - Vision Potion: {room.set_vision_potion(True)}"
+                dungeon_expected += f"\n  - Pit: {room.set_pit(True)}"
+                dungeon_expected += "\n\n"
+
+        self.assertEqual(dungeon_expected, d.__str__(),"Dungeon str failed")
+        
     # def create_multiple_items_side_effect(self):
     #     random_items = ["H", "V", "X"]
     #     return [Mock(spec=HealingPotion) for _ in range(random.choice(random_items))]
