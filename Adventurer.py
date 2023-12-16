@@ -4,6 +4,11 @@ TCSS 501 and 502
 Dungeon Adventure
 """
 
+"""
+Creates the Adventurer class object to hold Adventurer name, health points, healing potions, vision potions, and
+pillar counts
+"""
+
 class Adventurer:
     def __init__(self, name="", HP=0, healing_potion_count =0, vision_potion_count=0):
         self.adventurer_dict = {"Name": name, "HP": HP, "Healing Potion Count": healing_potion_count,
@@ -15,19 +20,19 @@ class Adventurer:
         """
         self.adventurer_dict["Name"] = name
 
-    def __get_name__(self):
+    def get_name__(self):
         """
         Getting name
         """
         return self.adventurer_dict["Name"]
 
-    def __get_health_potion_count__(self):
+    def get_health_potion_count__(self):
         """
         :returns: health potion count
         """
         return self.adventurer_dict["Healing Potion Count"]
 
-    def __get_vision_potion_count__(self):
+    def get_vision_potion_count__(self):
         """
         :returns: vision potion count
         """
@@ -81,5 +86,5 @@ class Adventurer:
         """
         Printing Adventurer's statistics
         """
-        formatted_list = ["    "+str(item) + " : " + str(values) for item, values in self.adventurer_dict.items()]
+        formatted_list = ["   "+str(item) + " : " + str(values) for item, values in self.adventurer_dict.items()]
         return "\n" + "\n".join(formatted_list) + "\n"

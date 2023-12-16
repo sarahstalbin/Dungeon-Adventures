@@ -65,7 +65,7 @@ class Dungeon:
     def get_maze_array(self):
         return self.__maze
 
-    def _get_maze_dictionary(self):
+    def get_maze_dictionary(self):
         """
         Internal getter method that returns the dictionary.
         :return: the dictionary instantiated in the class constructor.
@@ -590,3 +590,4 @@ class Dungeon:
                 symbols += "E"
             symbols_dict[(row, col)] = symbols
         return symbols_dict
+

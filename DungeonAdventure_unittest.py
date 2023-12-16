@@ -7,6 +7,13 @@ import unittest
 from unittest.mock import patch
 from DungeonAdventure import DungeonAdventure
 
+"""
+Dungeon Adventure Unit Test. Must delete at end of DungeonAdventure.py 
+game_play = DungeonAdventure()
+game_play.play_whole_game()
+
+for unit test to run properly.
+"""
 
 class DungeonAdventureTest(unittest.TestCase):
 
@@ -14,18 +21,17 @@ class DungeonAdventureTest(unittest.TestCase):
     def test_set_play_mode_easy(self, prompt):
         """
         Testing easy play mode
-        :return: None
         """
         expect_output = {"Name": "Minna", "HP": 100, "Healing Potion Count": 3,
                                 "Vision Potion Count": 0, "Pillar Count": 0}
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing Easy for health potion failed")
-        self.assertTrue(1 <= da.adventurer.__get_vision_potion_count__() <= 3,
+        self.assertTrue(1 <= da.adventurer.get_vision_potion_count__() <= 3,
                          "Testing Easy for vision potion failed")
         self.assertEqual(da.adventurer.get_HP(), expect_output["HP"], "Testing Easy for HP failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"] , "Testing Easy for "
@@ -39,20 +45,19 @@ class DungeonAdventureTest(unittest.TestCase):
     def test_set_play_mode_medium(self, prompt):
         """
         Testing medium play mode
-        :return: None
         """
         expect_output = {"Name": "Minna", "HP": 100, "Healing Potion Count": 3,
                                 "Vision Potion Count": 3, "Pillar Count": 0}
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertTrue(75 <= da.adventurer.get_HP() <= 100,
                          "Testing Med for HP failed")
-        self.assertTrue(0 <= da.adventurer.__get_health_potion_count__() <= 2,
+        self.assertTrue(0 <= da.adventurer.get_health_potion_count__() <= 2,
                          "Testing Med for health potion failed")
-        self.assertTrue(0 <= da.adventurer.__get_vision_potion_count__() <= 1,
+        self.assertTrue(0 <= da.adventurer.get_vision_potion_count__() <= 1,
                          "Testing Easy for vision potion failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"] , "Testing Easy for "
                                                                                     "Pillar count failed")
@@ -65,20 +70,19 @@ class DungeonAdventureTest(unittest.TestCase):
     def test_set_play_mode_hard(self, prompt):
         """
         Testing Hard play mode
-        :return: None
         """
         expect_output = {"Name": "Minna", "HP": 100, "Healing Potion Count": 0,
                          "Vision Potion Count": 0, "Pillar Count": 0}
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertTrue(75 <= da.adventurer.get_HP() <= 90,"Testing hard for HP failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing hard for health potion failed")
 
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), expect_output["Vision Potion Count"],
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), expect_output["Vision Potion Count"],
                          "Testing hard for Vision Potion Count failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"], "Testing hard for "
                                                                                     "Pillar count failed")
@@ -89,21 +93,20 @@ class DungeonAdventureTest(unittest.TestCase):
     @patch('builtins.input', side_effect=['c', 50, 20, 25, 20, 20, "Minna"])
     def test_set_play_mode_hard(self, prompt):
         """
-        Testing Hard play mode
-        :return: None
+        Testing User choice play mode
         """
         expect_output = {"Name": "Minna", "HP": 50, "Healing Potion Count": 20,
                          "Vision Potion Count": 25, "Pillar Count": 0}
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertEqual(da.adventurer.get_HP(), expect_output["HP"], "Testing hard for HP failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing hard for health potion failed")
 
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), expect_output["Vision Potion Count"],
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), expect_output["Vision Potion Count"],
                          "Testing hard for Vision Potion Count failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"], "Testing hard for "
                                                                                     "Pillar count failed")
@@ -114,7 +117,6 @@ class DungeonAdventureTest(unittest.TestCase):
     def test_menu_str(self):
         """
         Tests the menu string to be printed
-        :return: menu str
         """
         da = DungeonAdventure()
         menu = {"Action Menu": "m", "Go Up": "w", "Go Down": "s", "Go Left": "a", "Go Right": "d",
@@ -126,23 +128,21 @@ class DungeonAdventureTest(unittest.TestCase):
         self.assertEqual(actual_string, string_test, "Not equal")
 
     @patch('builtins.input', side_effect=['e', 'Minna', 'h', 'q'])
-    def test_player_command(self, prompt):
+    def test_player_command_health(self, prompt):
         """
-        Execute player's menu inputs
-        :return: None
+        Testing player using health command.
         """
         da = DungeonAdventure()
         da.set_play_mode() #sets default values - easy, name:"Minna", health potion: 3,
         da.player_command()
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         self.assertEqual(health_potion_count, 2, "Test player command h healing count failed")
         self.assertTrue(da.adventurer.get_HP() > 100, "Testing player command h HP failed")
 
     def test_move_adventurer_south(self):
         """
-        Player's input is a direction, check to see if that direction is possible and move that direction.
-        If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        Testing player input for south direction, check to see if that direction is possible and move that direction.
+        If moving to next room is possible go to next room.
         """
         da = DungeonAdventure()
         da.move_adventurer("s")
@@ -176,9 +176,8 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_move_adventurer_north(self):
         """
-        Player's input is a direction, check to see if that direction is possible and move that direction.
-        If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        Testing player input for north direction, check to see if that direction is possible and move that direction.
+        If moving to next room is possible go to next room.
         """
         da = DungeonAdventure()
         da.player_loc_col = 1
@@ -214,9 +213,8 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_move_adventurer_east(self):
         """
-        Player's input is a direction, check to see if that direction is possible and move that direction.
-        If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        Testing player input for east direction, check to see if that direction is possible and move that direction.
+        If moving to next room is possible go to next room.
         """
         da = DungeonAdventure()
         da.move_adventurer("d")
@@ -250,9 +248,8 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_move_adventurer_west(self):
         """
-        Player's input is a direction, check to see if that direction is possible and move that direction.
-        If moving to next room is possible, collect items and make traveled rooms empty unless pit
-        :return: any collected items
+        Testing player input for west direction, check to see if that direction is possible and move that direction.
+        If moving to next room is possible go to next room.
         """
         da = DungeonAdventure()
         da.player_loc_col = 1
@@ -286,33 +283,30 @@ class DungeonAdventureTest(unittest.TestCase):
             self.assertEqual(da.dungeon.get_doors(current_key, new_key, real_direction), False, "Test move "
                                                                                         "adventurer door fail failed")
 
-    def test_collect_item_h(self):
+    def test_collect_item_health(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect health item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
         da.collect_item("H")
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         self.assertEqual(health_potion_count, 1, "Test healing count failed")
 
-    def test_collect_item_v(self):
+    def test_collect_item_vision(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect vision item in room
         """
         # Collect Health potion
         # pit_points = DungeonItemsFactory.create_item("X", 1, 15)
         da = DungeonAdventure()
         da.collect_item("V")
         # self.assertTrue(-15 <= da.item.create_item("X", 1,15).use_item() <= -1,"Testing item pit failed")
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), 1, "Test vision count failed")
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), 1, "Test vision count failed")
 
     def test_collect_item_pit(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect pit item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
@@ -322,24 +316,22 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_collect_item_exit(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect exit command in room
         """
 
         da = DungeonAdventure()
         item = da.collect_item("O")
         self.assertEqual("O", item, "Test exit failed")
 
-    def test_collect_item_M(self):
+    def test_collect_item_Multi(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect multi item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
         da.collect_item("M")
-        vision_potion_count = da.adventurer.__get_vision_potion_count__()
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        vision_potion_count = da.adventurer.get_vision_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         hp = da.adventurer.get_HP()
         self.assertTrue(0 <= health_potion_count <= 1,"Test multi item healing count failed")
         self.assertTrue(0 <= vision_potion_count <= 1, "Test multi item vision count failed")
@@ -347,8 +339,7 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_collect_item_A(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect abstraction item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
@@ -358,8 +349,7 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_collect_item_P(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect polymorphism item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
@@ -369,8 +359,7 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_collect_item_I(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect inheritance item in room
         """
         # Collect Health potion
         da = DungeonAdventure()
@@ -380,8 +369,7 @@ class DungeonAdventureTest(unittest.TestCase):
 
     def test_collect_item_E(self):
         """
-        Items in room affects the player
-        :return: any collected
+        Testing collect encapsulation item in room
         """
         # Collect Health potion
         da = DungeonAdventure()

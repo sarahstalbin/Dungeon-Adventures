@@ -128,8 +128,8 @@ class VisionPotion(DungeonItems):
 
     def get_vision_rm_corner(self, current_row, current_col, row_direction, col_direction, dungeon):
         """
-        Retrieves and returns column and row for corner rooms
-        :return: New column and row
+        Retrieves and returns string room for corner rooms
+        :return: str
         """
 
         # Grab new column
@@ -145,8 +145,8 @@ class VisionPotion(DungeonItems):
 
     def get_vision_rm_one(self, current_row, current_col, direction, dungeon):
         """
-        Retrieves and returns column and row for directly touching rooms
-        :return: New column and row
+        Retrieves and returns string room for directly touching rooms
+        :return: str
         """
         row, col = dungeon._get_neighbor_coords(current_row, current_col, direction)
         if dungeon.is_valid_room(row, col):
@@ -164,43 +164,3 @@ class Pit(DungeonItems):
     def use_item(self):
         """ Implementing use_item method for Pit class"""
         return self.pit
-
-
-class AbstractionPillar(DungeonItems):
-    def __init__(self, abstraction_pillar):
-        super().__init__("A")
-        self.abstraction_pillar = abstraction_pillar
-
-    def use_item(self):
-        """ Implementing use_item method for AbstractionPillar class"""
-        return self.abstraction_pillar
-
-
-class InheritancePillar(DungeonItems):
-    def __init__(self, inheritance_pillar):
-        super().__init__("I")
-        self.inheritance_pillar = inheritance_pillar
-
-    def use_item(self):
-        """ Implementing use_item method for InheritancePillar class"""
-        return self.inheritance_pillar
-
-
-class PolymorphismPillar(DungeonItems):
-    def __init__(self, polymorphism_pillar):
-        super().__init__("P")
-        self.polymorphism_pillar = polymorphism_pillar
-
-    def use_item(self):
-        """ Implementing use_item method for PolymorphismPillar class"""
-        return self.polymorphism_pillar
-
-
-class EncapsulationPillar(DungeonItems):
-    def __init__(self, encapsulation_pillar):
-        super().__init__("E")
-        self.encapsulation_pillar = encapsulation_pillar
-
-    def use_item(self):
-        """ Implementing use_item method for EncapsulationPillar class"""
-        return self.encapsulation_pillar
