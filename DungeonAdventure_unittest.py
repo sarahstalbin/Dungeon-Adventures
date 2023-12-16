@@ -27,11 +27,11 @@ class DungeonAdventureTest(unittest.TestCase):
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing Easy for health potion failed")
-        self.assertTrue(1 <= da.adventurer.__get_vision_potion_count__() <= 3,
+        self.assertTrue(1 <= da.adventurer.get_vision_potion_count__() <= 3,
                          "Testing Easy for vision potion failed")
         self.assertEqual(da.adventurer.get_HP(), expect_output["HP"], "Testing Easy for HP failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"] , "Testing Easy for "
@@ -51,13 +51,13 @@ class DungeonAdventureTest(unittest.TestCase):
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertTrue(75 <= da.adventurer.get_HP() <= 100,
                          "Testing Med for HP failed")
-        self.assertTrue(0 <= da.adventurer.__get_health_potion_count__() <= 2,
+        self.assertTrue(0 <= da.adventurer.get_health_potion_count__() <= 2,
                          "Testing Med for health potion failed")
-        self.assertTrue(0 <= da.adventurer.__get_vision_potion_count__() <= 1,
+        self.assertTrue(0 <= da.adventurer.get_vision_potion_count__() <= 1,
                          "Testing Easy for vision potion failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"] , "Testing Easy for "
                                                                                     "Pillar count failed")
@@ -76,13 +76,13 @@ class DungeonAdventureTest(unittest.TestCase):
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertTrue(75 <= da.adventurer.get_HP() <= 90,"Testing hard for HP failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing hard for health potion failed")
 
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), expect_output["Vision Potion Count"],
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), expect_output["Vision Potion Count"],
                          "Testing hard for Vision Potion Count failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"], "Testing hard for "
                                                                                     "Pillar count failed")
@@ -100,13 +100,13 @@ class DungeonAdventureTest(unittest.TestCase):
 
         da = DungeonAdventure()
         da.set_play_mode()
-        self.assertEqual(da.adventurer.__get_name__(), expect_output["Name"], "Testing Easy for first set "
+        self.assertEqual(da.adventurer.get_name__(), expect_output["Name"], "Testing Easy for first set "
                                                                               "name failed")
         self.assertEqual(da.adventurer.get_HP(), expect_output["HP"], "Testing hard for HP failed")
-        self.assertEqual(da.adventurer.__get_health_potion_count__(), expect_output["Healing Potion Count"],
+        self.assertEqual(da.adventurer.get_health_potion_count__(), expect_output["Healing Potion Count"],
                          "Testing hard for health potion failed")
 
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), expect_output["Vision Potion Count"],
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), expect_output["Vision Potion Count"],
                          "Testing hard for Vision Potion Count failed")
         self.assertEqual(da.adventurer.get_pillar(), expect_output["Pillar Count"], "Testing hard for "
                                                                                     "Pillar count failed")
@@ -135,7 +135,7 @@ class DungeonAdventureTest(unittest.TestCase):
         da = DungeonAdventure()
         da.set_play_mode() #sets default values - easy, name:"Minna", health potion: 3,
         da.player_command()
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         self.assertEqual(health_potion_count, 2, "Test player command h healing count failed")
         self.assertTrue(da.adventurer.get_HP() > 100, "Testing player command h HP failed")
 
@@ -290,7 +290,7 @@ class DungeonAdventureTest(unittest.TestCase):
         # Collect Health potion
         da = DungeonAdventure()
         da.collect_item("H")
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         self.assertEqual(health_potion_count, 1, "Test healing count failed")
 
     def test_collect_item_vision(self):
@@ -302,7 +302,7 @@ class DungeonAdventureTest(unittest.TestCase):
         da = DungeonAdventure()
         da.collect_item("V")
         # self.assertTrue(-15 <= da.item.create_item("X", 1,15).use_item() <= -1,"Testing item pit failed")
-        self.assertEqual(da.adventurer.__get_vision_potion_count__(), 1, "Test vision count failed")
+        self.assertEqual(da.adventurer.get_vision_potion_count__(), 1, "Test vision count failed")
 
     def test_collect_item_pit(self):
         """
@@ -330,8 +330,8 @@ class DungeonAdventureTest(unittest.TestCase):
         # Collect Health potion
         da = DungeonAdventure()
         da.collect_item("M")
-        vision_potion_count = da.adventurer.__get_vision_potion_count__()
-        health_potion_count = da.adventurer.__get_health_potion_count__()
+        vision_potion_count = da.adventurer.get_vision_potion_count__()
+        health_potion_count = da.adventurer.get_health_potion_count__()
         hp = da.adventurer.get_HP()
         self.assertTrue(0 <= health_potion_count <= 1,"Test multi item healing count failed")
         self.assertTrue(0 <= vision_potion_count <= 1, "Test multi item vision count failed")
